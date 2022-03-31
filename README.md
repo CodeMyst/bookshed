@@ -1,5 +1,7 @@
 # PRIS-Books
 
+marko je glup
+
 Udruženje ljubitelja knjiga želi da mu razvijete web aplikaciju. Rok za završetak radova je 8 nedelja. Potrebno je da se na sajtu nalaze različite kategorije knjiga. Knjige je moguće filtrirati po različitim kriterijumima. Korisnici sajta mogu da se registruju I da postavljaju informacije o novim knjigama. Za svaku knjigu se unose naslov, autor, oblast, opis I potencijalno slika. Ispod svake knjige, registrovani korisnici mogu da ostavljaju svoje utiske o njoj.
 
 Pored toga, svaki registrovani korisnik ima mogućnost da za već postojeće knjige doda podatak o tome gde se ta knjiga može kupiti I po kojoj ceni. Takođe, postoji I forum na kome svi registrovani korisnici mogu otvarati teme, I odgovarati na postojeće. Tu se raspravlja o različitim temama iz sveta knjiga. Postoji posebna tema “klub čitalaca”, gde se svakog meseca raspravlja o jednoj knjizi, koju su članovi pročitali prošlog meseca.
