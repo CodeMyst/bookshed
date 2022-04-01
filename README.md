@@ -1,4 +1,4 @@
-# PRIS-Books
+# bookshed
 
 Udruženje ljubitelja knjiga želi da mu razvijete web aplikaciju. Rok za završetak radova je 8 nedelja. Potrebno je da se na sajtu nalaze različite kategorije knjiga. Knjige je moguće filtrirati po različitim kriterijumima. Korisnici sajta mogu da se registruju I da postavljaju informacije o novim knjigama. Za svaku knjigu se unose naslov, autor, oblast, opis I potencijalno slika. Ispod svake knjige, registrovani korisnici mogu da ostavljaju svoje utiske o njoj.
 
