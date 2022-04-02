@@ -1,5 +1,7 @@
 package rs.myst.bookshed.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -51,6 +53,7 @@ public class User {
         this.role = role;
     }
 
+    @JsonIgnore
     public String getPasswordHash() {
         return passwordHash;
     }
