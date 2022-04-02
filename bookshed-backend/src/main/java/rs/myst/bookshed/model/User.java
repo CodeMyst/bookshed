@@ -6,7 +6,6 @@ import java.util.Objects;
 
 @Entity
 public class User {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "username")
     private String username;
@@ -44,7 +43,7 @@ public class User {
         this.email = email;
     }
 
-    public Object getRole() {
+    public UserRole getRole() {
         return role;
     }
 
@@ -52,7 +51,7 @@ public class User {
         this.role = role;
     }
 
-    public Object getPasswordHash() {
+    public String getPasswordHash() {
         return passwordHash;
     }
 
