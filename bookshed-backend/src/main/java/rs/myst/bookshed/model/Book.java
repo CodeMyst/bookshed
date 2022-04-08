@@ -1,5 +1,7 @@
 package rs.myst.bookshed.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,8 +18,9 @@ public class Book {
     @Column(name = "author", nullable = false, length = 50)
     private String author;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private BookCategory category;
 
     @Lob
