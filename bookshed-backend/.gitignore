@@ -34,3 +34,5 @@ build/
 
 ### Spring logs ###
 logs/
+
+application.properties

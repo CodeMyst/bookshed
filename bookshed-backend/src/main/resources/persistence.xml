@@ -6,10 +6,6 @@
   <persistence-unit name="default">
 
     <class>rs.myst.bookshed.model.User</class>
-    <properties>
-      <property name="hibernate.connection.url" value="jdbc:mariadb://localhost:3306/bookshed"/>
-      <property name="hibernate.connection.driver_class" value="org.mariadb.jdbc.Driver"/>
-    </properties>
   </persistence-unit>
     <persistence-unit name="persistenceUnit"/>
 </persistence>
