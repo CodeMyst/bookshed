@@ -11,10 +11,10 @@ create table user
 
 create table book
 (
-    id          varchar(8)  not null primary key,
+    id          int         not null primary key auto_increment,
     title       varchar(50) not null,
     author      varchar(50) not null,
-    category_id varchar(8)  not null,
+    category_id int         not null,
     description mediumtext  not null,
     image_url   tinytext,
 
@@ -25,6 +25,6 @@ create table book
 
 create table book_category
 (
-    id   varchar(8)  not null primary key,
+    id   int         not null primary key auto_increment,
     name varchar(50) not null
 );
