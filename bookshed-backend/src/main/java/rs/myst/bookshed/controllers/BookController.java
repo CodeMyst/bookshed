@@ -1,7 +1,9 @@
 package rs.myst.bookshed.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import rs.myst.bookshed.constants.RoleConstants;
 import rs.myst.bookshed.model.Book;
 import rs.myst.bookshed.model.BookCategory;
 import rs.myst.bookshed.payload.BookCreateInfo;
@@ -52,6 +54,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(RoleConstants.ADMIN)
     public ResponseEntity<?> deleteBook(@PathVariable int id) {
         Optional<Book> book = bookRepo.findById(id);
 
