@@ -34,6 +34,7 @@ public class BookController {
     }
 
     @PostMapping("/")
+    @PreAuthorize(RoleConstants.USER)
     public ResponseEntity<?> createBook(@Valid @RequestBody BookCreateInfo createInfo) {
         if (!bookCategoryRepo.existsById(createInfo.getCategoryId())) {
             return ResponseEntity.badRequest().build();
@@ -63,5 +64,25 @@ public class BookController {
         bookRepo.delete(book.get());
 
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize(RoleConstants.USER)
+    public ResponseEntity<?> editBook(@Valid @RequestBody BookCreateInfo createInfo, @PathVariable int id) {
+        Book book  = bookRepo.findById(id).orElse(null);
+        if (book == null) return ResponseEntity.notFound().build();
+
+        BookCategory cat = bookCategoryRepo.findById(createInfo.getCategoryId()).orElse(null);
+        if (cat == null) return ResponseEntity.notFound().build();
+
+        book.setCategory(cat);
+        book.setTitle(createInfo.getTitle());
+        book.setAuthor(createInfo.getAuthor());
+        book.setImageUrl(createInfo.getImageUrl());
+        book.setDescription(createInfo.getDescription());
+
+        bookRepo.save(book);
+
+        return ResponseEntity.ok(book);
     }
 }
