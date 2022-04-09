@@ -64,4 +64,23 @@ public class BookController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> editBook(@Valid @RequestBody BookCreateInfo createInfo, @PathVariable int id) {
+        Book book  = bookRepo.findById(id).orElse(null);
+        if (book == null) return ResponseEntity.notFound().build();
+
+        BookCategory cat = bookCategoryRepo.findById(createInfo.getCategoryId()).orElse(null);
+        if (cat == null) return ResponseEntity.notFound().build();
+
+        book.setCategory(cat);
+        book.setTitle(createInfo.getTitle());
+        book.setAuthor(createInfo.getAuthor());
+        book.setImageUrl(createInfo.getImageUrl());
+        book.setDescription(createInfo.getDescription());
+
+        bookRepo.save(book);
+
+        return ResponseEntity.ok(book);
+    }
 }
