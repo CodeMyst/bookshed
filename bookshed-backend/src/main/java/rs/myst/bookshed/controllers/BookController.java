@@ -34,6 +34,7 @@ public class BookController {
     }
 
     @PostMapping("/")
+    @PreAuthorize(RoleConstants.USER)
     public ResponseEntity<?> createBook(@Valid @RequestBody BookCreateInfo createInfo) {
         if (!bookCategoryRepo.existsById(createInfo.getCategoryId())) {
             return ResponseEntity.badRequest().build();
@@ -66,6 +67,7 @@ public class BookController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize(RoleConstants.USER)
     public ResponseEntity<?> editBook(@Valid @RequestBody BookCreateInfo createInfo, @PathVariable int id) {
         Book book  = bookRepo.findById(id).orElse(null);
         if (book == null) return ResponseEntity.notFound().build();
