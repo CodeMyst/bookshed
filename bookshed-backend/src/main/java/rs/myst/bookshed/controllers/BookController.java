@@ -50,4 +50,15 @@ public class BookController {
 
         return ResponseEntity.ok(book);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable int id) {
+        Optional<Book> book = bookRepo.findById(id);
+
+        if (book.isEmpty()) return ResponseEntity.notFound().build();
+
+        bookRepo.delete(book.get());
+
+        return ResponseEntity.ok().build();
+    }
 }
