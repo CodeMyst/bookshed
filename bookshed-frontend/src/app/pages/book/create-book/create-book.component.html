@@ -1,0 +1,35 @@
+<div id="box">
+    <div class="container">
+        <h2>Add a new book</h2>
+
+        <div *ngIf="res && res.success" class="alert-success">
+            Book successfully added.
+        </div>
+        <div *ngIf="res && !res.success" class="alert-danger">
+            {{res.message}}
+        </div>
+
+        <form>
+            <div class="form-group">
+                <label for="title">Book title</label>
+                <input type="text" class="form-control" id="title" placeholder="Enter a book title" required>
+            </div>
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" class="form-control" id="author" placeholder="Enter author's name" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label><br>
+                <select [(ngModel)]="categoryId" name="category" class="selectpicker">
+                    <option *ngFor="let cat of categories" [ngValue]="cat.id">{{cat.name}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label><br>
+                <textarea class="form-control" id="description" placeholder="Enter a description" rows="5"
+                    cols="20"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+        </form>
+    </div>
+</div>

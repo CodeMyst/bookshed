@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class UserDetailsImpl implements UserDetails {
-    private String username;
+	private static final long serialVersionUID = 1L;
+
+	private String username;
 
     @JsonIgnore
     private String password;
