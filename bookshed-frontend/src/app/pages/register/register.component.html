@@ -1,0 +1,42 @@
+<div id="box">
+    <div class="container">
+        <h2>Create a new account</h2>
+
+        <div *ngIf="res && res.success" class="alert-success">
+            Account successfully registered. You can now <a routerLink="/login">login</a>.
+        </div>
+        <div *ngIf="res && !res.success" class="alert-danger">
+            {{res.message}}
+        </div>
+
+        <form>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" [(ngModel)]="username" name="username1"
+                    placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" [(ngModel)]="email" name="email1" placeholder="Enter email"
+                    required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" [(ngModel)]="password" name="password1"
+                    placeholder="Enter password" required>
+            </div>
+            <div class="form-group">
+                <label for="password-confirm">Confirm Password</label>
+                <input type="password" class="form-control" [(ngModel)]="passwordConfirm" name="password2"
+                    placeholder="Confirm password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="onSubmit()">Register</button>
+        </form>
+
+        <div *ngIf="password !== passwordConfirm" class="alert-warning">
+            Passwords do not match.
+        </div>
+
+        <br><span>Already have an account? Login <a routerLink="/login">here</a>.</span>
+    </div>
+</div>
