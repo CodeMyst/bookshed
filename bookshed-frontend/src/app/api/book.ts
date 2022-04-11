@@ -140,8 +140,8 @@ export const editBook = async (title: string, author: string, categoryId: number
     }
 };
 
-export const getBook = async (id: number) => {
-    await fetch(`${apiServerUrl}/book/${id}`, {
+export const getBook = async (id: number): Promise<Book> => {
+    const res = await fetch(`${apiServerUrl}/book/${id}`, {
         method: "GET",
         mode: "cors",
         headers: {
@@ -149,4 +149,6 @@ export const getBook = async (id: number) => {
         },
         credentials: "include"
     });
+
+    return await res.json();
 }

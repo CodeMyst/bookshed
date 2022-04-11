@@ -10,15 +10,17 @@ import { Book, getBook } from 'src/app/api/book';
 export class BookInfoComponent implements OnInit {
 
     book: Book | undefined;
-    id: string | null = null;
+    id: number = -1;
     apiBaseUrl: string  = "epil";
 
     constructor(private route: ActivatedRoute) {
     }
 
     
-    ngOnInit(): void {
-        this.id = this.route.snapshot.paramMap.get('id');
+    async ngOnInit() {
+        let strId: string = <string>this.route.snapshot.paramMap.get('id');
+        this.id = +strId
+        this.book = await getBook(this.id);
     }
 
 }
