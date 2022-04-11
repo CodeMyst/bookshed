@@ -14,7 +14,6 @@ export class RegisterComponent implements OnInit {
   password: string = "";
   passwordConfirm: string = "";
 
-
   onSubmit: any;
 
   constructor() {
