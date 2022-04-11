@@ -4,7 +4,7 @@ export interface Book {
     id: number;
     title: string;
     author: string;
-    categoryId: number;
+    category: BookCategory;
     description: string;
     imageUrl: string;
 }
@@ -51,7 +51,10 @@ export const getAllBookCategories = async (): Promise<BookCategory[]> => {
 export const createBook = async (title: string, author: string, categoryId: number, description: string, imageUrl: string): Promise<BookCreateResult> => {
     const data = {
         title: title,
-        description: description
+        author: author,
+        categoryId: categoryId,
+        description: description,
+        imageUrl: imageUrl
     };
 
     const res = await fetch(`${apiServerUrl}/api/book/createBook`, {

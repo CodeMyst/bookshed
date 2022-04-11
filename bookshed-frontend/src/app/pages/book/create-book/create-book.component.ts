@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { getUser } from 'src/app/api/auth';
 import { BookCategory, BookCreateResult, createBook, getAllBookCategories } from 'src/app/api/book';
-import { User } from 'src/app/api/user';
+import { ImageUploadResult, uploadImage } from 'src/app/api/image';
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: 'app-create-book',
@@ -13,28 +13,38 @@ export class CreateBookComponent implements OnInit {
   categoryId: number;
   categories: BookCategory[];
 
-  author: string = "test";
+  author: string = "";
   title: string = "";
   description: string = "";
-  imageUrl: string = "000";
+  imageUrl: string = "";
 
-  res: BookCreateResult | null = null
+  image: File | any;
+
+  onFileChanged(event: any) {
+    this.image = event.target.files[0];
+  }
+
+  res: BookCreateResult | null = null;
+  imgRes: ImageUploadResult | null = null;
   onSubmit: any;
-
-  currentUser: User | null = null;
 
   constructor() {
     this.categories = new Array;
     this.categoryId = 1;
 
     this.onSubmit = async () => {
-      // this.res = await createBook(title, author, this.categoryId, description, imageUrl);
+      this.imgRes = await uploadImage(this.image);
+      this.imageUrl =  environment.apiBaseUrl + "/static/images/" + this.imgRes.filename;
+      console.log(this.image);
+      console.log(this.imageUrl);
+      console.log(this.imgRes);
+
+      this.res = await createBook(this.title, this.author, this.categoryId, this.description, this.imageUrl);
     }
   }
 
   async ngOnInit() {
     this.categories = await getAllBookCategories();
-    this.currentUser = await getUser();
   }
 
 }

@@ -24,9 +24,8 @@ export class LoginComponent implements OnInit {
       this.res = await login(this.username, this.password);
 
       GlobalConstants.currentUser = await getUser();
-      console.log("after logging: " + GlobalConstants.currentUser.username);
     };
-
+    
     this.reRoute = () => {
       this.router.navigate(["/"]);
     };

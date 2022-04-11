@@ -1,5 +1,3 @@
-import { environment } from "src/environments/environment";
-
 export interface User {
     username: string;
     email: string;
@@ -8,9 +6,7 @@ export interface User {
     created_at: Date;
 }
 
-enum Role {
+export enum Role {
     ADMIN = "ADMIN",
     USER = "USER"
 }
-
-const apiServerUrl = environment.apiBaseUrl;
