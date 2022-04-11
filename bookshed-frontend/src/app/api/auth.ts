@@ -87,19 +87,6 @@ export const logout = async () => {
     });
 };
 
-export const isLoggedIn = async (): Promise<boolean> => {
-    const res = await fetch(`${apiServerUrl}/auth/self`, {
-        method: "GET",
-        mode: "cors",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: "include"
-    });
-
-    return res.ok;
-};
-
 export const getUser = async (): Promise<User> => {
     const res = await fetch(`${apiServerUrl}/api/auth/self`, {
         method: "GET",

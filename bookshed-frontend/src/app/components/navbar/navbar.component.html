@@ -7,18 +7,24 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-left mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" routerLink="/createBook">New book</a></li>
-            </ul>
+           
+            <!-- show only if user's logged in -->
+            <div *ngIf="currentUser">
+                <ul class="navbar-nav ms-left mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" routerLink="/createBook">New book</a></li>
+                </ul>
+            </div>
+           
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <div class="navbar-nav ms-auto mb-2 mb-lg-0" *ngIf="currentUser === null || currentUser === undefined; else user">
+                <div class="navbar-nav"
+                    *ngIf="currentUser === null || currentUser === undefined; else user">
                     <li class="nav-item"><a class="nav-link" routerLink="/login">Login</a></li>
                     <li class="nav-item"><a class="nav-link" routerLink="/register">Register</a></li>
                 </div>
                 <ng-template #user>
-                    <li class="nav-item"><a class="nav-link">{{currentUser?.username}}</a></li>
+                    <li class="nav-item"><a class="nav-link">{{userRole}} {{currentUser?.username}}</a></li>
                     <li class="nav-item">
-                        <button type="submit" class="nav-link" (click)="onLogout()">Logout</button>
+                        <button type="submit" class="nav-link" (click)="onLogout(); goToPage('/')">Logout</button>
                     </li>
                 </ng-template>
             </ul>
