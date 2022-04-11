@@ -1,9 +1,9 @@
     <div *ngFor="let book of books" class="book-container">
         <span class="book-image-container">
-            <img src="https://ichef.bbci.co.uk/news/976/cpsprodpb/16620/production/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg" class="" alt="img">
+            <img src='{{ book.imageUrl !== "" ? book.imageUrl : noImage}}' class="" alt="img">
         </span>
         <span class="book-text-container">
-                <small><a href="#">Category{{book.categoryId}} </a></small>
+                <small><a href="#">{{book.category.name}}</a></small>
                 <br>
                 <h6><a routerLink="{{'/book/' + book.id}}">{{book.title}}</a></h6>
                   {{ book.description }}

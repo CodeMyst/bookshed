@@ -11,7 +11,8 @@ export class BookInfoComponent implements OnInit {
 
     book: Book | undefined;
     id: number = -1;
-    apiBaseUrl: string  = "epil";
+    apiBaseUrl: string  = "";
+    noImage: string = "../../../../../../assets/no-image.jpg";
 
     constructor(private route: ActivatedRoute) {
     }

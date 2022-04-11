@@ -11,6 +11,7 @@ export class BookListComponent implements OnInit {
 
     books: Book[];
     apiBaseUrl: string = environment.apiBaseUrl;
+    noImage: string = "../../../../../../assets/no-image.jpg";
 
     constructor() {
         this.books = new Array;
