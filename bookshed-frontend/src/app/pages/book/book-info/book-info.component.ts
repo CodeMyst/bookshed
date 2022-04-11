@@ -10,18 +10,13 @@ import { Book, getBook } from 'src/app/api/book';
 export class BookInfoComponent implements OnInit {
 
     book: Book | undefined;
-    id: number = -1;
-    apiBaseUrl: string  = "";
-    noImage: string = "../../../../../../assets/no-image.jpg";
+    apiBaseUrl: string = "";
+    descriotionLengthLimit: number = 100;
 
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) { }
 
-    
     async ngOnInit() {
         let strId: string = <string>this.route.snapshot.paramMap.get('id');
-        this.id = +strId
-        this.book = await getBook(this.id);
+        this.book = await getBook(+strId);
     }
-
 }

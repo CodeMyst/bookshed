@@ -1,13 +1,12 @@
     <div *ngFor="let book of books" class="book-container">
         <span class="book-image-container">
-            <img src='{{ book.imageUrl !== "" ? book.imageUrl : noImage}}' class="" alt="img">
+            <img src='{{ book.imageUrl !== "" ? book.imageUrl : "assets/no-image.jpg"}}' class="" alt="img">
         </span>
         <span class="book-text-container">
                 <small><a href="#">{{book.category.name}}</a></small>
                 <br>
                 <h6><a routerLink="{{'/book/' + book.id}}">{{book.title}}</a></h6>
-                  {{ book.description }}
-                  Once upon a time there was a lovely princess.  But she had an enchantment upon her of a fearful sort which could only be broken by love's first kiss.  She was locked away in a castle guarded by a terrible fire-breathing dragon.
+                  {{ truncateString(book.description, 150) }}
                 <br>
         </span>
     </div>

@@ -1,5 +1,5 @@
 <div class="container">
-  <img src="{{book?.imageUrl === '' ? noImage : book?.imageUrl }}" alt="image of {{book?.title}}">
+  <img src="{{book?.imageUrl === '' ? 'assets/no-image.jpg' : book?.imageUrl }}" alt="image of {{book?.title}}">
   <h1>{{ book?.title }}</h1>
   by {{ book?.author }}
   <hr>
