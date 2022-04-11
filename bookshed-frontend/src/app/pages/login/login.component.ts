@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthResult, login } from 'src/app/api/auth';
+import { AuthResult, getUser, login } from 'src/app/api/auth';
+import { GlobalConstants } from 'src/app/api/global.constants';
+import { User } from 'src/app/api/user';
 
 @Component({
   selector: 'app-register',
@@ -9,11 +11,9 @@ import { AuthResult, login } from 'src/app/api/auth';
 })
 export class LoginComponent implements OnInit {
 
-  // public form = {} as HTMLFormElement;
-
   res: AuthResult | null = null;
 
-  username: string = "laz";
+  username: string = "";
   password: string = "";
 
   onSubmit: any;
@@ -21,10 +21,10 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router) { 
     this.onSubmit = async () => {
-      // this.res = await login(this.username, this.password);
-      console.log(this.username)
+      this.res = await login(this.username, this.password);
 
-      // if (this.res.success) this.form.reset();
+      GlobalConstants.currentUser = await getUser();
+      console.log("after logging: " + GlobalConstants.currentUser.username);
     };
 
     this.reRoute = () => {
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
   }
 
 }

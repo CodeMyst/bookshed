@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### Eclipse ###
+*/.metadata/
+
 ### Spring logs ###
 logs/
 
