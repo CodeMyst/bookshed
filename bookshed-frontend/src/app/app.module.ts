@@ -10,6 +10,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
+import { BookListComponent } from './components/book/book-list/book-list.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { LoginComponent } from './pages/login/login.component';
     RegisterComponent,
     LoginComponent,
     CreateBookComponent,
-    HomeComponent
+    HomeComponent,
+    BookListComponent,
   ],
   imports: [
     BrowserModule,

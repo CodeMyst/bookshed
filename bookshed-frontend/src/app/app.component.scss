@@ -3,8 +3,9 @@ body {
     color: white;  
     min-height: 100vh;
     display:flex; 
-    flex-direction:column; 
-    justify-content:space-between;
+    flex-direction: column; 
+    justify-content: space-between;
+    flex-grow: 10;
 }
 
 .navbar {

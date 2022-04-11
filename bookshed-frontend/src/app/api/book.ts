@@ -139,3 +139,14 @@ export const editBook = async (title: string, author: string, categoryId: number
         };
     }
 };
+
+export const getBook = async (id: number) => {
+    await fetch(`${apiServerUrl}/book/${id}`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+}
