@@ -1,6 +1,5 @@
 import { User } from "./user";
 import { environment } from "src/environments/environment";
-import { empty } from "rxjs";
 
 export interface AuthResult {
     success: boolean;
@@ -55,7 +54,7 @@ export const login = async (username: string, password: string): Promise<AuthRes
         password: password
     };
 
-    const res = await fetch(`${apiServerUrl}/auth/login`, {
+    const res = await fetch(`${apiServerUrl}/api/auth/login`, {
         method: "POST",
         mode: "cors",
         headers: {
@@ -78,7 +77,7 @@ export const login = async (username: string, password: string): Promise<AuthRes
 };
 
 export const logout = async () => {
-    const res = await fetch(`${apiServerUrl}/auth/logout`, {
+    const res = await fetch(`${apiServerUrl}/api/auth/logout`, {
         method: "POST",
         mode: "cors",
         headers: {
@@ -89,7 +88,7 @@ export const logout = async () => {
 };
 
 export const isLoggedIn = async (): Promise<boolean> => {
-    const res = await fetch(`${apiServerUrl}/auth/user`, {
+    const res = await fetch(`${apiServerUrl}/auth/self`, {
         method: "GET",
         mode: "cors",
         headers: {
@@ -102,7 +101,7 @@ export const isLoggedIn = async (): Promise<boolean> => {
 };
 
 export const getUser = async (): Promise<User> => {
-    const res = await fetch(`${apiServerUrl}/auth/user`, {
+    const res = await fetch(`${apiServerUrl}/api/auth/self`, {
         method: "GET",
         mode: "cors",
         headers: {
