@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
+import { NgModule, OnInit } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BookInfoComponent } from './pages/book/book-info/book-info.component';
 import { CreateBookComponent } from './pages/book/create-book/create-book.component';
+import { EditBookComponent } from './pages/book/edit-book/edit-book.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
@@ -35,11 +36,17 @@ const routes: Routes = [
         component: BookInfoComponent
       }
     ]
+  },
+  {
+    path: "editBook",
+    component: EditBookComponent
   }
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+ }

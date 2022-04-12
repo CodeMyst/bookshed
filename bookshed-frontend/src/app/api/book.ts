@@ -102,13 +102,16 @@ export const deleteBook = async (id: number) => {
     });
 };
 
-export const editBook = async (title: string, author: string, categoryId: number, description: string, imageUrl: string): Promise<BookCreateResult> => {
+export const editBook = async (title: string, author: string, categoryId: number, description: string, imageUrl: string, id: number): Promise<BookCreateResult> => {
     const data = {
         title: title,
-        description: description
+        author: author,
+        categoryId: categoryId,
+        description: description,
+        imageUrl: imageUrl
     };
 
-    const res = await fetch(`${apiServerUrl}/api/book/createBook`, {
+    const res = await fetch(`${apiServerUrl}/api/book/${id}`, {
         method: "PATCH",
         mode: "cors",
         headers: {

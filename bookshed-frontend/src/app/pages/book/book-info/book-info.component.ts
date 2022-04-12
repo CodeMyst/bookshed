@@ -20,8 +20,13 @@ export class BookInfoComponent implements OnInit {
     async ngOnInit() {
         let strId: string = <string>this.route.snapshot.paramMap.get("id");
         this.book = await getBook(+strId);
+        GlobalConstants.viewedBook = this.book;
 
         this.isAdmin =  GlobalConstants.currentUser?.role === "ADMIN";
+    }
+
+    navigateToEdit() {
+        this.router.navigate(["/editBook"]);
     }
 
     confirmDelete() {

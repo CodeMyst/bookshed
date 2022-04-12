@@ -11,7 +11,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 import { BookListComponent } from './components/book/book-list/book-list.component';
-import { ErrorComponent } from './component/error/error.component';
+import { EditBookComponent } from './pages/book/edit-book/edit-book.component';
 
 
 @NgModule({
@@ -24,7 +24,7 @@ import { ErrorComponent } from './component/error/error.component';
     CreateBookComponent,
     HomeComponent,
     BookListComponent,
-    ErrorComponent,
+    EditBookComponent
   ],
   imports: [
     CommonModule,

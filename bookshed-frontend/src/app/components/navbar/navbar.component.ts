@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { logout } from 'src/app/api/auth';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { User, Role } from 'src/app/api/user';
@@ -16,16 +16,17 @@ export class NavbarComponent implements OnInit {
 
   onLogout: any;
   onLogin: any;
-  checkIfLogged: any;
 
   constructor(private router: Router) {
     this.onLogout = async () => {
       await logout();
 
       GlobalConstants.currentUser = null;
+
+      GlobalConstants.checkIfLogged();
     };
 
-    this.checkIfLogged = () => {
+    GlobalConstants.checkIfLogged = () => {
       this.currentUser = GlobalConstants.currentUser;
       this.userRole = this.currentUser?.role === Role.USER ? "[U]" : "[A]";
     }
@@ -36,6 +37,12 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      GlobalConstants.checkIfLogged();
+    });
   }
 
 }
