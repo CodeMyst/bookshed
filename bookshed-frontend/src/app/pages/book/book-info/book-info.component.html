@@ -6,4 +6,8 @@
   {{ book?.description }}
   <br>
   <button>Edit</button>
+
+  <div [hidden]="!isAdmin">
+    <button (click)="confirmDelete()">Delete</button>
+  </div>
 </div>
