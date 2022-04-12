@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Book, deleteBook, getBook } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
+import { Role } from 'src/app/api/user';
 
 @Component({
     selector: 'app-book-info',
@@ -14,6 +15,7 @@ export class BookInfoComponent implements OnInit {
     apiBaseUrl: string = "";
     descriotionLengthLimit: number = 100;
     isAdmin: boolean = false;
+    imageUrl: string = "assets/no-image.jpg";
 
     constructor(private route: ActivatedRoute, private router: Router) { }
 
@@ -21,7 +23,11 @@ export class BookInfoComponent implements OnInit {
         let strId: string = <string>this.route.snapshot.paramMap.get("id");
         this.book = await getBook(+strId);
 
-        this.isAdmin =  GlobalConstants.currentUser?.role === "ADMIN";
+        if (this.book.imageUrl !== "") {
+            this.imageUrl = this.book.imageUrl;
+        }
+
+        this.isAdmin =  GlobalConstants.currentUser?.role === Role.ADMIN;
     }
 
     confirmDelete() {

@@ -1,6 +1,37 @@
-.container {
+.info {
     background-color: #16181c;
-    height: 100vh;
+
+    width: 1250px;
+
+    margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
+
+    padding: 60px;
+}
+
+.description {
+    margin-bottom: 10px;
+}
+
+.image-container {
+    text-align: center;
+    background-color: rgb(20, 20, 20);
+    padding: 20px;
+    width: 100%;
+}
+
+.image-container a {
+    text-decoration: none;
+    color: white;
+}
+
+.title {
+    text-align: center;
+}
+
+@media only screen and (max-width: 1250px) {
+    .info {
+        width: 100%;
+    }
 }
