@@ -91,7 +91,8 @@ export const createBook = async (title: string, author: string, categoryId: numb
 };
 
 export const deleteBook = async (id: number) => {
-    await fetch(`${apiServerUrl}/book/${id}`, {
+    await fetch(`${apiServerUrl}/api/book/${id}`, {
+
         method: "DELETE",
         mode: "cors",
         headers: {
@@ -139,3 +140,16 @@ export const editBook = async (title: string, author: string, categoryId: number
         };
     }
 };
+
+export const getBook = async (id: number): Promise<Book> => {
+    const res = await fetch(`${apiServerUrl}/api/book/${id}`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+
+    return await res.json();
+}
