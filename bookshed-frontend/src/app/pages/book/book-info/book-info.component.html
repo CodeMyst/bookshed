@@ -16,7 +16,7 @@
       {{ book?.description }}
     </div>
 
-    <button>Edit</button>
+    <button (click)="navigateToEdit()">Edit</button>
 
     <div [hidden]="!isAdmin">
       <button (click)="confirmDelete()">Delete</button>

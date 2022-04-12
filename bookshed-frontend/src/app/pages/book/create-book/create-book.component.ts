@@ -20,10 +20,6 @@ export class CreateBookComponent implements OnInit {
 
   image: File | any;
 
-  onFileChanged(event: any) {
-    this.image = event.target.files[0];
-  }
-
   res: BookCreateResult | null = null;
   imgRes: ImageUploadResult | null = null;
   onSubmit: any;
@@ -45,6 +41,10 @@ export class CreateBookComponent implements OnInit {
 
   async ngOnInit() {
     this.categories = await getAllBookCategories();
+  }
+
+  onFileChanged(event: any) {
+    this.image = event.target.files[0];
   }
 
 }
