@@ -8,6 +8,7 @@
         <class>rs.myst.bookshed.model.User</class>
         <class>rs.myst.bookshed.model.BookCategory</class>
         <class>rs.myst.bookshed.model.Book</class>
+        <class>rs.myst.bookshed.model.Review</class>
     </persistence-unit>
     <persistence-unit name="persistenceUnit"/>
 </persistence>

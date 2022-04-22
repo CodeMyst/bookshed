@@ -39,6 +39,27 @@ create table book
 );
 
 
+drop table if exists bookshed.review;
+
+create table review
+(
+    id         int         not null primary key auto_increment,
+    book_id    int         not null,
+    author     varchar(50) not null,
+    content    mediumtext  not null,
+    created_at datetime    not null,
+    last_edit  datetime    not null,
+
+    constraint fk_book_id
+        foreign key (book_id)
+            references book (id),
+
+    constraint fk_author
+        foreign key (author)
+            references user (username)
+);
+
+
 insert into book_category (name)
 values ('Fantasy');
 insert into book_category (name)
