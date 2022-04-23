@@ -1,12 +1,16 @@
 body {
-    background-color: #202024;
-    color: white;  
-    min-height: 100vh;
-    display:flex; 
-    flex-direction:column; 
-    justify-content:space-between;
+  background-color: #202024;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .navbar {
-    background-color: #1a1a1f;
+  background-color: #1a1a1f;
+}
+
+.content {
+    flex: 1 0 auto;
 }
