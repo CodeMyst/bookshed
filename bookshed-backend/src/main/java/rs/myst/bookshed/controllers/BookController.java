@@ -41,14 +41,14 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchBooks(String query) {
+    public ResponseEntity<?> searchBooks(String query, int categoryId) {
         List<Book> books = bookRepo.search(query);
-        return ResponseEntity.ok(books);
-    }
 
-    @GetMapping("/getByCategory")
-    public ResponseEntity<?> getByCategory(int categoryId) {
-        return ResponseEntity.ok(bookRepo.findAllByCategoryId(categoryId));
+        if (categoryId > 0) {
+            books.retainAll(bookRepo.findAllByCategoryId(categoryId));
+        }
+
+        return ResponseEntity.ok(books);
     }
 
     @GetMapping("/allCat")
