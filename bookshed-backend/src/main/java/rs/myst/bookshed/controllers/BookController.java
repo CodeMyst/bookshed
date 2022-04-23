@@ -1,5 +1,6 @@
 package rs.myst.bookshed.controllers;
 
+import jdk.jfr.Category;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,11 @@ public class BookController {
     public ResponseEntity<?> searchBooks(String query) {
         List<Book> books = bookRepo.search(query);
         return ResponseEntity.ok(books);
+    }
+
+    @GetMapping("/getByCategory")
+    public ResponseEntity<?> getByCategory(int categoryId) {
+        return ResponseEntity.ok(bookRepo.findAllByCategoryId(categoryId));
     }
 
     @GetMapping("/allCat")

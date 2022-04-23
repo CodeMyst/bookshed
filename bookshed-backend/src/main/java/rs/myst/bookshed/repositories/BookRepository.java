@@ -16,4 +16,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
             "or b.category.name like %:query% "
     )
     List<Book> search(@Param("query") String query);
+
+    List<Book> findAllByCategoryId(int categoryId);
 }
