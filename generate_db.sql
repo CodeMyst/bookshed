@@ -1,5 +1,9 @@
 create database if not exists bookshed;
 
+drop schema if exists bookshed;
+create schema if not exists bookshed;
+use bookshed;
+
 
 drop table if exists bookshed.user;
 
