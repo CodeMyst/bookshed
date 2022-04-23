@@ -60,6 +60,21 @@ create table review
 );
 
 
+drop table if exists bookshed.sell_info;
+
+create table sell_info
+(
+    id       int            not null primary key auto_increment,
+    book_id  int            not null,
+    location tinytext       not null,
+    price    decimal(15, 2) not null,
+
+    constraint fk_sell_info_book_id
+        foreign key (book_id)
+            references book (id)
+);
+
+
 insert into book_category (name)
 values ('Fantasy');
 insert into book_category (name)
