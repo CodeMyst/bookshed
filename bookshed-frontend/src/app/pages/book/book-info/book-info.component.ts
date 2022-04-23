@@ -15,6 +15,7 @@ export class BookInfoComponent implements OnInit {
     apiBaseUrl: string = "";
     descriotionLengthLimit: number = 100;
     isAdmin: boolean = false;
+    isLoggedIn: boolean = false;
     imageUrl: string = "assets/no-image.jpg";
 
     constructor(private route: ActivatedRoute, private router: Router) { }
@@ -29,6 +30,7 @@ export class BookInfoComponent implements OnInit {
         }
 
         this.isAdmin =  GlobalConstants.currentUser?.role === Role.ADMIN;
+        this.isLoggedIn = GlobalConstants.currentUser !== null;
     }
 
     navigateToEdit() {
