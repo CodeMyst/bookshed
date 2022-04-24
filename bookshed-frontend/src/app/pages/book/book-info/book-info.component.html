@@ -1,24 +1,26 @@
-  <div class="info">
-    <div class="image-container">
-      <a href="{{ imageUrl }}" target="_blank">
-        <img src="{{ imageUrl }}" alt="Image of {{book?.title}}">
-      </a>
-    </div>
+<div class="info">
+  <div class="image-container">
+    <a href="{{ imageUrl }}" target="_blank">
+      <img src="{{ imageUrl }}" alt="Image of {{book?.title}}">
+    </a>
+  </div>
 
-    <div class="title">
-      <h1>{{ book?.title }}</h1>
-      <h3>by {{ book?.author }}</h3>
-    </div>
+  <div class="title">
+    <h1>{{ book?.title }}</h1>
+    <h3>by {{ book?.author }}</h3>
+  </div>
 
-    <hr>
+  <hr>
 
-    <div class="description">
-      {{ book?.description }}
-    </div>
+  <div class="description">
+    {{ book?.description }}
+  </div>
 
+  <div [hidden]="!isLoggedIn">
     <button (click)="navigateToEdit()">Edit</button>
 
     <div [hidden]="!isAdmin">
       <button (click)="confirmDelete()">Delete</button>
     </div>
   </div>
+</div>

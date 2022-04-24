@@ -2,3 +2,8 @@ input, textarea {
     background-color: #0c0d0f;
     color: white;
 }
+
+input:focus, textarea:focus {
+    background-color: #1c2026;
+    color: white;
+}

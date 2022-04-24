@@ -39,12 +39,10 @@ export class EditBookComponent implements OnInit {
     this.onSubmit = async () => {
       if (!this.hasChanged) {
         this.imageUrl = GlobalConstants.viewedBook.imageUrl;
-        console.log("im here")
       } else {
         this.imgRes = await uploadImage(this.image);
         this.imageUrl = environment.apiBaseUrl + "/static/images/" + this.imgRes.filename;
       }
-
 
       this.res = await editBook(this.title, this.author, this.categoryId, this.description, this.imageUrl, GlobalConstants.viewedBook.id);
     }
