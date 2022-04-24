@@ -43,6 +43,11 @@ public class BookController {
     @GetMapping("/search")
     public ResponseEntity<?> searchBooks(String query) {
         List<Book> books = bookRepo.search(query);
+
+        if (categoryId > 0) {
+            books.retainAll(bookRepo.findAllByCategoryId(categoryId));
+        }
+
         return ResponseEntity.ok(books);
     }
 
