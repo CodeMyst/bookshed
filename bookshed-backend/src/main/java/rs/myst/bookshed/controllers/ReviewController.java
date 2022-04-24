@@ -2,12 +2,15 @@ package rs.myst.bookshed.controllers;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +22,8 @@ import rs.myst.bookshed.constants.RoleConstants;
 import rs.myst.bookshed.model.Book;
 import rs.myst.bookshed.model.Review;
 import rs.myst.bookshed.model.User;
+import rs.myst.bookshed.model.UserRole;
+import rs.myst.bookshed.payload.MessageResponse;
 import rs.myst.bookshed.repositories.BookRepository;
 import rs.myst.bookshed.repositories.ReviewRepository;
 import rs.myst.bookshed.repositories.UserRepository;
@@ -72,5 +77,28 @@ public class ReviewController {
 		reviewRepo.save(review);
 
 		return ResponseEntity.ok(review);
+	}
+	
+	@DeleteMapping("/{id}")
+	@PreAuthorize(RoleConstants.USER)
+	public ResponseEntity<?> deleteReview(@PathVariable int id) {
+		Optional<Review> review = reviewRepo.findById(id);
+
+		if (review.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+
+		UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+		
+		if (currentUser.getRole() != UserRole.ADMIN) {
+			if (!review.get().getAuthor().equals(currentUser)) {
+				return new ResponseEntity<>(new MessageResponse("Can't delete someone else's review."), HttpStatus.UNAUTHORIZED);
+			}
+		}
+		
+		reviewRepo.delete(review.get());
+
+		return ResponseEntity.ok().build();
 	}
 }
