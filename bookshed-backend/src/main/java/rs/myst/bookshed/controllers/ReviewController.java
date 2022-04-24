@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,10 +49,10 @@ public class ReviewController {
 		if (!bookRepo.existsById(idBook)) {
 			return ResponseEntity.badRequest().build();
 		}
-		
+
 		Book book = bookRepo.findById(idBook).get();
 		List<Review> reviews = reviewRepo.findAllByBook(book);
-		
+
 		return ResponseEntity.ok(reviews);
 	}
 
@@ -78,7 +79,34 @@ public class ReviewController {
 
 		return ResponseEntity.ok(review);
 	}
-	
+
+	@PatchMapping("/{idBook}/{idReview}")
+	@PreAuthorize(RoleConstants.USER)
+	public ResponseEntity<?> editBook(@PathVariable int idBook, @PathVariable int idReview,
+			@Valid @RequestBody String content) {
+		if (!bookRepo.existsById(idBook))
+			return ResponseEntity.badRequest().build();
+
+		Review review = reviewRepo.findById(idReview).orElse(null);
+		if (review == null)
+			return ResponseEntity.notFound().build();
+		
+		UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+		
+		if (!currentUser.equals(review.getAuthor()))
+			return new ResponseEntity<>(new MessageResponse("Can't delete someone else's review."),
+					HttpStatus.UNAUTHORIZED);
+
+		review.setContent(content);
+		review.setLastEdit(LocalDateTime.now());
+		
+		reviewRepo.save(review);
+		
+		return ResponseEntity.ok(review);
+	}
+
 	@DeleteMapping("/{id}")
 	@PreAuthorize(RoleConstants.USER)
 	public ResponseEntity<?> deleteReview(@PathVariable int id) {
@@ -88,15 +116,17 @@ public class ReviewController {
 			return ResponseEntity.notFound().build();
 		}
 
-		UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
 		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
-		
+
 		if (currentUser.getRole() != UserRole.ADMIN) {
 			if (!review.get().getAuthor().equals(currentUser)) {
-				return new ResponseEntity<>(new MessageResponse("Can't delete someone else's review."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new MessageResponse("Can't delete someone else's review."),
+						HttpStatus.UNAUTHORIZED);
 			}
 		}
-		
+
 		reviewRepo.delete(review.get());
 
 		return ResponseEntity.ok().build();
