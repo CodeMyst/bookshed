@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Book, deleteBook, getBook } from 'src/app/api/book';
+import { Book, deleteBook, getBook, getBookSellInfos, SellInfo } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { Role } from 'src/app/api/user';
 
@@ -18,6 +18,8 @@ export class BookInfoComponent implements OnInit {
     isLoggedIn: boolean = false;
     imageUrl: string = "assets/no-image.jpg";
 
+    sellInfos: SellInfo[] = [];
+
     constructor(private route: ActivatedRoute, private router: Router) { }
 
     async ngOnInit() {
@@ -31,6 +33,8 @@ export class BookInfoComponent implements OnInit {
 
         this.isAdmin =  GlobalConstants.currentUser?.role === Role.ADMIN;
         this.isLoggedIn = GlobalConstants.currentUser !== null;
+
+        this.sellInfos = await getBookSellInfos(this.book?.id);
     }
 
     navigateToEdit() {

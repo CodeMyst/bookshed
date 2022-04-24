@@ -20,6 +20,12 @@ export interface BookCreateResult {
     url: string;
 }
 
+export interface SellInfo {
+    id: number;
+    location: string;
+    price: number;
+}
+
 const apiServerUrl = environment.apiBaseUrl;
 
 export const getAllBooks = async (): Promise<Book[]> => {
@@ -156,3 +162,16 @@ export const getBook = async (id: number): Promise<Book> => {
 
     return await res.json();
 }
+
+export const getBookSellInfos = async (id: number): Promise<SellInfo[]> => {
+    const res = await fetch(`${apiServerUrl}/api/book/${id}/sellInfo`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+
+    return await res.json();
+};

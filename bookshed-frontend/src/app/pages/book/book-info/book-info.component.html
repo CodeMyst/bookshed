@@ -21,4 +21,14 @@
       </p>
     </div>
   </div>
+
+  <div class="sell-infos">
+    <h4>Places where you can buy this book:</h4>
+
+    <p *ngIf="sellInfos.length === 0">No one submitted purchase locations for this book. Submit one yourself with the button below.</p>
+
+    <p *ngFor="let info of sellInfos">At: <b>{{ info.location }}</b>, For: <b>{{ info.price }}</b></p>
+
+    <button class="btn btn-primary">Submit a new location</button>
+  </div>
 </div>
