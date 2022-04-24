@@ -96,7 +96,7 @@ public class ReviewController {
 		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
 		
 		if (!currentUser.equals(review.getAuthor()))
-			return new ResponseEntity<>(new MessageResponse("Can't delete someone else's review."),
+			return new ResponseEntity<>(new MessageResponse("Can't edit someone else's review."),
 					HttpStatus.UNAUTHORIZED);
 
 		review.setContent(content);
