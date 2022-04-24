@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Book, deleteBook, getBook, getBookSellInfos, SellInfo } from 'src/app/api/book';
+import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { Role } from 'src/app/api/user';
 
@@ -19,6 +19,10 @@ export class BookInfoComponent implements OnInit {
     imageUrl: string = "assets/no-image.jpg";
 
     sellInfos: SellInfo[] = [];
+
+    isSubmittingSellInfo: boolean = false;
+    location: string = "";
+    price: number = 1.00;
 
     constructor(private route: ActivatedRoute, private router: Router) { }
 
@@ -46,5 +50,17 @@ export class BookInfoComponent implements OnInit {
             deleteBook(this.book!.id);
             this.router.navigate(["/"]);
         }
+    }
+
+    toggleSellInfoSubmit() {
+        this.isSubmittingSellInfo = !this.isSubmittingSellInfo;
+    }
+
+    async submitSellInfo() {
+        await addBookSellInfo(this.book!.id, this.location, this.price);
+
+        this.isSubmittingSellInfo = false;
+
+        this.sellInfos = await getBookSellInfos(this.book!.id);
     }
 }

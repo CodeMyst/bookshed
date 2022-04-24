@@ -175,3 +175,20 @@ export const getBookSellInfos = async (id: number): Promise<SellInfo[]> => {
 
     return await res.json();
 };
+
+export const addBookSellInfo = async (id: number, location: string, price: number) => {
+    const data = {
+        location: location,
+        price: price
+    };
+
+    await fetch(`${apiServerUrl}/api/book/${id}/sellInfo`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(data)
+    });
+};

@@ -25,10 +25,30 @@
   <div class="sell-infos">
     <h4>Places where you can buy this book:</h4>
 
-    <p *ngIf="sellInfos.length === 0">No one submitted purchase locations for this book. Submit one yourself with the button below.</p>
+    <p *ngIf="sellInfos.length === 0 && isLoggedIn">No one submitted purchase locations for this book. Submit one yourself with the button below.</p>
+    <p *ngIf="sellInfos.length === 0 && !isLoggedIn">No one submitted purchase locations for this book. Submit one yourself by creating a new account.</p>
 
     <p *ngFor="let info of sellInfos">At: <b>{{ info.location }}</b>, For: <b>{{ info.price }}</b></p>
 
-    <button class="btn btn-primary">Submit a new location</button>
+    <button class="btn btn-primary" *ngIf="isLoggedIn" (click)="toggleSellInfoSubmit()">Submit a new location</button>
+
+    <div class="submit-sell-info" *ngIf="isSubmittingSellInfo">
+      <form>
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" name="location" id="location" class="form-control" placeholder="Book Purchase Location" [(ngModel)]="location">
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price</label>
+          <input type="number" min="1" step="any" name="price" id="price" class="form-control" value="01.00" [(ngModel)]="price">
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary" (click)="submitSellInfo()">Submit</button>
+          <button class="btn btn-secondary" (click)="toggleSellInfoSubmit()">Cancel</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
