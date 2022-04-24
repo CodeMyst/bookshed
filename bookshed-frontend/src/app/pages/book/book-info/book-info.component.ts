@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
+import { createReview, getBookReviews, Review, ReviewCreateResult } from 'src/app/api/review';
 import { Role } from 'src/app/api/user';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
     selector: 'app-book-info',
@@ -10,13 +13,18 @@ import { Role } from 'src/app/api/user';
     styleUrls: ['./book-info.component.scss']
 })
 export class BookInfoComponent implements OnInit {
-
     book: Book | undefined;
+    reviews: Review[] = [];
+
     apiBaseUrl: string = "";
-    descriotionLengthLimit: number = 100;
+    descriptionLengthLimit: number = 100;
+
+    imageUrl: string = "assets/no-image.jpg";
+
     isAdmin: boolean = false;
     isLoggedIn: boolean = false;
-    imageUrl: string = "assets/no-image.jpg";
+
+    onSubmit: any;
 
     sellInfos: SellInfo[] = [];
 
@@ -24,7 +32,10 @@ export class BookInfoComponent implements OnInit {
     location: string = "";
     price: number = 1.00;
 
-    constructor(private route: ActivatedRoute, private router: Router) { }
+    reviewContent: string = "";
+    reviewRes: ReviewCreateResult | null = null;
+
+    constructor(private route: ActivatedRoute, private router: Router) {}
 
     async ngOnInit() {
         let strId: string = <string>this.route.snapshot.paramMap.get("id");
@@ -39,6 +50,8 @@ export class BookInfoComponent implements OnInit {
         this.isLoggedIn = GlobalConstants.currentUser !== null;
 
         this.sellInfos = await getBookSellInfos(this.book?.id);
+
+        this.loadReviews();
     }
 
     navigateToEdit() {
@@ -62,5 +75,22 @@ export class BookInfoComponent implements OnInit {
         this.isSubmittingSellInfo = false;
 
         this.sellInfos = await getBookSellInfos(this.book!.id);
+    }
+
+    async submitReview() {
+        this.reviewRes = await createReview(this.book!.id, this.reviewContent);
+        this.loadReviews();
+        this.reviewContent = "";
+    }
+
+    async loadReviews() {
+        this.reviews = await getBookReviews(this.book!.id);
+    }
+
+    formatDate(date: Date): string {
+        const datepipe: DatePipe = new DatePipe('en-US');
+        let formatedDate: string | null =  datepipe.transform(date, 'dd/MM/YYYY');
+        console.log("EOPI:" + formatedDate);
+        return formatedDate != null ? formatedDate : "unknown";
     }
 }

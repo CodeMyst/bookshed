@@ -2,20 +2,10 @@ package rs.myst.bookshed.controllers;
 
 import java.util.List;
 import java.util.Optional;
-
 import javax.validation.Valid;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import rs.myst.bookshed.constants.RoleConstants;
 import rs.myst.bookshed.model.Book;
 import rs.myst.bookshed.model.BookCategory;
@@ -52,6 +42,22 @@ public class BookController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllBooks() {
         return ResponseEntity.ok(bookRepo.findAll());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchBooks(String query, int categoryId) {
+        List<Book> books = bookRepo.search(query);
+
+        if (categoryId > 0) {
+            books.retainAll(bookRepo.findAllByCategoryId(categoryId));
+        }
+
+        return ResponseEntity.ok(books);
+    }
+
+    @GetMapping("/getByCategory")
+    public ResponseEntity<?> getByCategory(int categoryId) {
+        return ResponseEntity.ok(bookRepo.findAllByCategoryId(categoryId));
     }
 
     @GetMapping("/allCat")
