@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Book, deleteBook, getBook } from 'src/app/api/book';
+import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
-import { createReview, getBookReviews, Review, ReviewCreateResault } from 'src/app/api/review';
+import { createReview, getBookReviews, Review, ReviewCreateResult } from 'src/app/api/review';
 import { Role } from 'src/app/api/user';
 import { DatePipe } from '@angular/common';
 
@@ -13,12 +13,12 @@ import { DatePipe } from '@angular/common';
     styleUrls: ['./book-info.component.scss']
 })
 export class BookInfoComponent implements OnInit {
-
     book: Book | undefined;
     reviews: Review[] = [];
 
     apiBaseUrl: string = "";
-    descriotionLengthLimit: number = 100;
+    descriptionLengthLimit: number = 100;
+
     imageUrl: string = "assets/no-image.jpg";
 
     isAdmin: boolean = false;
@@ -26,15 +26,16 @@ export class BookInfoComponent implements OnInit {
 
     onSubmit: any;
 
-    content: string = "";
-    res: ReviewCreateResault | null = null;
+    sellInfos: SellInfo[] = [];
 
-    constructor(private route: ActivatedRoute, private router: Router) {
-        this.onSubmit = async () => {
-            this.res = await createReview(this.book!.id, this.content);
-            this.loadReviews();
-        }
-    }
+    isSubmittingSellInfo: boolean = false;
+    location: string = "";
+    price: number = 1.00;
+
+    reviewContent: string = "";
+    reviewRes: ReviewCreateResult | null = null;
+
+    constructor(private route: ActivatedRoute, private router: Router) {}
 
     async ngOnInit() {
         let strId: string = <string>this.route.snapshot.paramMap.get("id");
@@ -47,6 +48,8 @@ export class BookInfoComponent implements OnInit {
 
         this.isAdmin =  GlobalConstants.currentUser?.role === Role.ADMIN;
         this.isLoggedIn = GlobalConstants.currentUser !== null;
+
+        this.sellInfos = await getBookSellInfos(this.book?.id);
 
         this.loadReviews();
     }
@@ -62,6 +65,24 @@ export class BookInfoComponent implements OnInit {
         }
     }
 
+    toggleSellInfoSubmit() {
+        this.isSubmittingSellInfo = !this.isSubmittingSellInfo;
+    }
+
+    async submitSellInfo() {
+        await addBookSellInfo(this.book!.id, this.location, this.price);
+
+        this.isSubmittingSellInfo = false;
+
+        this.sellInfos = await getBookSellInfos(this.book!.id);
+    }
+
+    async submitReview() {
+        this.reviewRes = await createReview(this.book!.id, this.reviewContent);
+        this.loadReviews();
+        this.reviewContent = "";
+    }
+
     async loadReviews() {
         this.reviews = await getBookReviews(this.book!.id);
     }
@@ -72,5 +93,4 @@ export class BookInfoComponent implements OnInit {
         console.log("EOPI:" + formatedDate);
         return formatedDate != null ? formatedDate : "unknown";
     }
-    
 }

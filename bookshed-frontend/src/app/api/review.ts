@@ -14,13 +14,13 @@ export interface Review {
 
 const apiServerUrl = environment.apiBaseUrl;
 
-export interface ReviewCreateResault {
+export interface ReviewCreateResult {
     success: boolean;
     message: string;
     url: string;
 }
 
-export const createReview = async (idBook: number, content: string) : Promise<ReviewCreateResault> => {
+export const createReview = async (idBook: number, content: string) : Promise<ReviewCreateResult> => {
     const res = await fetch(`${apiServerUrl}/api/review/${idBook}`, {
         method: "POST",
         mode: "cors",

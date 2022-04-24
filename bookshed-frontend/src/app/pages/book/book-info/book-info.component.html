@@ -1,78 +1,156 @@
 <div class="info">
-    <div class="image-container">
-      <a href="{{ imageUrl }}" target="_blank">
-        <img src="{{ imageUrl }}" alt="Image of {{book?.title}}">
-      </a>
-    </div>
-  
-    <div class="title">
-      <h1>{{ book?.title }}</h1>
-      <h3>by {{ book?.author }}</h3>
-    </div>
-  
-    <hr>
-  
-    <div class="description">
-      {{ book?.description }}
-    </div>
-  
-    <div [hidden]="!isLoggedIn" class="edit-delete-book">
-      <button class="btn btn-primary" (click)="navigateToEdit()">Edit</button>
-  
-      <span [hidden]="!isAdmin">
-        <button class="btn btn-primary delete-button" (click)="confirmDelete()">Delete</button>
-      </span>
-    </div>
-  
-    <hr>
-    
-    <div *ngIf="res">
-        {{ res.message }}
-    </div>
-    <ng-template [ngIf]="isLoggedIn" [ngIfElse]="notLoggedIn">
-        <h4>Your review</h4>
+  <div class="top">
+    <img src="{{ imageUrl }}" alt="Image of {{ book?.title }}" />
 
-        <form action="">
-            <textarea
-                [(ngModel)]="content"
-                name="content" 
-                placeholder="Write here something about the book.."
-                id="review-textarea"
-                class="review-textarea"
-            ></textarea>
-            <button type="submit" class="btn btn-primary" (click)="onSubmit()">Post</button>
-        </form>
-    </ng-template>
+    <div class="meta">
+      <div class="title">
+        <h2>{{ book?.title }}</h2>
 
-    <ng-template #notLoggedIn>
-        <a routerLink="/login">Log in</a> to post a review of {{ book?.title }}
-    </ng-template>
-  
-    <hr>
-    <h4>User reviews</h4>
-    
-    <div class="reviews">
-        <div *ngFor="let review of reviews" class="review" id="review{{review.id}}">
-            <div class="review-info">
-                <span class="review-author">
-                    {{ review.author.username }}
-                </span>
-                <span class="review-time">
-                    {{ formatDate(review.createdAt) }}
-                    <span *ngIf="review.lastEdit">
-                        , edited at: {{ formatDate(review.lastEdit) }}
-                    </span>
-                </span> 
-                <span class="review-id">
-                    #{{ review.id }}
-                </span>
-            </div>
-            
-            <div class="review-content">
-                {{ review.content }}
-            </div>
-            <hr>
+        <div class="right" [hidden]="!isLoggedIn">
+          <button (click)="navigateToEdit()" class="btn btn-warning">
+            Edit
+          </button>
+          <button
+            [hidden]="!isAdmin"
+            (click)="confirmDelete()"
+            class="btn btn-danger"
+          >
+            Delete
+          </button>
         </div>
-    </div>
+      </div>
 
+      <h3>by {{ book?.author }}</h3>
+
+      <p class="category">Category: {{ book?.category?.name }}</p>
+
+      <p class="description">
+        {{ book?.description }}
+      </p>
+    </div>
   </div>
+
+  <hr />
+
+  <div class="sell-infos">
+    <h4>Places where you can buy this book:</h4>
+
+    <p *ngIf="sellInfos.length === 0 && isLoggedIn">
+      No one submitted purchase locations for this book. Submit one yourself
+      with the button below.
+    </p>
+    <p *ngIf="sellInfos.length === 0 && !isLoggedIn">
+      No one submitted purchase locations for this book. Submit one yourself by
+      creating a new account.
+    </p>
+
+    <p *ngFor="let info of sellInfos">
+      At: <b>{{ info.location }}</b>, For: <b>{{ info.price }}</b>
+    </p>
+
+    <button
+      class="btn btn-primary"
+      *ngIf="isLoggedIn"
+      (click)="toggleSellInfoSubmit()"
+    >
+      Submit a new location
+    </button>
+
+    <div class="submit-sell-info" *ngIf="isSubmittingSellInfo">
+      <form>
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input
+            type="text"
+            name="location"
+            id="location"
+            class="form-control"
+            placeholder="Book Purchase Location"
+            [(ngModel)]="location"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price</label>
+          <input
+            type="number"
+            min="1"
+            step="any"
+            name="price"
+            id="price"
+            class="form-control"
+            value="01.00"
+            [(ngModel)]="price"
+          />
+        </div>
+
+        <div class="form-group">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            (click)="submitSellInfo()"
+          >
+            Submit
+          </button>
+          <button class="btn btn-secondary" (click)="toggleSellInfoSubmit()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="!reviewRes?.success">
+    {{ reviewRes?.message }}
+  </div>
+
+  <hr />
+  <h4>User Reviews</h4>
+
+  <ng-template [ngIf]="isLoggedIn" [ngIfElse]="notLoggedIn">
+    <h4>Your review</h4>
+
+    <form action="">
+      <textarea
+        [(ngModel)]="reviewContent"
+        name="content"
+        placeholder="Write here something about the book.."
+        id="review-textarea"
+        class="review-textarea"
+      ></textarea>
+      <button type="submit" class="btn btn-primary" (click)="submitReview()">
+        Post
+      </button>
+    </form>
+  </ng-template>
+
+  <ng-template #notLoggedIn>
+    <a routerLink="/login">Log in</a> to post a review of {{ book?.title }}
+  </ng-template>
+
+  <div class="reviews">
+    <div
+      *ngFor="let review of reviews"
+      class="review"
+      id="review{{ review.id }}"
+    >
+      <div class="review-info">
+        <span class="review-author">
+          {{ review.author.username }}
+        </span>
+        <span class="review-time">
+          {{ formatDate(review.createdAt) }}
+          <span *ngIf="review.lastEdit">
+            , edited at: {{ formatDate(review.lastEdit) }}
+          </span>
+        </span>
+        <span class="review-id"> #{{ review.id }} </span>
+      </div>
+
+      <div class="review-content">
+        {{ review.content }}
+      </div>
+      <hr />
+    </div>
+  </div>
+</div>
