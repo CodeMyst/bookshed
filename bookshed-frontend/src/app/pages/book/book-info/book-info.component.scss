@@ -30,6 +30,49 @@
     text-align: center;
 }
 
+.btn {
+    margin-right: 5px;
+    padding: 2px 5px;
+}
+
+.delete-button {
+    background-color: rgb(187, 49, 49);
+    border: 1px solid rgb(187, 49, 49);
+}
+
+#review-textarea {
+    width: 100%;
+    margin-bottom: 10px;;
+    resize: vertical;
+    border: none;
+    padding: 2px 5px;
+    min-height: 150px;
+}
+
+.review {
+    padding: 2px 5px;
+}
+
+.review-info {
+    margin: 2px 10px;
+}
+
+.review-id {
+    font-size: small;
+    color: gray;
+    float: right;
+}
+
+.review-time {
+    font-size: smaller;
+    color: gray;
+}
+
+.review-content {
+    background-color: #0f1013;
+    padding: 5px 10px;
+}
+
 @media only screen and (max-width: 1250px) {
     .info {
         width: 100%;

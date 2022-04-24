@@ -1,26 +1,78 @@
 <div class="info">
-  <div class="image-container">
-    <a href="{{ imageUrl }}" target="_blank">
-      <img src="{{ imageUrl }}" alt="Image of {{book?.title}}">
-    </a>
-  </div>
-
-  <div class="title">
-    <h1>{{ book?.title }}</h1>
-    <h3>by {{ book?.author }}</h3>
-  </div>
-
-  <hr>
-
-  <div class="description">
-    {{ book?.description }}
-  </div>
-
-  <div [hidden]="!isLoggedIn">
-    <button (click)="navigateToEdit()">Edit</button>
-
-    <div [hidden]="!isAdmin">
-      <button (click)="confirmDelete()">Delete</button>
+    <div class="image-container">
+      <a href="{{ imageUrl }}" target="_blank">
+        <img src="{{ imageUrl }}" alt="Image of {{book?.title}}">
+      </a>
     </div>
+  
+    <div class="title">
+      <h1>{{ book?.title }}</h1>
+      <h3>by {{ book?.author }}</h3>
+    </div>
+  
+    <hr>
+  
+    <div class="description">
+      {{ book?.description }}
+    </div>
+  
+    <div [hidden]="!isLoggedIn" class="edit-delete-book">
+      <button class="btn btn-primary" (click)="navigateToEdit()">Edit</button>
+  
+      <span [hidden]="!isAdmin">
+        <button class="btn btn-primary delete-button" (click)="confirmDelete()">Delete</button>
+      </span>
+    </div>
+  
+    <hr>
+    
+    <div *ngIf="res">
+        {{ res.message }}
+    </div>
+    <ng-template [ngIf]="isLoggedIn" [ngIfElse]="notLoggedIn">
+        <h4>Your review</h4>
+
+        <form action="">
+            <textarea
+                [(ngModel)]="content"
+                name="content" 
+                placeholder="Write here something about the book.."
+                id="review-textarea"
+                class="review-textarea"
+            ></textarea>
+            <button type="submit" class="btn btn-primary" (click)="onSubmit()">Post</button>
+        </form>
+    </ng-template>
+
+    <ng-template #notLoggedIn>
+        <a routerLink="/login">Log in</a> to post a review of {{ book?.title }}
+    </ng-template>
+  
+    <hr>
+    <h4>User reviews</h4>
+    
+    <div class="reviews">
+        <div *ngFor="let review of reviews" class="review" id="review{{review.id}}">
+            <div class="review-info">
+                <span class="review-author">
+                    {{ review.author.username }}
+                </span>
+                <span class="review-time">
+                    {{ formatDate(review.createdAt) }}
+                    <span *ngIf="review.lastEdit">
+                        , edited at: {{ formatDate(review.lastEdit) }}
+                    </span>
+                </span> 
+                <span class="review-id">
+                    #{{ review.id }}
+                </span>
+            </div>
+            
+            <div class="review-content">
+                {{ review.content }}
+            </div>
+            <hr>
+        </div>
+    </div>
+
   </div>
-</div>
