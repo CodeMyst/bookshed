@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { User } from './api/user';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { filter } from 'rxjs';
+import { GlobalConstants } from './api/global.constants';
 
 @Component({
   selector: 'app-root',
