@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
-import { createReview, deleteReview, getBookReviews, Review, ReviewCreateResult } from 'src/app/api/review';
+import { createReview, deleteReview, editReview, getBookReviews, Review, ReviewResult } from 'src/app/api/review';
 import { Role } from 'src/app/api/user';
 import { DatePipe } from '@angular/common';
 
@@ -15,6 +15,7 @@ import { DatePipe } from '@angular/common';
 export class BookInfoComponent implements OnInit {
     book: Book | undefined;
     reviews: Review[] = [];
+    usersReview: Review | undefined;
 
     apiBaseUrl: string = "";
 
@@ -32,9 +33,9 @@ export class BookInfoComponent implements OnInit {
     price: number = 1.00;
 
     reviewContent: string = "";
-    reviewRes: ReviewCreateResult | null = null;
+    reviewRes: ReviewResult | null = null;
 
-    constructor(private route: ActivatedRoute, private router: Router) {}
+    constructor(private route: ActivatedRoute, private router: Router) { }
 
     async ngOnInit() {
         let strId: string = <string>this.route.snapshot.paramMap.get("id");
@@ -45,7 +46,7 @@ export class BookInfoComponent implements OnInit {
             this.imageUrl = this.book.imageUrl;
         }
 
-        this.isAdmin =  GlobalConstants.currentUser?.role === Role.ADMIN;
+        this.isAdmin = GlobalConstants.currentUser?.role === Role.ADMIN;
         this.isLoggedIn = GlobalConstants.currentUser !== null;
 
         this.sellInfos = await getBookSellInfos(this.book?.id);
@@ -58,7 +59,7 @@ export class BookInfoComponent implements OnInit {
     }
 
     async confirmDeleteBook() {
-        if (confirm("Are you sure you want to delete this book: '" + this.book?.title + "'") == true) {
+        if (confirm(`Are you sure you want to delete this book: ${this.book?.title}`)) {
             await deleteBook(this.book!.id);
             this.router.navigate(["/"]);
         }
@@ -69,7 +70,9 @@ export class BookInfoComponent implements OnInit {
             await deleteReview(review.id)
             this.router.navigate([`/book/${review.book.id}`]);
         }
+
         this.loadReviews();
+        this.reviewRes = null;
     }
 
     toggleSellInfoSubmit() {
@@ -84,19 +87,26 @@ export class BookInfoComponent implements OnInit {
         this.sellInfos = await getBookSellInfos(this.book!.id);
     }
 
-    async submitReview() {
-        this.reviewRes = await createReview(this.book!.id, this.reviewContent);
-        this.loadReviews();
-        this.reviewContent = "";
+    async submitOrEditReview(isPost: boolean) {
+        this.reviewRes = isPost ?
+            await createReview(this.book!.id, this.reviewContent) :
+            await editReview(this.book!.id, this.usersReview!.id, this.reviewContent);
+
+        this.loadReviews()
     }
 
     async loadReviews() {
         this.reviews = await getBookReviews(this.book!.id);
+        this.usersReview = this.reviews.find(r => r.author.username == GlobalConstants.currentUser?.username);
+
+        if (this.usersReview) {
+            this.reviewContent = this.usersReview!.content;
+        }
     }
 
     formatDate(date: Date): string {
         const datepipe: DatePipe = new DatePipe('en-US');
-        let formatedDate: string | null =  datepipe.transform(date, 'dd/MM/YYYY');
+        let formatedDate: string | null = datepipe.transform(date, 'dd/MM/YYYY');
         return formatedDate != null ? formatedDate : "unknown";
     }
 }

@@ -100,14 +100,17 @@
     </div>
   </div>
 
-  <div *ngIf="!reviewRes?.success">
-    {{ reviewRes?.message }}
-  </div>
-
   <hr />
 
   <ng-template [ngIf]="isLoggedIn" [ngIfElse]="notLoggedIn">
     <h4>Your review</h4>
+
+    <div 
+      *ngIf="reviewRes"
+      [class]="reviewRes.success ? 'alert-success' : 'alert-fail'"
+    >
+      {{ reviewRes?.message }}
+    </div> 
 
     <form class="review-form">
       <textarea
@@ -116,9 +119,34 @@
         placeholder="Write here something about the book.."
         id="review-textarea"
         class="review-textarea"
+        [value]="usersReview?.content"
       ></textarea>
-      <button type="submit" class="btn btn-primary" (click)="submitReview()">
+
+      <button 
+        *ngIf="usersReview == undefined"
+        type="submit"
+        class="btn btn-primary"
+        (click)="submitOrEditReview(true)"
+      >
         Post
+      </button>
+
+      <button 
+        *ngIf="usersReview != undefined"
+        type="submit"
+        class="btn btn-warning"
+        (click)="submitOrEditReview(false)"
+      >
+        Edit
+      </button>
+
+      <button 
+        *ngIf="usersReview != undefined"
+        type="submit"
+        class="btn btn-danger"
+        (click)="confirmDeleteReview(usersReview)"
+      >
+        Delete
       </button>
     </form>
   </ng-template>
