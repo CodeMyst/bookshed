@@ -59,7 +59,7 @@
 }
 
 .btn {
-  margin-right: 5px;
+    margin-right: 5px;
   padding: 2px 5px;
 }
 
@@ -80,6 +80,10 @@
     min-height: 150px;
     border-radius: 5px;
     border: 1px solid white;
+  }
+
+  textarea :active {
+    outline: none;
   }
 }
 
