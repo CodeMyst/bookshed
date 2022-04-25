@@ -12,6 +12,8 @@ import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 import { BookListComponent } from './components/book/book-list/book-list.component';
 import { EditBookComponent } from './pages/book/edit-book/edit-book.component';
+import { BookInfoComponent } from './pages/book/book-info/book-info.component';
+import { BookSearchComponent } from './components/book/book-search/book-search.component';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { EditBookComponent } from './pages/book/edit-book/edit-book.component';
     CreateBookComponent,
     HomeComponent,
     BookListComponent,
-    EditBookComponent
+    EditBookComponent,
+    BookInfoComponent,
+    BookSearchComponent
   ],
   imports: [
     CommonModule,

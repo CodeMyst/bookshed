@@ -48,6 +48,32 @@ export const getAllBookCategories = async (): Promise<BookCategory[]> => {
     return await res.json();
 };
 
+export const getByCategory = async (categoryId: number): Promise<Book[]> => {  
+    const res = await fetch(`${apiServerUrl}/api/book/getByCategory?categoryId=${categoryId}`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+
+    return await res.json();
+};
+
+export const searchBooks = async (query: string, categoryId: number): Promise<Book[]> => {  
+    const res = await fetch(`${apiServerUrl}/api/book/search?query=${query}&categoryId=${categoryId}`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+
+    return await res.json();
+};
+
 export const createBook = async (title: string, author: string, categoryId: number, description: string, imageUrl: string): Promise<BookCreateResult> => {
     const data = {
         title: title,

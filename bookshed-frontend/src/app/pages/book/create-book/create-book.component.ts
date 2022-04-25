@@ -31,9 +31,6 @@ export class CreateBookComponent implements OnInit {
     this.onSubmit = async () => {
       this.imgRes = await uploadImage(this.image);
       this.imageUrl =  environment.apiBaseUrl + "/static/images/" + this.imgRes.filename;
-      console.log(this.image);
-      console.log(this.imageUrl);
-      console.log(this.imgRes);
 
       this.res = await createBook(this.title, this.author, this.categoryId, this.description, this.imageUrl);
     }

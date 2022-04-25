@@ -1,0 +1,26 @@
+input {
+    width: 30%;
+    background-color: #0c0d0f;
+    color: white;
+}
+
+label {
+    min-width: 32%;
+}
+
+input:focus, textarea:focus {
+    background-color: #1c2026;
+    color: white;
+}
+
+select, input {
+    background-color: #0c0d0f;
+    color: white;
+    min-width: 30%;
+    height: 35px;
+    border-radius: 5px;
+    padding-left: 0.5%;
+    margin-right: 2%;
+    border: 1px solid #ccc;
+    margin-bottom: 2%;
+}
