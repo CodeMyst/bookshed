@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Book, BookCategory, getAllBookCategories, getByCategory, searchBooks } from 'src/app/api/book';
+import { Book, BookCategory, getAllBookCategories, getAllBooks, getByCategory, searchBooks } from 'src/app/api/book';
+import { GlobalConstants } from 'src/app/api/global.constants';
 
 @Component({
   selector: 'app-book-search',
@@ -13,6 +14,7 @@ export class BookSearchComponent implements OnInit {
   categories: BookCategory[];
 
   res: Book[] | null = null;
+  message: string = "all";
 
   onSubmit: any;
 
@@ -21,12 +23,19 @@ export class BookSearchComponent implements OnInit {
     this.categoryId = 0;
   
     this.onSubmit = async () => {
-      if (this.search === "" && this.categoryId !== 0) {
+      if (this.search === "" && this.categoryId === 0) {
+        this.res = await getAllBooks();
+        this.message = "all";
+      } else if (this.search === "" && this.categoryId !== 0) {
         this.res = await getByCategory(this.categoryId);
+        this.message = this.categories[this.categoryId-1].name;
       } else {
         this.res = await searchBooks(this.search, this.categoryId);
+        this.message = "search";
       }
-      console.log(this.res);
+
+      GlobalConstants.books = this.res;
+      GlobalConstants.onSearch();
     }
   }
 

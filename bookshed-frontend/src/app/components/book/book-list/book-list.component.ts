@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Book, getAllBooks } from 'src/app/api/book';
+import { GlobalConstants } from 'src/app/api/global.constants';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -14,6 +15,10 @@ export class BookListComponent implements OnInit {
 
     constructor() {
         this.books = new Array;
+
+        GlobalConstants.onSearch = async () => {
+            this.books = GlobalConstants.books;
+        }
     }
 
     async ngOnInit() {
