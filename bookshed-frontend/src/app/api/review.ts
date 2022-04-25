@@ -66,3 +66,14 @@ export const getBookReviews = async (idBook: number) : Promise<Review[]> => {
 
     return await res.json();
 }
+
+export const deleteReview = async (idReview: number) : Promise<void> => {
+    const res = await fetch(`${apiServerUrl}/api/review/${idReview}`, {
+        method : "DELETE",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+}

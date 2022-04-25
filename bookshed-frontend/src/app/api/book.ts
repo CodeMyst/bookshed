@@ -98,7 +98,6 @@ export const createBook = async (title: string, author: string, categoryId: numb
 
 export const deleteBook = async (id: number) => {
     await fetch(`${apiServerUrl}/api/book/${id}`, {
-
         method: "DELETE",
         mode: "cors",
         headers: {
