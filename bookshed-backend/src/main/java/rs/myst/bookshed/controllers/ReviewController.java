@@ -82,7 +82,7 @@ public class ReviewController {
 
 	@PatchMapping("/{idBook}/{idReview}")
 	@PreAuthorize(RoleConstants.USER)
-	public ResponseEntity<?> editBook(@PathVariable int idBook, @PathVariable int idReview,
+	public ResponseEntity<?> editReview(@PathVariable int idBook, @PathVariable int idReview,
 			@Valid @RequestBody String content) {
 		if (!bookRepo.existsById(idBook))
 			return ResponseEntity.badRequest().build();
