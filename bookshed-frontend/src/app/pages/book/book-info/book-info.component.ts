@@ -35,7 +35,7 @@ export class BookInfoComponent implements OnInit {
     reviewContent: string = "";
     reviewRes: ReviewResult | null = null;
 
-    constructor(private route: ActivatedRoute, private router: Router) {}
+    constructor(private route: ActivatedRoute, private router: Router) { }
 
     async ngOnInit() {
         let strId: string = <string>this.route.snapshot.paramMap.get("id");
@@ -46,7 +46,7 @@ export class BookInfoComponent implements OnInit {
             this.imageUrl = this.book.imageUrl;
         }
 
-        this.isAdmin =  GlobalConstants.currentUser?.role === Role.ADMIN;
+        this.isAdmin = GlobalConstants.currentUser?.role === Role.ADMIN;
         this.isLoggedIn = GlobalConstants.currentUser !== null;
 
         this.sellInfos = await getBookSellInfos(this.book?.id);
@@ -72,6 +72,7 @@ export class BookInfoComponent implements OnInit {
         }
 
         this.loadReviews();
+        this.reviewRes = null;
     }
 
     toggleSellInfoSubmit() {
@@ -105,7 +106,7 @@ export class BookInfoComponent implements OnInit {
 
     formatDate(date: Date): string {
         const datepipe: DatePipe = new DatePipe('en-US');
-        let formatedDate: string | null =  datepipe.transform(date, 'dd/MM/YYYY');
+        let formatedDate: string | null = datepipe.transform(date, 'dd/MM/YYYY');
         return formatedDate != null ? formatedDate : "unknown";
     }
 }
