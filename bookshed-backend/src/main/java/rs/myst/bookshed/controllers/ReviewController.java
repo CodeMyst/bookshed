@@ -90,20 +90,20 @@ public class ReviewController {
 		Review review = reviewRepo.findById(idReview).orElse(null);
 		if (review == null)
 			return ResponseEntity.notFound().build();
-		
+
 		UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
-		
+
 		if (!currentUser.equals(review.getAuthor()))
 			return new ResponseEntity<>(new MessageResponse("Can't edit someone else's review."),
 					HttpStatus.UNAUTHORIZED);
 
 		review.setContent(content);
 		review.setLastEdit(LocalDateTime.now());
-		
+
 		reviewRepo.save(review);
-		
+
 		return ResponseEntity.ok(review);
 	}
 

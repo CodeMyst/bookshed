@@ -10,6 +10,8 @@ import { environment } from 'src/environments/environment';
 export class BookListComponent implements OnInit {
 
     books: Book[];
+    descriptionLengthLimit: number = 250;
+
     apiBaseUrl: string = environment.apiBaseUrl;
 
     constructor() {

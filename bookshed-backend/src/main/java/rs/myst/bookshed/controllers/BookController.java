@@ -19,30 +19,37 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.myst.bookshed.constants.RoleConstants;
 import rs.myst.bookshed.model.Book;
 import rs.myst.bookshed.model.BookCategory;
+import rs.myst.bookshed.model.SellInfo;
 import rs.myst.bookshed.payload.BookCreateInfo;
+import rs.myst.bookshed.payload.SellCreateInfo;
 import rs.myst.bookshed.repositories.BookCategoryRepository;
 import rs.myst.bookshed.repositories.BookRepository;
+
+import rs.myst.bookshed.repositories.SellInfoRepository;
 
 @RestController
 @RequestMapping("/api/book")
 public class BookController {
     private final BookRepository bookRepo;
     private final BookCategoryRepository bookCategoryRepo;
+    private final SellInfoRepository sellInfoRepo;
 
-    public BookController(BookRepository bookRepo, BookCategoryRepository bookCategoryRepo) {
+    public BookController(BookRepository bookRepo, BookCategoryRepository bookCategoryRepo, SellInfoRepository sellInfoRepo) {
         this.bookRepo = bookRepo;
         this.bookCategoryRepo = bookCategoryRepo;
+        this.sellInfoRepo = sellInfoRepo;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getBook(@PathVariable int id) {
         Optional<Book> book = bookRepo.findById(id);
 
-        if (book.isEmpty()) return ResponseEntity.notFound().build();
+        if (book.isEmpty())
+            return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(book.get());
     }
-    
+
     @GetMapping("/all")
     public ResponseEntity<?> getAllBooks() {
         return ResponseEntity.ok(bookRepo.findAll());
@@ -59,9 +66,14 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
+    @GetMapping("/getByCategory")
+    public ResponseEntity<?> getByCategory(int categoryId) {
+        return ResponseEntity.ok(bookRepo.findAllByCategoryId(categoryId));
+    }
+
     @GetMapping("/allCat")
     public ResponseEntity<?> getAllBookCategories() {
-        return ResponseEntity.ok(bookCategoryRepo.findAll());	
+        return ResponseEntity.ok(bookCategoryRepo.findAll());
     }
 
     @PostMapping("/createBook")
@@ -90,7 +102,8 @@ public class BookController {
     public ResponseEntity<?> deleteBook(@PathVariable int id) {
         Optional<Book> book = bookRepo.findById(id);
 
-        if (book.isEmpty()) return ResponseEntity.notFound().build();
+        if (book.isEmpty())
+            return ResponseEntity.notFound().build();
 
         bookRepo.delete(book.get());
 
@@ -100,11 +113,13 @@ public class BookController {
     @PatchMapping("/{id}")
     @PreAuthorize(RoleConstants.USER)
     public ResponseEntity<?> editBook(@Valid @RequestBody BookCreateInfo createInfo, @PathVariable int id) {
-        Book book  = bookRepo.findById(id).orElse(null);
-        if (book == null) return ResponseEntity.notFound().build();
+        Book book = bookRepo.findById(id).orElse(null);
+        if (book == null)
+            return ResponseEntity.notFound().build();
 
         BookCategory cat = bookCategoryRepo.findById(createInfo.getCategoryId()).orElse(null);
-        if (cat == null) return ResponseEntity.notFound().build();
+        if (cat == null)
+            return ResponseEntity.notFound().build();
 
         book.setCategory(cat);
         book.setTitle(createInfo.getTitle());
@@ -115,5 +130,33 @@ public class BookController {
         bookRepo.save(book);
 
         return ResponseEntity.ok(book);
+    }
+
+    @PostMapping("/{id}/sellInfo")
+    @PreAuthorize(RoleConstants.USER)
+    public ResponseEntity<?> addSellInfo(@Valid @RequestBody SellCreateInfo createInfo, @PathVariable int id) {
+        Book book = bookRepo.findById(id).orElse(null);
+        if (book == null)
+            return ResponseEntity.notFound().build();
+
+        SellInfo sellInfo = new SellInfo();
+        sellInfo.setBook(book);
+        sellInfo.setLocation(createInfo.getLocation());
+        sellInfo.setPrice(createInfo.getPrice());
+
+        sellInfoRepo.save(sellInfo);
+
+        return ResponseEntity.ok(sellInfo);
+    }
+
+    @GetMapping("/{id}/sellInfo")
+    public ResponseEntity<?> getSellInfos(@PathVariable int id) {
+        Book book = bookRepo.findById(id).orElse(null);
+        if (book == null)
+            return ResponseEntity.notFound().build();
+
+        List<SellInfo> infos = sellInfoRepo.findAllByBook(book);
+
+        return ResponseEntity.ok(infos);
     }
 }

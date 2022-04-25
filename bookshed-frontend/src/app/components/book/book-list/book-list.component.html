@@ -7,7 +7,7 @@
                 <small><a href="#">{{book.category.name}}</a></small>
                 <br>
                 <h6><a routerLink="{{'/book/' + book.id}}">{{book.title}}</a></h6>
-                    {{ truncateString(book.description, 150) }}
+                    {{ truncateString(book.description, descriptionLengthLimit) }}
                 <br>
         </span>
     </div>
