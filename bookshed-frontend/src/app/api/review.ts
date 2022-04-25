@@ -1,4 +1,3 @@
-import { async } from "@angular/core/testing";
 import { environment } from "src/environments/environment";
 import { Book } from "./book";
 import { User } from "./user";
