@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
-import { createReview, getBookReviews, Review, ReviewCreateResult } from 'src/app/api/review';
+import { createReview, deleteReview, getBookReviews, Review, ReviewCreateResult } from 'src/app/api/review';
 import { Role } from 'src/app/api/user';
 import { DatePipe } from '@angular/common';
 
@@ -17,7 +17,6 @@ export class BookInfoComponent implements OnInit {
     reviews: Review[] = [];
 
     apiBaseUrl: string = "";
-    descriptionLengthLimit: number = 100;
 
     imageUrl: string = "assets/no-image.jpg";
 
@@ -58,11 +57,19 @@ export class BookInfoComponent implements OnInit {
         this.router.navigate(["/editBook"]);
     }
 
-    confirmDelete() {
+    async confirmDeleteBook() {
         if (confirm("Are you sure you want to delete this book: '" + this.book?.title + "'") == true) {
-            deleteBook(this.book!.id);
+            await deleteBook(this.book!.id);
             this.router.navigate(["/"]);
         }
+    }
+
+    async confirmDeleteReview(review: Review) {
+        if (confirm(`Are you sure you want to delete ${review.author.username}'s review: ${review.content}`)) {
+            await deleteReview(review.id)
+            this.router.navigate([`/book/${review.book.id}`]);
+        }
+        this.loadReviews();
     }
 
     toggleSellInfoSubmit() {
@@ -90,7 +97,6 @@ export class BookInfoComponent implements OnInit {
     formatDate(date: Date): string {
         const datepipe: DatePipe = new DatePipe('en-US');
         let formatedDate: string | null =  datepipe.transform(date, 'dd/MM/YYYY');
-        console.log("EOPI:" + formatedDate);
         return formatedDate != null ? formatedDate : "unknown";
     }
 }

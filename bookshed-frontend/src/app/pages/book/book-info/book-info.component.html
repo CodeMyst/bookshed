@@ -11,8 +11,8 @@
             Edit
           </button>
           <button
-            [hidden]="!isAdmin"
-            (click)="confirmDelete()"
+            *ngIf="isAdmin"
+            (click)="confirmDeleteBook()"
             class="btn btn-danger"
           >
             Delete
@@ -105,12 +105,11 @@
   </div>
 
   <hr />
-  <h4>User Reviews</h4>
 
   <ng-template [ngIf]="isLoggedIn" [ngIfElse]="notLoggedIn">
     <h4>Your review</h4>
 
-    <form action="">
+    <form class="review-form">
       <textarea
         [(ngModel)]="reviewContent"
         name="content"
@@ -128,6 +127,10 @@
     <a routerLink="/login">Log in</a> to post a review of {{ book?.title }}
   </ng-template>
 
+  <hr>
+
+  <h4>User Reviews</h4>
+
   <div class="reviews">
     <div
       *ngFor="let review of reviews"
@@ -138,13 +141,24 @@
         <span class="review-author">
           {{ review.author.username }}
         </span>
+
         <span class="review-time">
           {{ formatDate(review.createdAt) }}
           <span *ngIf="review.lastEdit">
             , edited at: {{ formatDate(review.lastEdit) }}
           </span>
         </span>
-        <span class="review-id"> #{{ review.id }} </span>
+        
+        <span class="review-right-side">
+          <button 
+            *ngIf="isAdmin"
+            (click)="confirmDeleteReview(review)"
+          >
+            Delete
+          </button>
+
+          <span> #{{ review.id }} </span>
+        </span>
       </div>
 
       <div class="review-content">
