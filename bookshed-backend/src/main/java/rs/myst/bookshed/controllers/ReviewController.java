@@ -59,15 +59,21 @@ public class ReviewController {
 	@PostMapping("/{idBook}")
 	@PreAuthorize(RoleConstants.USER)
 	public ResponseEntity<?> createReview(@PathVariable int idBook, @Valid @RequestBody String content) {
-		if (!bookRepo.existsById(idBook)) {
+		Book book = bookRepo.findById(idBook).orElse(null);
+		if (book == null) {
 			return ResponseEntity.badRequest().build();
 		}
-
-		Book book = bookRepo.findById(idBook).get();
 
 		UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+
+		if (reviewRepo.existsByAuthorAndBook(currentUser, book)) {
+			return new ResponseEntity<>(
+					new MessageResponse("Already posted a review"),
+					HttpStatus.BAD_REQUEST
+			);
+		}
 
 		Review review = new Review();
 		review.setAuthor(currentUser);
@@ -90,20 +96,20 @@ public class ReviewController {
 		Review review = reviewRepo.findById(idReview).orElse(null);
 		if (review == null)
 			return ResponseEntity.notFound().build();
-		
+
 		UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
-		
+
 		if (!currentUser.equals(review.getAuthor()))
 			return new ResponseEntity<>(new MessageResponse("Can't edit someone else's review."),
 					HttpStatus.UNAUTHORIZED);
 
 		review.setContent(content);
 		review.setLastEdit(LocalDateTime.now());
-		
+
 		reviewRepo.save(review);
-		
+
 		return ResponseEntity.ok(review);
 	}
 

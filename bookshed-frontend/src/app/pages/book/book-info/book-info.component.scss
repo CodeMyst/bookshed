@@ -1,37 +1,145 @@
 .info {
-    background-color: #16181c;
-
-    width: 1250px;
-
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-
-    padding: 60px;
+  background-color: #16181c;
+  max-width: 90%;
+  width: 1250px;
+  margin: 2rem auto;
+  padding: 60px;
 }
 
-.description {
-    margin-bottom: 10px;
-}
+.top {
+  display: flex;
+  flex-direction: row;
 
-.image-container {
-    text-align: center;
-    background-color: rgb(20, 20, 20);
-    padding: 20px;
-    width: 100%;
-}
+  img {
+    max-width: 250px;
+    display: block;
+    margin-right: 2rem;
+  }
 
-.image-container a {
-    text-decoration: none;
-    color: white;
-}
+  h2 {
+    margin-bottom: 0;
+  }
 
-.title {
-    text-align: center;
-}
+  .description {
+    margin-top: 2rem;
+  }
 
-@media only screen and (max-width: 1250px) {
-    .info {
-        width: 100%;
+  .title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .btn-warning {
+      margin-right: 1rem;
     }
+  }
+}
+
+.sell-infos {
+  margin-top: 2rem;
+
+  h4 {
+    margin-bottom: 1rem;
+  }
+
+  .submit-sell-info {
+    background-color: var(--bs-dark);
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    button[type="submit"] {
+      margin-right: 1rem;
+    }
+
+    button {
+      margin-top: 1.25rem;
+    }
+  }
+}
+
+.btn {
+    margin-right: 5px;
+  padding: 2px 5px;
+}
+
+.delete-button {
+  background-color: rgb(187, 49, 49);
+  border: 1px solid rgb(187, 49, 49);
+}
+
+.review-form {
+  margin: 2px 5px;
+
+  textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    resize: vertical;
+    border: none;
+    padding: 2px 5px;
+    min-height: 150px;
+    border-radius: 5px;
+    border: 1px solid white;
+  }
+
+  textarea :active {
+    outline: none;
+  }
+}
+
+.reviews {
+  margin-top: 0.5rem;
+}
+
+.review {
+  padding: 2px 5px;
+}
+
+.review-info {
+  margin: 2px 10px;
+}
+
+.review-time {
+  font-size: smaller;
+  color: gray;
+}
+
+.review-right-side {
+  float: right;
+
+  button {
+    color: rgb(187, 49, 49);
+    background: none;
+    border: none;
+    font-size: small;
+    position: relative;
+    bottom: 4px;
+    margin-right: 10px;
+  }
+
+  span {
+    font-size: small;
+    color: gray;
+    float: right;
+  }
+}
+
+.review-content {
+  background-color: #0f1013;
+  padding: 5px 10px;
+  overflow: auto;
+}
+
+@media only screen and (max-width: 720px) {
+  .top {
+    flex-direction: column;
+
+    img {
+      margin-bottom: 2rem;
+    }
+  }
+
+  .info {
+    width: 100%;
+  }
 }

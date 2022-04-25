@@ -15,3 +15,8 @@
 <ng-template #elseBlock>
     <h2>Search results:</h2>
 </ng-template>
+
+<div *ngIf="noResult">
+    <hr>
+    <h2>There are no search results.</h2>
+</div>

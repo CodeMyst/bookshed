@@ -1,3 +1,4 @@
+import { async } from "@angular/core/testing";
 import { environment } from "src/environments/environment";
 import { Book } from "./book";
 import { User } from "./user";
@@ -13,13 +14,13 @@ export interface Review {
 
 const apiServerUrl = environment.apiBaseUrl;
 
-export interface ReviewCreateResult {
+export interface ReviewResult {
     success: boolean;
     message: string;
     url: string;
 }
 
-export const createReview = async (idBook: number, content: string) : Promise<ReviewCreateResult> => {
+export const createReview = async (idBook: number, content: string) : Promise<ReviewResult> => {
     const res = await fetch(`${apiServerUrl}/api/review/${idBook}`, {
         method: "POST",
         mode: "cors",
@@ -33,7 +34,7 @@ export const createReview = async (idBook: number, content: string) : Promise<Re
     if (res.ok) {
         return {
             success: true,
-            message: "Review posted",
+            message: "Review posted successfuly",
             url: (await res.json()).url
         };
     } else {
@@ -43,6 +44,40 @@ export const createReview = async (idBook: number, content: string) : Promise<Re
             msg = (await res.json()).message;
         } catch (_) {
             msg = "Something went wrong with posting your review. Try again."
+        }
+
+        return {
+            success: false,
+            message: msg,
+            url: ""
+        };
+    }
+}
+
+export const editReview = async (idBook: number, idReview: number, content: string) => {
+    const res = await fetch(`${apiServerUrl}/api/review/${idBook}/${idReview}`, {
+        method: "PATCH",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: content
+    });
+
+    if (res.ok) {
+        return {
+            success: true,
+            message: "Review edited successfuly",
+            url: (await res.json()).url
+        };
+    } else {
+        let msg: string;
+
+        try {
+            msg = (await res.json()).message;
+        } catch (_) {
+            msg = "Something went wrong with editing your review. Try again."
         }
 
         return {
@@ -64,4 +99,15 @@ export const getBookReviews = async (idBook: number) : Promise<Review[]> => {
     });
 
     return await res.json();
+}
+
+export const deleteReview = async (idReview: number) : Promise<void> => {
+    const res = await fetch(`${apiServerUrl}/api/review/${idReview}`, {
+        method : "DELETE",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
 }
