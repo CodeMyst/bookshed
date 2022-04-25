@@ -1,0 +1,22 @@
+<form>
+    <label>Book search</label>
+    <label>Category</label><br>
+    <input type="text" [(ngModel)]="search" name="search" placeholder="Search books and more" required>
+    <select [(ngModel)]="categoryId" name="category">
+        <option value="0">All</option>
+        <option *ngFor="let cat of categories" [ngValue]="cat.id">{{cat.name}}</option>
+    </select>
+    <button type="submit" class="btn btn-primary" (click)="onSubmit()">Search</button>
+</form>
+<br>
+<div *ngIf="message !== 'search'; else elseBlock">
+    <h2>List of {{message}} books: </h2>
+</div>
+<ng-template #elseBlock>
+    <h2>Search results:</h2>
+</ng-template>
+
+<div *ngIf="noResult">
+    <hr>
+    <h2>There are no search results.</h2>
+</div>
