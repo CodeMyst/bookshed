@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { empty } from 'rxjs';
 import { Book, BookCategory, getAllBookCategories, getAllBooks, getByCategory, searchBooks } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 
@@ -13,6 +12,7 @@ export class BookSearchComponent implements OnInit {
   search: string = "";
   categoryId: number;
   categories: BookCategory[];
+  sortedCategories: BookCategory[];
 
   res: Book[] | null = null;
   message: string = "all";
@@ -22,6 +22,7 @@ export class BookSearchComponent implements OnInit {
 
   constructor() { 
     this.categories = new Array;
+    this.sortedCategories = new Array;
     this.categoryId = 0;
   
     this.onSubmit = async () => {
@@ -49,6 +50,8 @@ export class BookSearchComponent implements OnInit {
 
   async ngOnInit() {
     this.categories = await getAllBookCategories();
+
+    this.sortedCategories = this.categories.sort((a, b) => a.name.localeCompare(b.name));
   }
 
 }
