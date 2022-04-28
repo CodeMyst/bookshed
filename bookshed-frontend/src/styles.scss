@@ -18,7 +18,7 @@ select {
     padding-left: 0.5%;
 }
 
-.alert-danger, .alert-success {
+.alert-danger, .alert-success, .alert-warning {
     padding: 0.2%;
     padding-left: 0.5%;
     margin-bottom: 2%;
@@ -63,3 +63,21 @@ button {
     margin-top: 3%;
     margin-bottom: 5%;
 }
+
+::-webkit-scrollbar {
+    width: 13px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #1E1E1E;
+    border-left: 1px solid #393939;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #424242;
+    border-left: 1px solid #525252;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #4F4F4F;
+  }

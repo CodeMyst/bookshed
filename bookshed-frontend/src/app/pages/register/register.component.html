@@ -6,7 +6,17 @@
             Account successfully registered. You can now <a routerLink="/login">login</a>.
         </div>
         <div *ngIf="res && !res.success" class="alert-danger">
-            {{res.message}}
+            <div *ngIf="!res.message; else elseBlock">
+                <div *ngIf="!username || !email; else elseBlock2">
+                    Fields cannot be empty.
+                </div>
+                <ng-template #elseBlock2>
+                    Email syntax not valid.
+                </ng-template>
+            </div>
+            <ng-template #elseBlock>
+                {{res.message}}
+            </ng-template>
         </div>
 
         <form>
