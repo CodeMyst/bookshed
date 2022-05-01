@@ -1,5 +1,6 @@
 import { NgModule, OnInit } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { BookInfoComponent } from './pages/book/book-info/book-info.component';
 import { CreateBookComponent } from './pages/book/create-book/create-book.component';
 import { EditBookComponent } from './pages/book/edit-book/edit-book.component';
@@ -40,6 +41,10 @@ const routes: Routes = [
   {
     path: "editBook",
     component: EditBookComponent
+  },
+  {
+    path: "forbidden",
+    component: ForbiddenComponent
   }
 ];
 

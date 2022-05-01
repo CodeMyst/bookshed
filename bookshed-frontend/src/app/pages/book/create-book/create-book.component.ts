@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BookCategory, BookCreateResult, createBook, getAllBookCategories } from 'src/app/api/book';
+import { GlobalConstants } from 'src/app/api/global.constants';
 import { ImageUploadResult, uploadImage } from 'src/app/api/image';
 import { environment } from "src/environments/environment";
 
@@ -9,6 +10,10 @@ import { environment } from "src/environments/environment";
   styleUrls: ['./create-book.component.scss']
 })
 export class CreateBookComponent implements OnInit {
+
+  isLoggedIn = GlobalConstants.isLoggedIn;
+
+  goToPage = GlobalConstants.goToPage;
 
   categoryId: number;
   categories: BookCategory[];
@@ -22,7 +27,9 @@ export class CreateBookComponent implements OnInit {
 
   res: BookCreateResult | null = null;
   imgRes: ImageUploadResult | null = null;
+  
   onSubmit: any;
+  onFileChanged: any;
 
   constructor() {
     this.categories = new Array;
@@ -34,14 +41,13 @@ export class CreateBookComponent implements OnInit {
 
       this.res = await createBook(this.title, this.author, this.categoryId, this.description, this.imageUrl);
     }
+
+    this.onFileChanged = (event: any) => {
+      this.image = event.target.files[0];
+    }
   }
 
   async ngOnInit() {
     this.categories = await getAllBookCategories();
   }
-
-  onFileChanged(event: any) {
-    this.image = event.target.files[0];
-  }
-
 }

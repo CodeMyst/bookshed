@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { logout } from 'src/app/api/auth';
+import { getSelf, isLoggedIn, logout } from 'src/app/api/auth';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { User, Role } from 'src/app/api/user';
 
@@ -17,23 +17,27 @@ export class NavbarComponent implements OnInit {
   onLogout: any;
   onLogin: any;
 
+  goToPage = GlobalConstants.goToPage;
+
   constructor(private router: Router) {
     this.onLogout = async () => {
       await logout();
 
-      GlobalConstants.currentUser = null;
-
-      GlobalConstants.checkIfLogged();
+      GlobalConstants.isLoggedIn = false;
+      window.location.href = "/";
     };
 
-    GlobalConstants.checkIfLogged = () => {
-      this.currentUser = GlobalConstants.currentUser;
-      this.userRole = this.currentUser?.role === Role.USER ? "[U]" : "[A]";
+    GlobalConstants.checkIfLogged = async () => {
+      if (await isLoggedIn()) {
+        GlobalConstants.currentUser = await getSelf();
+        this.currentUser = GlobalConstants.currentUser;
+        this.userRole = GlobalConstants.currentUser?.role === Role.USER ? "[U]" : "[A]";
+      }
     }
-  }
 
-  goToPage(pageName: string) {
-    this.router.navigate([`${pageName}`]);
+    GlobalConstants.goToPage = (pageName: string) => {
+      this.router.navigate([`${pageName}`]);
+    }
   }
 
   ngOnInit() {
