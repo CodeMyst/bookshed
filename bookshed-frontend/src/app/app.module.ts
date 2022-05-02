@@ -14,6 +14,7 @@ import { BookListComponent } from './components/book/book-list/book-list.compone
 import { EditBookComponent } from './pages/book/edit-book/edit-book.component';
 import { BookInfoComponent } from './pages/book/book-info/book-info.component';
 import { BookSearchComponent } from './components/book/book-search/book-search.component';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { BookSearchComponent } from './components/book/book-search/book-search.c
     BookListComponent,
     EditBookComponent,
     BookInfoComponent,
-    BookSearchComponent
+    BookSearchComponent,
+    ForbiddenComponent
   ],
   imports: [
     CommonModule,

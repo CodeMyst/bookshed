@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Book, BookCategory, BookCreateResult, editBook, getAllBookCategories } from 'src/app/api/book';
+import { BookCategory, BookCreateResult, editBook, getAllBookCategories } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { ImageUploadResult, uploadImage } from 'src/app/api/image';
 import { environment } from 'src/environments/environment';
@@ -12,6 +12,9 @@ import { environment } from 'src/environments/environment';
 })
 export class EditBookComponent implements OnInit {
 
+  goToPage = GlobalConstants.goToPage;
+  isLoggedIn = GlobalConstants.isLoggedIn;
+
   categoryId: number;
   categories: BookCategory[];
 
@@ -22,20 +25,21 @@ export class EditBookComponent implements OnInit {
 
   image: File | any;
   hasChanged: boolean = false;
-
-  onFileChanged(event: any) {
-    this.image = event.target.files[0];
-    this.hasChanged = true;
-  }
+  onFileChange: any;
 
   res: BookCreateResult | null = null;
   imgRes: ImageUploadResult | null = null;
   onSubmit: any;
 
-  constructor(private route: ActivatedRoute) {
+  constructor() {
     this.categories = new Array;
     this.categoryId = GlobalConstants.viewedBook.category.id;
 
+    this.onFileChange = (event: any) => {
+      this.image = event.target.files[0];
+      this.hasChanged = true;
+    }
+    
     this.onSubmit = async () => {
       if (!this.hasChanged) {
         this.imageUrl = GlobalConstants.viewedBook.imageUrl;
