@@ -23,8 +23,6 @@ export class LoginComponent implements OnInit {
       this.res = await login(this.username, this.password);
 
       GlobalConstants.currentUser = await getSelf();
-
-      GlobalConstants.isLoggedIn = true;
       GlobalConstants.checkIfLogged();
     };
     

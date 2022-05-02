@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { BookCategory, BookCreateResult, editBook, getAllBookCategories } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { ImageUploadResult, uploadImage } from 'src/app/api/image';

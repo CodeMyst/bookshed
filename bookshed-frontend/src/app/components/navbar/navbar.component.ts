@@ -23,7 +23,6 @@ export class NavbarComponent implements OnInit {
     this.onLogout = async () => {
       await logout();
 
-      GlobalConstants.isLoggedIn = false;
       window.location.href = "/";
     };
 
@@ -31,6 +30,8 @@ export class NavbarComponent implements OnInit {
       if (await isLoggedIn()) {
         GlobalConstants.currentUser = await getSelf();
         this.currentUser = GlobalConstants.currentUser;
+
+        GlobalConstants.isLoggedIn = true;
         this.userRole = GlobalConstants.currentUser?.role === Role.USER ? "[U]" : "[A]";
       }
     }
@@ -41,12 +42,7 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.router.events.subscribe((evt) => {
-      if (!(evt instanceof NavigationEnd)) {
-        return;
-      }
-      GlobalConstants.checkIfLogged();
-    });
+    GlobalConstants.checkIfLogged();
   }
 
 }
