@@ -11,7 +11,7 @@ import { environment } from "src/environments/environment";
 })
 export class CreateBookComponent implements OnInit {
 
-  isLoggedIn = GlobalConstants.isLoggedIn;
+  isLoggedIn = GlobalConstants.isLoggedIn;;
 
   goToPage = GlobalConstants.goToPage;
 

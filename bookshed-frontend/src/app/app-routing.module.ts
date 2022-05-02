@@ -1,4 +1,4 @@
-import { NgModule, OnInit } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { BookInfoComponent } from './pages/book/book-info/book-info.component';

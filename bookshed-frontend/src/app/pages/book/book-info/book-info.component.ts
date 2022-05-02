@@ -54,10 +54,6 @@ export class BookInfoComponent implements OnInit {
         this.loadReviews();
     }
 
-    navigateToEdit() {
-        this.router.navigate(["/editBook"]);
-    }
-
     async confirmDeleteBook() {
         if (confirm(`Are you sure you want to delete this book: ${this.book?.title}`)) {
             await deleteBook(this.book!.id);
