@@ -61,6 +61,8 @@ export class EditBookComponent implements OnInit {
     this.categories = await getAllBookCategories();
 
     this.isLoggedIn = await isLoggedIn();
+
+    if (!this.isLoggedIn) this.goToPage("/forbidden");
   }
 
 }
