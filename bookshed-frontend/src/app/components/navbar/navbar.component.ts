@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { getSelf, isLoggedIn, logout } from 'src/app/api/auth';
+import { Router } from '@angular/router';
+import { getSelf, logout } from 'src/app/api/auth';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { User, Role } from 'src/app/api/user';
 
@@ -26,23 +26,13 @@ export class NavbarComponent implements OnInit {
       window.location.href = "/";
     };
 
-    GlobalConstants.checkIfLogged = async () => {
-      if (await isLoggedIn()) {
-        GlobalConstants.currentUser = await getSelf();
-        this.currentUser = GlobalConstants.currentUser;
-
-        GlobalConstants.isLoggedIn = true;
-        this.userRole = GlobalConstants.currentUser?.role === Role.USER ? "[U]" : "[A]";
-      }
-    }
-
     GlobalConstants.goToPage = (pageName: string) => {
       this.router.navigate([`${pageName}`]);
     }
   }
 
-  ngOnInit() {
-    GlobalConstants.checkIfLogged();
+  async ngOnInit() {
+    this.currentUser = await getSelf();
+    this.userRole = this.currentUser.role === Role.USER ? "[U]" : "[A]";
   }
-
 }

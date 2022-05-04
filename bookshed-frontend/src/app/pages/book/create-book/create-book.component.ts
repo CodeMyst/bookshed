@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { isLoggedIn } from 'src/app/api/auth';
 import { BookCategory, BookCreateResult, createBook, getAllBookCategories } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { ImageUploadResult, uploadImage } from 'src/app/api/image';
@@ -11,7 +12,7 @@ import { environment } from "src/environments/environment";
 })
 export class CreateBookComponent implements OnInit {
 
-  isLoggedIn = GlobalConstants.isLoggedIn;;
+  isLoggedIn: boolean = false;
 
   goToPage = GlobalConstants.goToPage;
 
@@ -49,5 +50,11 @@ export class CreateBookComponent implements OnInit {
 
   async ngOnInit() {
     this.categories = await getAllBookCategories();
+
+    this.isLoggedIn = await isLoggedIn();
+
+    if (!this.isLoggedIn) {
+      this.goToPage("/forbidden");
+    }
   }
 }
