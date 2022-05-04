@@ -21,17 +21,12 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router) { 
     this.onSubmit = async () => {
       this.res = await login(this.username, this.password);
-
-      GlobalConstants.currentUser = await getSelf();
-      GlobalConstants.checkIfLogged();
     };
-    
+
     this.reRoute = () => {
       this.router.navigate(["/"]);
     };
   }
 
-  async ngOnInit() {
-  }
-
+  ngOnInit(): void {}
 }

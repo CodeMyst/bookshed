@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { isLoggedIn } from 'src/app/api/auth';
 import { BookCategory, BookCreateResult, editBook, getAllBookCategories } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { ImageUploadResult, uploadImage } from 'src/app/api/image';
@@ -12,7 +13,7 @@ import { environment } from 'src/environments/environment';
 export class EditBookComponent implements OnInit {
 
   goToPage = GlobalConstants.goToPage;
-  isLoggedIn = GlobalConstants.isLoggedIn;
+  isLoggedIn: boolean = false;
 
   categoryId: number;
   categories: BookCategory[];
@@ -58,6 +59,8 @@ export class EditBookComponent implements OnInit {
     this.imageUrl = GlobalConstants.viewedBook.imageUrl;
 
     this.categories = await getAllBookCategories();
+
+    this.isLoggedIn = await isLoggedIn();
   }
 
 }

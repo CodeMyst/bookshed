@@ -1,50 +1,43 @@
 <div id="box">
     <div class="container">
+        <h2>Add a new book</h2>
 
-        <div *ngIf="!isLoggedIn; else elseBlock">
-            {{goToPage('/forbidden')}}
+        <div *ngIf="res && res.success" class="alert-success">
+            Book successfully added.
+        </div>
+        <div *ngIf="res && !res.success" class="alert-danger">
+            {{res.message}}
         </div>
 
-        <ng-template #elseBlock>
-            <h2>Add a new book</h2>
-
-            <div *ngIf="res && res.success" class="alert-success">
-                Book successfully added.
+        <form>
+            <div class="form-group">
+                <label for="title">Book title</label>
+                <input type="text" class="form-control" [(ngModel)]="title" name="title1"
+                    placeholder="Enter a book title" required>
             </div>
-            <div *ngIf="res && !res.success" class="alert-danger">
-                {{res.message}}
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" class="form-control" [(ngModel)]="author" name="author1"
+                    placeholder="Enter author's name" required>
             </div>
-
-            <form>
-                <div class="form-group">
-                    <label for="title">Book title</label>
-                    <input type="text" class="form-control" [(ngModel)]="title" name="title1"
-                        placeholder="Enter a book title" required>
-                </div>
-                <div class="form-group">
-                    <label for="author">Author</label>
-                    <input type="text" class="form-control" [(ngModel)]="author" name="author1"
-                        placeholder="Enter author's name" required>
-                </div>
-                <div class="form-group">
-                    <label for="category">Category</label><br>
-                    <select [(ngModel)]="categoryId" name="category" class="selectpicker">
-                        <option *ngFor="let cat of categories" [ngValue]="cat.id">{{cat.name}}</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label><br>
-                    <textarea class="form-control" [(ngModel)]="description" name="description1"
-                        placeholder="Enter a description" rows="5" cols="20" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="formFileLg" class="form-label">Book image</label>
-                    <input class="form-control form-control-lg" id="formFileLg" type="file"
-                        (change)="onFileChanged($event)" />
-                </div>
-                <br>
-                <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
-            </form>
-        </ng-template>
+            <div class="form-group">
+                <label for="category">Category</label><br>
+                <select [(ngModel)]="categoryId" name="category" class="selectpicker">
+                    <option *ngFor="let cat of categories" [ngValue]="cat.id">{{cat.name}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label><br>
+                <textarea class="form-control" [(ngModel)]="description" name="description1"
+                    placeholder="Enter a description" rows="5" cols="20" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="formFileLg" class="form-label">Book image</label>
+                <input class="form-control form-control-lg" id="formFileLg" type="file"
+                    (change)="onFileChanged($event)" />
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+        </form>
     </div>
 </div>

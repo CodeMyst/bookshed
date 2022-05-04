@@ -5,6 +5,7 @@ import { GlobalConstants } from 'src/app/api/global.constants';
 import { createReview, deleteReview, editReview, getBookReviews, Review, ReviewResult } from 'src/app/api/review';
 import { Role } from 'src/app/api/user';
 import { DatePipe } from '@angular/common';
+import { getSelf, isLoggedIn } from 'src/app/api/auth';
 
 
 @Component({
@@ -46,8 +47,8 @@ export class BookInfoComponent implements OnInit {
             this.imageUrl = this.book.imageUrl;
         }
 
-        this.isAdmin = GlobalConstants.currentUser?.role === Role.ADMIN;
-        this.isLoggedIn = GlobalConstants.currentUser !== null;
+        this.isLoggedIn = await isLoggedIn();
+        this.isAdmin = (await getSelf()).role === Role.ADMIN;
 
         this.sellInfos = await getBookSellInfos(this.book?.id);
 
@@ -93,7 +94,7 @@ export class BookInfoComponent implements OnInit {
 
     async loadReviews() {
         this.reviews = await getBookReviews(this.book!.id);
-        this.usersReview = this.reviews.find(r => r.author.username == GlobalConstants.currentUser?.username);
+        this.usersReview = this.reviews.find(async r => r.author.username == (await getSelf()).username);
 
         if (this.usersReview) {
             this.reviewContent = this.usersReview!.content;
