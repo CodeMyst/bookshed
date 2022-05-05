@@ -40,7 +40,7 @@ public class PostController {
 
         Post post = new Post();
         post.setContent(createInfo.getContent());
-        post.setAuthor(currentUser.getUsername());
+        post.setAuthor(currentUser);
         post.setSticky(createInfo.isSticky());
         post.setCreatedAt(LocalDateTime.now());
 

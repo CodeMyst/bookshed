@@ -96,6 +96,26 @@ create table bookshed.post
             references user (username)
 );
 
+drop table if exists bookshed.post_reply;
+
+create table bookshed.post_reply
+(
+    id          int             not null primary key auto_increment,
+    post_id     int             not null,
+    author      varchar(50)     not null,
+    created_at  datetime        not null,
+    last_edit   datetime,
+    content     mediumtext      not null,
+
+    constraint fk_reply_author
+        foreign key (author)
+            references user (username),
+    
+    constraint fk_reply_post
+        foreign key (post_id)
+            references post (id)
+);
+
 insert into book_category (name)
 values ('Fantasy');
 insert into book_category (name)

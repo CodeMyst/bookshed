@@ -1,36 +1,45 @@
 package rs.myst.bookshed.model;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 @Entity
-@Table(name = "post")
-public class Post {
+@Table(name = "post_reply")
+public class PostReply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @JoinColumn(name = "post_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    private Post post;
 
     @JoinColumn(name = "author", nullable = false)
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private User author;
-
-    @Lob
-    @Column(name = "content", nullable = false)
-    private String content;
-
-    @Column(name = "sticky", nullable = false)
-    private boolean sticky;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "last_edit", nullable = true)
     private LocalDateTime lastEdit;
+
+    @Lob
+    @Column(name = "content", nullable = false)
+    private String content;
+
 
     public int getId() {
         return this.id;
@@ -40,12 +49,12 @@ public class Post {
         this.id = id;
     }
 
-    public String getTitle() {
-        return this.title;
+    public Post getPost() {
+        return this.post;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     public User getAuthor() {
@@ -54,26 +63,6 @@ public class Post {
 
     public void setAuthor(User author) {
         this.author = author;
-    }
-
-    public String getContent() {
-        return this.content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public boolean isSticky() {
-        return this.sticky;
-    }
-
-    public boolean getSticky() {
-        return this.sticky;
-    }
-
-    public void setSticky(boolean sticky) {
-        this.sticky = sticky;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -92,19 +81,27 @@ public class Post {
         this.lastEdit = lastEdit;
     }
 
+    public String getContent() {
+        return this.content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof Post)) {
+        if (!(o instanceof PostReply)) {
             return false;
         }
-        Post post = (Post) o;
-        return id == post.id && Objects.equals(title, post.title) && Objects.equals(author, post.author) && Objects.equals(content, post.content) && sticky == post.sticky && Objects.equals(createdAt, post.createdAt) && Objects.equals(lastEdit, post.lastEdit);
+        PostReply postReply = (PostReply) o;
+        return id == postReply.id && Objects.equals(post, postReply.post) && Objects.equals(author, postReply.author) && Objects.equals(createdAt, postReply.createdAt) && Objects.equals(lastEdit, postReply.lastEdit) && Objects.equals(content, postReply.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, author, content, sticky, createdAt, lastEdit);
+        return Objects.hash(id, post, author, createdAt, lastEdit, content);
     }
 }

@@ -1,6 +1,7 @@
 package rs.myst.bookshed.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -85,5 +86,21 @@ public class Review {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Review)) {
+            return false;
+        }
+        Review review = (Review) o;
+        return Objects.equals(id, review.id) && Objects.equals(book, review.book) && Objects.equals(author, review.author) && Objects.equals(content, review.content) && Objects.equals(createdAt, review.createdAt) && Objects.equals(lastEdit, review.lastEdit);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, book, author, content, createdAt, lastEdit);
     }
 }
