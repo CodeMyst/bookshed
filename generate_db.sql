@@ -84,6 +84,7 @@ drop table if exists bookshed.post;
 create table bookshed.post
 (
     id          int             not null primary key auto_increment,
+    title       mediumtext      not null,
     author      varchar(50)     not null,
     created_at  datetime        not null,
     last_edit   datetime,
