@@ -11,6 +11,9 @@ public class Post {
     @Column(name = "id")
     private int id;
     @Basic
+    @Column(name = "title")
+    private String title;
+    @Basic
     @Column(name = "author")
     private String author;
     @Basic
@@ -32,6 +35,14 @@ public class Post {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getAuthor() {
@@ -79,11 +90,11 @@ public class Post {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return id == post.id && sticky == post.sticky && Objects.equals(author, post.author) && Objects.equals(content, post.content) && Objects.equals(createdAt, post.createdAt) && Objects.equals(lastEdit, post.lastEdit);
+        return id == post.id && sticky == post.sticky && Objects.equals(author, post.author) && Objects.equals(content, post.content) && Objects.equals(createdAt, post.createdAt) && Objects.equals(lastEdit, post.lastEdit) && Objects.equals(title, post.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, content, sticky, createdAt, lastEdit);
+        return Objects.hash(id, author, content, sticky, createdAt, lastEdit, title);
     }
 }
