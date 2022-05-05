@@ -9,6 +9,9 @@
         <class>rs.myst.bookshed.model.BookCategory</class>
         <class>rs.myst.bookshed.model.Book</class>
         <class>rs.myst.bookshed.model.Review</class>
+        <class>rs.myst.bookshed.model.Post</class>
+        <class>rs.myst.bookshed.model.PostReply</class>
+        <class>rs.myst.bookshed.model.SellInfo</class>
     </persistence-unit>
     <persistence-unit name="persistenceUnit"/>
 </persistence>
