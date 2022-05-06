@@ -1,12 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
 .alert-danger {
-    background-color: #6b2b27;
-    color: white;
-    padding: 0.2%;
-    padding-left: 0.5%;
-    margin-bottom: 2%;
-    margin-top: 2%;
+    background-color: #6b2b27 !important;
+    color: #E5D0D0 !important;
+}
+
+.alert-success {
+    background-color: #0F5132 !important;
+    color: #D1E7DD !important;
 }
 
 input, textarea, select {
@@ -35,10 +36,10 @@ select {
 .alert-danger,
 .alert-success,
 .alert-warning {
-    padding: 0.2%;
-    padding-left: 0.5%;
-    margin-bottom: 2%;
-    margin-top: 2%;
+    padding: 0.2% !important;
+    padding-left: 1% !important;
+    margin-bottom: 2% !important;
+    margin-top: 2% !important;
 }
 
 h2 {

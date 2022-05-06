@@ -5,23 +5,27 @@
         <div *ngIf="res && res.success" class="alert-success">
             Post successfully added.
         </div>
-        <div *ngIf="res && !res.success" class="alert-danger">
-            {{res.message}}
+        <div *ngIf="error; else elseBlock" class="alert-danger">
+            Fields cannot be empty.
         </div>
+        <ng-template #elseBlock>
+            <div *ngIf="res && !res.success" class="alert-danger">
+                {{res.message}}
+            </div>
+        </ng-template>
 
-        <form>
+        <form (ngSubmit)="onSubmit(postForm)" #postForm="ngForm">
             <div class="form-group">
                 <label for="title">Post title</label>
-                <input type="text" class="form-control" [(ngModel)]="title" name="title1"
-                    placeholder="Enter a post title" required>
+                <input type="text" class="form-control" ngModel name="title" placeholder="Enter a post title" required>
             </div>
             <div class="form-group">
                 <div class="editor">
-                    <textarea placeholder="Insert content here..."></textarea>
+                    <textarea placeholder="Insert content here..." required></textarea>
                 </div>
             </div>
             <br>
-            <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>

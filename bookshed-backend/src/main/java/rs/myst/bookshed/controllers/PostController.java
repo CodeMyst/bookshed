@@ -39,6 +39,7 @@ public class PostController {
         User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
 
         Post post = new Post();
+        post.setTitle(createInfo.getTitle());
         post.setContent(createInfo.getContent());
         post.setAuthor(currentUser);
         post.setSticky(createInfo.isSticky());

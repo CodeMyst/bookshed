@@ -13,22 +13,23 @@ export class CreatePostComponent implements OnInit {
 
   isLoggedIn: boolean = false;
 
+  content : EasyMDE | any;
+
   goToPage = GlobalConstants.goToPage;
-
-  author: string = "";
-  title: string = "";
-  content: string = "";
-  imageUrl: string = "";
-  sticky: boolean = false;
-
-
   res: PostCreateResult | null = null;
+  error: boolean = false;
 
   onSubmit: any;
 
   constructor() {
-    this.onSubmit = async () => {
-      this.res = await createPost(this.content, this.sticky);
+    this.onSubmit = async (postForm: any) => {
+      this.error = false;
+      
+      if (postForm.value["title"] && this.content.value()) {
+        this.res = await createPost(postForm.value["title"], this.content.value(), false);
+      } else {
+        this.error = true;
+      }
     }
   }
 
@@ -41,7 +42,7 @@ export class CreatePostComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    const easyMDE = new EasyMDE(
+    this.content = new EasyMDE(
       {
         toolbar: ["bold", "italic", "heading", "|",
           "quote", "unordered-list", "ordered-list", "|",

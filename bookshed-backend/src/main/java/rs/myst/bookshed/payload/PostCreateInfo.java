@@ -1,22 +1,31 @@
 package rs.myst.bookshed.payload;
 
 public class PostCreateInfo {
-    private String content;
-    private boolean sticky;
+	private String title;
+	private String content;
+	private boolean sticky;
 
-    public String getContent() {
-        return content;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public boolean isSticky() {
-        return sticky;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public void setSticky(boolean sticky) {
-        this.sticky = sticky;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public boolean isSticky() {
+		return sticky;
+	}
+
+	public void setSticky(boolean sticky) {
+		this.sticky = sticky;
+	}
 }

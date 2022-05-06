@@ -3,10 +3,10 @@ import { User } from "./user";
 
 export interface Post {
     id: number;
-    // title: string;
+    title: string;
     content: string;
-    sticky: boolean;
     author: User;
+    sticky: boolean;
     createdAt: Date;
 }
 
@@ -18,8 +18,9 @@ export interface PostCreateResult {
 
 const apiServerUrl = environment.apiBaseUrl;
 
-export const createPost = async (content: string, sticky: boolean): Promise<PostCreateResult> => {
+export const createPost = async (title: string, content: string, sticky: boolean): Promise<PostCreateResult> => {
     const data = {
+        title: title,
         content: content,
         sticky: sticky
     };
