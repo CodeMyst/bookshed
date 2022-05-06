@@ -24,7 +24,7 @@ export class CreatePostComponent implements OnInit {
   constructor() {
     this.onSubmit = async (postForm: any) => {
       this.error = false;
-      
+
       if (postForm.value["title"] && this.content.value()) {
         this.res = await createPost(postForm.value["title"], this.content.value(), false);
       } else {
