@@ -1,12 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
 
 .alert-danger {
-    background-color: #6b2b27;
-    color: white;
-    padding: 0.2%;
-    padding-left: 0.5%;
-    margin-bottom: 2%;
-    margin-top: 2%;
+    background-color: #6b2b27 !important;
+    color: #E5D0D0 !important;
+}
+
+.alert-success {
+    background-color: #0F5132 !important;
+    color: #D1E7DD !important;
+}
+
+input, textarea, select {
+    border: none !important;
+}
+
+input, textarea {
+    background-color: #0c0d0f !important;
+    color: white !important;
+}
+
+input:focus, textarea:focus {
+    background-color: #1c2026 !important;
+    color: white !important;
 }
 
 select {
@@ -18,30 +33,18 @@ select {
     padding-left: 0.5%;
 }
 
-.alert-danger, .alert-success, .alert-warning {
-    padding: 0.2%;
-    padding-left: 0.5%;
-    margin-bottom: 2%;
-    margin-top: 2%;
+.alert-danger,
+.alert-success,
+.alert-warning {
+    padding: 0.2% !important;
+    padding-left: 1% !important;
+    margin-bottom: 2% !important;
+    margin-top: 2% !important;
 }
 
 h2 {
     margin-top: 2%;
     padding-bottom: 2%;
-}
-
-input, textarea {
-    background-color: #0c0d0f;
-    color: white;
-}
-
-textearea {
-    resize: none;
-}
-
-input:focus, textarea:focus {
-    background-color: #1c2026;
-    color: white;
 }
 
 .form-group {
@@ -66,18 +69,54 @@ button {
 
 ::-webkit-scrollbar {
     width: 13px;
-  }
-  
-  ::-webkit-scrollbar-track {
+}
+
+::-webkit-scrollbar-track {
     background: #1E1E1E;
     border-left: 1px solid #393939;
-  }
-  
-  ::-webkit-scrollbar-thumb {
+}
+
+::-webkit-scrollbar-thumb {
     background: #424242;
     border-left: 1px solid #525252;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
+}
+
+::-webkit-scrollbar-thumb:hover {
     background: #4F4F4F;
-  }
+}
+
+.EasyMDEContainer .editor-toolbar {
+    border: none;
+}
+
+.EasyMDEContainer {
+    border-radius: 5px;
+}
+
+.EasyMDEContainer .editor-toolbar button {
+    color: white !important;
+}
+
+.EasyMDEContainer .CodeMirror-cursor {
+    border-color: white;
+}
+
+.EasyMDEContainer .editor-toolbar button:hover,
+.EasyMDEContainer .editor-toolbar button.active {
+    color: #0c0d0f !important;
+}
+
+.EasyMDEContainer .CodeMirror,
+.EasyMDEContainer {
+    background-color: #0c0d0f !important;
+    color: white;
+    border: none !important;
+}
+
+.EasyMDEContainer .cm-spell-error {
+    background-color: transparent !important;
+}
+
+.EasyMDEContainer .CodeMirror-selected {
+    background-color: #0663D4 !important;
+}
