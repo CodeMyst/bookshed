@@ -7,26 +7,31 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.myst.bookshed.constants.RoleConstants;
 import rs.myst.bookshed.model.Post;
+import rs.myst.bookshed.model.PostReply;
 import rs.myst.bookshed.model.User;
 import rs.myst.bookshed.model.UserRole;
 import rs.myst.bookshed.payload.MessageResponse;
 import rs.myst.bookshed.payload.PostCreateInfo;
+import rs.myst.bookshed.repositories.PostReplyRepository;
 import rs.myst.bookshed.repositories.PostRepository;
 import rs.myst.bookshed.repositories.UserRepository;
 import rs.myst.bookshed.services.UserDetailsImpl;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/post")
 public class PostController {
     private final PostRepository postRepo;
     private final UserRepository userRepo;
+    private final PostReplyRepository replyRepo;
 
-    public PostController(PostRepository postRepository, UserRepository userRepo) {
+    public PostController(PostRepository postRepository, UserRepository userRepo, PostReplyRepository replyRepo) {
         this.postRepo = postRepository;
         this.userRepo = userRepo;
+        this.replyRepo = replyRepo;
     }
 
     @GetMapping("/all")
@@ -58,5 +63,40 @@ public class PostController {
         postRepo.save(post);
 
         return ResponseEntity.ok(post);
+    }
+    
+    @GetMapping("/{idPost}")
+    public ResponseEntity<?> getAllPostReplies(@PathVariable int idPost) {
+    	Post post = postRepo.findById(idPost).orElse(null);
+    	if (post == null) {
+    		return ResponseEntity.badRequest().build();
+    	}
+    	
+    	List<PostReply> replies = replyRepo.findAllByPost(post);
+    	
+    	return ResponseEntity.ok(replies);
+    }
+    
+    @PostMapping("/{idPost}")
+    @PreAuthorize(RoleConstants.USER)
+    public ResponseEntity<?> createPostReply(@PathVariable int idPost, @RequestBody String content) {
+    	Post post = postRepo.findById(idPost).orElse(null);
+    	if (post == null) {
+    		return ResponseEntity.badRequest().build();
+    	}
+    	
+    	UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+    	User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+    	
+    	PostReply reply = new PostReply();
+    	reply.setAuthor(currentUser);
+    	reply.setPost(post);
+    	reply.setContent(content);
+    	reply.setCreatedAt(LocalDateTime.now());
+    	
+    	replyRepo.save(reply);
+    	
+    	return ResponseEntity.ok(reply);
     }
 }
