@@ -119,35 +119,16 @@
         placeholder="Write here something about the book.."
         id="review-textarea"
         class="review-textarea"
-        [value]="usersReview?.content"
       ></textarea>
 
       <button 
-        *ngIf="usersReview == undefined"
         type="submit"
         class="btn btn-primary"
-        (click)="submitOrEditReview(true)"
+        (click)="submitReview()"
       >
         Post
       </button>
 
-      <button 
-        *ngIf="usersReview != undefined"
-        type="submit"
-        class="btn btn-warning"
-        (click)="submitOrEditReview(false)"
-      >
-        Edit
-      </button>
-
-      <button 
-        *ngIf="usersReview != undefined"
-        type="submit"
-        class="btn btn-danger"
-        (click)="confirmDeleteReview(usersReview)"
-      >
-        Delete
-      </button>
     </form>
   </ng-template>
 
@@ -178,6 +159,14 @@
         </span>
         
         <span class="review-right-side">
+          <button
+            *ngIf="isLoggedUserReviewAuthor(review)"
+            class="edit-review-button"
+            (click)="toggleEditReviewForm(review.id)"
+          >
+            Edit
+          </button>
+
           <button 
             *ngIf="isAdmin"
             (click)="confirmDeleteReview(review)"
@@ -191,6 +180,28 @@
 
       <div class="review-content">
         {{ review.content }}
+      </div>
+
+      <div class="review-edit-form" id="review-edit-form-{{review.id}}">
+        <form action="">
+          <textarea
+            [(ngModel)]="reviewContent"
+            name="content"
+            placeholder="Write here something about the book.."
+            id="review-textarea"
+            class="review-textarea"
+          ></textarea>
+
+          <button 
+            type="submit"
+            class="btn btn-warning"
+            (click)="submitReview()"
+          >
+            Edit
+          </button>
+
+        </form>
+
       </div>
       <hr />
     </div>

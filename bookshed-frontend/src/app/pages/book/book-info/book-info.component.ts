@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { createReview, deleteReview, editReview, getBookReviews, Review, ReviewResult } from 'src/app/api/review';
-import { Role } from 'src/app/api/user';
+import { Role, User } from 'src/app/api/user';
 import { DatePipe } from '@angular/common';
 import { getSelf, isLoggedIn } from 'src/app/api/auth';
 
@@ -16,7 +16,6 @@ import { getSelf, isLoggedIn } from 'src/app/api/auth';
 export class BookInfoComponent implements OnInit {
     book: Book | undefined;
     reviews: Review[] = [];
-    usersReview: Review | undefined;
 
     apiBaseUrl: string = "";
 
@@ -24,6 +23,8 @@ export class BookInfoComponent implements OnInit {
 
     isAdmin: boolean = false;
     isLoggedIn: boolean = false;
+
+    loggedUser: User | undefined;
 
     onSubmit: any;
 
@@ -49,6 +50,7 @@ export class BookInfoComponent implements OnInit {
 
         this.isLoggedIn = await isLoggedIn();
         this.isAdmin = (await getSelf()).role === Role.ADMIN;
+        this.loggedUser = await getSelf();
 
         this.sellInfos = await getBookSellInfos(this.book?.id);
 
@@ -84,21 +86,27 @@ export class BookInfoComponent implements OnInit {
         this.sellInfos = await getBookSellInfos(this.book!.id);
     }
 
-    async submitOrEditReview(isPost: boolean) {
-        this.reviewRes = isPost ?
-            await createReview(this.book!.id, this.reviewContent) :
-            await editReview(this.book!.id, this.usersReview!.id, this.reviewContent);
+    isLoggedUserReviewAuthor(review: Review) {
+        return review.author.username == this.loggedUser?.username;
+    }
+
+    async submitReview() {
+        await createReview(this.book!.id, this.reviewContent);
 
         this.loadReviews()
     }
 
+    async editReview(reviewId: number) {
+        await editReview(this.book!.id, reviewId, this.reviewContent);
+        this.loadReviews()
+    }
+    
+    toggleEditReviewForm(reviewId: number) {
+        
+    }
+
     async loadReviews() {
         this.reviews = await getBookReviews(this.book!.id);
-        this.usersReview = this.reviews.find(async r => r.author.username == (await getSelf()).username);
-
-        if (this.usersReview) {
-            this.reviewContent = this.usersReview!.content;
-        }
     }
 
     formatDate(date: Date): string {
