@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
@@ -35,9 +35,12 @@ export class BookInfoComponent implements OnInit {
     price: number = 1.00;
 
     reviewContent: string = "";
+    reviewEditContent: string = "";
+    visibleEditFormReviewId: number | undefined;
+
     reviewRes: ReviewResult | null = null;
 
-    constructor(private route: ActivatedRoute, private router: Router) { }
+    constructor(private route: ActivatedRoute, private router: Router, private renderer: Renderer2) { }
 
     async ngOnInit() {
         let strId: string = <string>this.route.snapshot.paramMap.get("id");
@@ -97,12 +100,44 @@ export class BookInfoComponent implements OnInit {
     }
 
     async editReview(reviewId: number) {
-        await editReview(this.book!.id, reviewId, this.reviewContent);
+        await editReview(this.book!.id, reviewId, this.reviewEditContent);
         this.loadReviews()
     }
     
-    toggleEditReviewForm(reviewId: number) {
-        
+    toggleEditReviewForm(review: Review) {
+        // close the already opened some edit form, close it
+        if (this.visibleEditFormReviewId) {
+            this.renderer.setStyle(
+                document.getElementById(`review-edit-form-${this.visibleEditFormReviewId}`),
+                'display', 'none'
+            );
+
+            this.renderer.setStyle(
+                document.getElementById(`review-content-${this.visibleEditFormReviewId}`),
+                'display', 'block'
+            );
+
+            this.reviewEditContent = '';
+        }
+
+        if (this.visibleEditFormReviewId == review.id) {
+            // if just closed form was the one selected
+            this.visibleEditFormReviewId = undefined;
+        } else {
+            // some other one is closed, show selected
+            this.renderer.setStyle(
+                document.getElementById(`review-edit-form-${review.id}`),
+                'display', 'block'
+            );
+
+            this.renderer.setStyle(
+                document.getElementById(`review-content-${review.id}`),
+                'display', 'none'
+            );
+
+            this.visibleEditFormReviewId = review.id;
+            this.reviewEditContent = review.content;
+        }
     }
 
     async loadReviews() {

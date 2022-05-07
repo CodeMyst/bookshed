@@ -162,13 +162,13 @@
           <button
             *ngIf="isLoggedUserReviewAuthor(review)"
             class="edit-review-button"
-            (click)="toggleEditReviewForm(review.id)"
+            (click)="toggleEditReviewForm(review)"
           >
             Edit
           </button>
 
           <button 
-            *ngIf="isAdmin"
+            *ngIf="isAdmin || isLoggedUserReviewAuthor(review)"
             (click)="confirmDeleteReview(review)"
           >
             Delete
@@ -178,26 +178,29 @@
         </span>
       </div>
 
-      <div class="review-content">
+      <div class="review-content" id="review-content-{{review.id}}">
         {{ review.content }}
       </div>
 
-      <div class="review-edit-form" id="review-edit-form-{{review.id}}">
+      <div 
+        class="review-edit-form"
+        id="review-edit-form-{{review.id}}"
+        *ngIf="isLoggedUserReviewAuthor(review)" 
+      >
         <form action="">
           <textarea
-            [(ngModel)]="reviewContent"
-            name="content"
-            placeholder="Write here something about the book.."
-            id="review-textarea"
-            class="review-textarea"
+            [(ngModel)]="reviewEditContent"
+            name="reviewContent"
+            id="review-edit-textarea"
+            class="review-edit-textarea"
           ></textarea>
 
           <button 
             type="submit"
             class="btn btn-warning"
-            (click)="submitReview()"
+            (click)="editReview(review.id)"
           >
-            Edit
+            Save
           </button>
 
         </form>
