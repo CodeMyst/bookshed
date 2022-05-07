@@ -69,7 +69,7 @@ public class PostController {
     public ResponseEntity<?> getAllPostReplies(@PathVariable int idPost) {
     	Post post = postRepo.findById(idPost).orElse(null);
     	if (post == null) {
-    		return ResponseEntity.badRequest().build();
+    		return ResponseEntity.notFound().build();
     	}
     	
     	List<PostReply> replies = replyRepo.findAllByPost(post);
@@ -82,7 +82,7 @@ public class PostController {
     public ResponseEntity<?> createPostReply(@PathVariable int idPost, @RequestBody String content) {
     	Post post = postRepo.findById(idPost).orElse(null);
     	if (post == null) {
-    		return ResponseEntity.badRequest().build();
+    		return ResponseEntity.notFound().build();
     	}
     	
     	UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
@@ -98,5 +98,23 @@ public class PostController {
     	replyRepo.save(reply);
     	
     	return ResponseEntity.ok(reply);
+    }
+    
+    @DeleteMapping("/{idPost}")
+    @PreAuthorize(RoleConstants.ADMIN)
+    public ResponseEntity<?> deletePostAndReplies(@PathVariable int idPost) {
+    	Post post = postRepo.findById(idPost).orElse(null);
+    	if (post == null) {
+    		return ResponseEntity.notFound().build();
+    	}
+    	
+    	List<PostReply> replies = replyRepo.findAllByPost(post);
+    	for (int i = 0; i < replies.size(); i++) {
+    		replyRepo.delete(replies.get(i));
+    	}
+    	
+    	postRepo.delete(post);
+    	
+    	return ResponseEntity.ok().build();
     }
 }
