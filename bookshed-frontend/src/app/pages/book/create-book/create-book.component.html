@@ -5,19 +5,24 @@
         <div *ngIf="res && res.success" class="alert-success">
             Book successfully added.
         </div>
-        <div *ngIf="res && !res.success" class="alert-danger">
-            {{res.message}}
+        <div *ngIf="error; else elseBlock" class="alert-danger">
+            Fields cannot be empty.
         </div>
+        <ng-template #elseBlock>
+            <div *ngIf="res && !res.success" class="alert-danger">
+                {{res.message}}
+            </div>
+        </ng-template>
 
-        <form>
+        <form (ngSubmit)="onSubmit(bookForm)" #bookForm="ngForm">
             <div class="form-group">
                 <label for="title">Book title</label>
-                <input type="text" class="form-control" [(ngModel)]="title" name="title1"
+                <input type="text" class="form-control" ngModel name="title"
                     placeholder="Enter a book title" required>
             </div>
             <div class="form-group">
                 <label for="author">Author</label>
-                <input type="text" class="form-control" [(ngModel)]="author" name="author1"
+                <input type="text" class="form-control" ngModel name="author"
                     placeholder="Enter author's name" required>
             </div>
             <div class="form-group">
@@ -28,7 +33,7 @@
             </div>
             <div class="form-group">
                 <label for="description">Description</label><br>
-                <textarea class="form-control" [(ngModel)]="description" name="description1"
+                <textarea class="form-control" ngModel name="description"
                     placeholder="Enter a description" rows="5" cols="20" required></textarea>
             </div>
             <div class="form-group">
@@ -37,7 +42,7 @@
                     (change)="onFileChanged($event)" />
             </div>
             <br>
-            <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>

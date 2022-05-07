@@ -12,8 +12,9 @@ import { environment } from 'src/environments/environment';
 })
 export class EditBookComponent implements OnInit {
 
-  goToPage = GlobalConstants.goToPage;
   isLoggedIn: boolean = false;
+
+  goToPage = GlobalConstants.goToPage;
 
   categoryId: number;
   categories: BookCategory[];
@@ -21,14 +22,16 @@ export class EditBookComponent implements OnInit {
   author: string = "";
   title: string = "";
   description: string = "";
+  
   imageUrl: string = "";
-
   image: File | any;
-  hasChanged: boolean = false;
-  onFileChange: any;
+  imgRes: ImageUploadResult | null = null;
 
   res: BookCreateResult | null = null;
-  imgRes: ImageUploadResult | null = null;
+  error: boolean = false;
+
+  hasChanged: boolean = false;
+  onFileChange: any;
   onSubmit: any;
 
   constructor() {
@@ -41,6 +44,8 @@ export class EditBookComponent implements OnInit {
     }
     
     this.onSubmit = async () => {
+      this.error = false;
+
       if (!this.hasChanged) {
         this.imageUrl = GlobalConstants.viewedBook.imageUrl;
       } else {
@@ -48,7 +53,11 @@ export class EditBookComponent implements OnInit {
         this.imageUrl = environment.apiBaseUrl + "/static/images/" + this.imgRes.filename;
       }
 
-      this.res = await editBook(this.title, this.author, this.categoryId, this.description, this.imageUrl, GlobalConstants.viewedBook.id);
+      if (this.title !== "" && this.author !== "" && this.description !== "") {
+        this.res = await editBook(this.title, this.author, this.categoryId, this.description, this.imageUrl, GlobalConstants.viewedBook.id);
+      } else {
+        this.error = true;
+      }
     }
   }
 
