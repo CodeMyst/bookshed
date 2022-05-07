@@ -19,16 +19,13 @@ export class CreateBookComponent implements OnInit {
   categoryId: number;
   categories: BookCategory[];
 
-  author: string = "";
-  title: string = "";
-  description: string = "";
   imageUrl: string = "";
-
   image: File | any;
+  imgRes: ImageUploadResult | null = null;
 
   res: BookCreateResult | null = null;
-  imgRes: ImageUploadResult | null = null;
-  
+  error: boolean = false;
+
   onSubmit: any;
   onFileChanged: any;
 
@@ -36,11 +33,17 @@ export class CreateBookComponent implements OnInit {
     this.categories = new Array;
     this.categoryId = 1;
 
-    this.onSubmit = async () => {
-      this.imgRes = await uploadImage(this.image);
-      this.imageUrl =  environment.apiBaseUrl + "/static/images/" + this.imgRes.filename;
+    this.onSubmit = async (bookForm: any) => {
+      this.error = false;
 
-      this.res = await createBook(this.title, this.author, this.categoryId, this.description, this.imageUrl);
+      this.imgRes = await uploadImage(this.image);
+      this.imageUrl = environment.apiBaseUrl + "/static/images/" + this.imgRes.filename;
+
+      if (bookForm.value.title && bookForm.value.author && bookForm.value.description) {
+        this.res = await createBook(bookForm.value.title, bookForm.value.author, this.categoryId, bookForm.value.description, this.imageUrl);
+      } else {
+        this.error = true;
+      }
     }
 
     this.onFileChanged = (event: any) => {

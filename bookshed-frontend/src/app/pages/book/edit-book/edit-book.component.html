@@ -5,9 +5,14 @@
         <div *ngIf="res && res.success" class="alert-success">
             Book successfully edited.
         </div>
-        <div *ngIf="res && !res.success" class="alert-danger">
-            {{res.message}}
+        <div *ngIf="error; else elseBlock" class="alert-danger">
+            Fields cannot be empty.
         </div>
+        <ng-template #elseBlock>
+            <div *ngIf="res && !res.success" class="alert-danger">
+                {{res.message}}
+            </div>
+        </ng-template>
 
         <form>
             <div class="form-group">
