@@ -117,4 +117,18 @@ public class PostController {
     	
     	return ResponseEntity.ok().build();
     }
+    
+    @DeleteMapping("/{idPost}/{idReply}")
+    @PreAuthorize(RoleConstants.ADMIN)
+    public ResponseEntity<?> deletePostReply(@PathVariable int idPost, @PathVariable int idReply) {
+    	Post post = postRepo.findById(idPost).orElse(null);
+    	PostReply reply = replyRepo.findById(idReply).orElse(null);
+    	if (post == null || reply == null) {
+    		return ResponseEntity.notFound().build();
+    	}
+    	
+    	replyRepo.delete(reply);
+    	
+    	return ResponseEntity.ok().build();
+    }
 }
