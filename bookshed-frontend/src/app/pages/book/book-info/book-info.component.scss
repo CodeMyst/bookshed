@@ -59,7 +59,7 @@
 }
 
 .btn {
-    margin-right: 5px;
+  margin-right: 5px;
   padding: 2px 5px;
 }
 
@@ -68,16 +68,18 @@
   border: 1px solid rgb(187, 49, 49);
 }
 
-.review-form {
-  margin: 2px 5px;
+.review-form,
+.review-edit-form {
+
+  transition:  100ms;
 
   textarea {
     width: 100%;
-    margin-bottom: 10px;
-    resize: vertical;
-    border: none;
-    padding: 2px 5px;
     min-height: 150px;
+    resize: none;
+    border: none;
+    margin-bottom: 1rem;
+    padding: 0.2rem 0.5rem;
     border-radius: 5px;
     border: 1px solid white;
   }
@@ -85,6 +87,18 @@
   textarea :active {
     outline: none;
   }
+
+  button[type="submit"] {
+    margin-right: 1rem;
+  }
+}
+
+.review-form-toggle-button {
+  margin-bottom: 1rem;
+}
+
+.review-edit-form {
+  display: none;
 }
 
 .reviews {
@@ -117,6 +131,10 @@
     margin-right: 10px;
   }
 
+  .edit-review-button {
+    color: #ffc107;
+  }
+
   span {
     font-size: small;
     color: gray;
@@ -126,8 +144,9 @@
 
 .review-content {
   background-color: #0f1013;
-  padding: 5px 10px;
+  padding: 0.2rem 0.5rem;
   overflow: auto;
+  border-radius: 5px;
 }
 
 @media only screen and (max-width: 720px) {

@@ -102,51 +102,47 @@
 
   <hr />
 
-  <ng-template [ngIf]="isLoggedIn" [ngIfElse]="notLoggedIn">
-    <h4>Your review</h4>
+  <h4>User Reviews</h4>
+
+  <ng-template
+    [ngIf]="isLoggedIn"
+    [ngIfElse]="notLoggedIn"
+    class="review-submit-form"
+  >
+    <button
+      class="btn btn-primary review-form-toggle-button"
+      *ngIf="isLoggedIn && !isWritingAReview"
+      (click)="toggleIsWritingAReview()"
+    >
+      Write your own review
+    </button>
 
     <div 
-      *ngIf="reviewRes"
-      [class]="reviewRes.success ? 'alert-success' : 'alert-fail'"
+      *ngIf="reviewRes && !reviewRes.success"
+      class="alert-fail"
     >
-      {{ reviewRes?.message }}
+      {{ reviewRes.message }}
     </div> 
 
-    <form class="review-form">
+    <form *ngIf="isWritingAReview" class="review-form">
       <textarea
         [(ngModel)]="reviewContent"
         name="content"
-        placeholder="Write here something about the book.."
+        placeholder="Write your own review"
         id="review-textarea"
         class="review-textarea"
-        [value]="usersReview?.content"
       ></textarea>
 
       <button 
-        *ngIf="usersReview == undefined"
         type="submit"
         class="btn btn-primary"
-        (click)="submitOrEditReview(true)"
+        (click)="submitReview()"
       >
         Post
       </button>
 
-      <button 
-        *ngIf="usersReview != undefined"
-        type="submit"
-        class="btn btn-warning"
-        (click)="submitOrEditReview(false)"
-      >
-        Edit
-      </button>
-
-      <button 
-        *ngIf="usersReview != undefined"
-        type="submit"
-        class="btn btn-danger"
-        (click)="confirmDeleteReview(usersReview)"
-      >
-        Delete
+      <button class="btn btn-secondary" (click)="toggleIsWritingAReview()">
+        Cancel
       </button>
     </form>
   </ng-template>
@@ -155,9 +151,7 @@
     <a routerLink="/login">Log in</a> to post a review of {{ book?.title }}
   </ng-template>
 
-  <hr>
-
-  <h4>User Reviews</h4>
+  <br />
 
   <div class="reviews">
     <div
@@ -178,8 +172,16 @@
         </span>
         
         <span class="review-right-side">
+          <button
+            *ngIf="isLoggedUserReviewAuthor(review)"
+            class="edit-review-button"
+            (click)="toggleEditReviewForm(review)"
+          >
+            Edit
+          </button>
+
           <button 
-            *ngIf="isAdmin"
+            *ngIf="isAdmin || isLoggedUserReviewAuthor(review)"
             (click)="confirmDeleteReview(review)"
           >
             Delete
@@ -189,8 +191,37 @@
         </span>
       </div>
 
-      <div class="review-content">
+      <div class="review-content" id="review-content-{{review.id}}">
         {{ review.content }}
+      </div>
+
+      <div 
+        class="review-edit-form"
+        id="review-edit-form-{{review.id}}"
+        *ngIf="isLoggedUserReviewAuthor(review)" 
+      >
+        <form action="">
+          <textarea
+            [(ngModel)]="reviewEditContent"
+            name="reviewContent"
+            id="review-edit-textarea"
+            class="review-edit-textarea"
+          ></textarea>
+
+          <button 
+            type="submit"
+            class="btn btn-warning"
+            (click)="editReview(review)"
+          >
+            Save
+          </button>
+
+          <button class="btn btn-secondary" (click)="toggleEditReviewForm(review)">
+            Cancel
+          </button>
+
+        </form>
+
       </div>
       <hr />
     </div>

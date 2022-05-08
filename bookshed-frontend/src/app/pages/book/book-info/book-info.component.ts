@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { createReview, deleteReview, editReview, getBookReviews, Review, ReviewResult } from 'src/app/api/review';
-import { Role } from 'src/app/api/user';
+import { Role, User } from 'src/app/api/user';
 import { DatePipe } from '@angular/common';
 import { getSelf, isLoggedIn } from 'src/app/api/auth';
 
@@ -16,7 +16,6 @@ import { getSelf, isLoggedIn } from 'src/app/api/auth';
 export class BookInfoComponent implements OnInit {
     book: Book | undefined;
     reviews: Review[] = [];
-    usersReview: Review | undefined;
 
     apiBaseUrl: string = "";
 
@@ -24,6 +23,8 @@ export class BookInfoComponent implements OnInit {
 
     isAdmin: boolean = false;
     isLoggedIn: boolean = false;
+
+    loggedUser: User | undefined;
 
     onSubmit: any;
 
@@ -33,10 +34,14 @@ export class BookInfoComponent implements OnInit {
     location: string = "";
     price: number = 1.00;
 
+    isWritingAReview: boolean = false;
     reviewContent: string = "";
+    reviewEditContent: string = "";
+    visibleEditFormReviewId: number | undefined;
+
     reviewRes: ReviewResult | null = null;
 
-    constructor(private route: ActivatedRoute, private router: Router) { }
+    constructor(private route: ActivatedRoute, private router: Router, private renderer: Renderer2) { }
 
     async ngOnInit() {
         let strId: string = <string>this.route.snapshot.paramMap.get("id");
@@ -49,6 +54,7 @@ export class BookInfoComponent implements OnInit {
 
         this.isLoggedIn = await isLoggedIn();
         this.isAdmin = (await getSelf()).role === Role.ADMIN;
+        this.loggedUser = await getSelf();
 
         this.sellInfos = await getBookSellInfos(this.book?.id);
 
@@ -84,21 +90,66 @@ export class BookInfoComponent implements OnInit {
         this.sellInfos = await getBookSellInfos(this.book!.id);
     }
 
-    async submitOrEditReview(isPost: boolean) {
-        this.reviewRes = isPost ?
-            await createReview(this.book!.id, this.reviewContent) :
-            await editReview(this.book!.id, this.usersReview!.id, this.reviewContent);
+    isLoggedUserReviewAuthor(review: Review) {
+        return review.author.username == this.loggedUser?.username;
+    }
 
+    async submitReview() {
+        await createReview(this.book!.id, this.reviewContent);
+
+        this.reviewContent = '';
+        this.toggleIsWritingAReview();
         this.loadReviews()
+    }
+
+    toggleIsWritingAReview() {
+        this.isWritingAReview = !this.isWritingAReview;
+    }
+
+    async editReview(review: Review) {
+        await editReview(this.book!.id, review.id, this.reviewEditContent);
+        this.toggleEditReviewForm(review);
+        this.loadReviews()
+    }
+    
+    toggleEditReviewForm(review: Review) {
+        // close the already opened some edit form, close it
+        if (this.visibleEditFormReviewId) {
+            this.renderer.setStyle(
+                document.getElementById(`review-edit-form-${this.visibleEditFormReviewId}`),
+                'display', 'none'
+            );
+
+            this.renderer.setStyle(
+                document.getElementById(`review-content-${this.visibleEditFormReviewId}`),
+                'display', 'block'
+            );
+
+            this.reviewEditContent = '';
+        }
+
+        if (this.visibleEditFormReviewId == review.id) {
+            // if just closed form was the one selected
+            this.visibleEditFormReviewId = undefined;
+        } else {
+            // some other one is closed, show selected
+            this.renderer.setStyle(
+                document.getElementById(`review-edit-form-${review.id}`),
+                'display', 'block'
+            );
+
+            this.renderer.setStyle(
+                document.getElementById(`review-content-${review.id}`),
+                'display', 'none'
+            );
+
+            this.visibleEditFormReviewId = review.id;
+            this.reviewEditContent = review.content;
+        }
     }
 
     async loadReviews() {
         this.reviews = await getBookReviews(this.book!.id);
-        this.usersReview = this.reviews.find(async r => r.author.username == (await getSelf()).username);
-
-        if (this.usersReview) {
-            this.reviewContent = this.usersReview!.content;
-        }
     }
 
     formatDate(date: Date): string {

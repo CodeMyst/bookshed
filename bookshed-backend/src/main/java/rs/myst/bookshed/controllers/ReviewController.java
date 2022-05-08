@@ -68,13 +68,6 @@ public class ReviewController {
 				.getPrincipal();
 		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
 
-		if (reviewRepo.existsByAuthorAndBook(currentUser, book)) {
-			return new ResponseEntity<>(
-					new MessageResponse("Already posted a review"),
-					HttpStatus.BAD_REQUEST
-			);
-		}
-
 		Review review = new Review();
 		review.setAuthor(currentUser);
 		review.setBook(book);
