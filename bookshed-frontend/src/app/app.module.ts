@@ -17,6 +17,8 @@ import { BookSearchComponent } from './components/book/book-search/book-search.c
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { ForumComponent } from './pages/forum/forum.component';
 import { CreatePostComponent } from './components/forum/create-post/create-post.component';
+import { PostInfoComponent } from './components/forum/post-info/post-info.component';
+import { MarkdownPipe } from './pipes/markdown.pipe';
 
 
 @NgModule({
@@ -34,7 +36,9 @@ import { CreatePostComponent } from './components/forum/create-post/create-post.
     BookSearchComponent,
     ForbiddenComponent,
     ForumComponent,
-    CreatePostComponent
+    CreatePostComponent,
+    PostInfoComponent,
+    MarkdownPipe
   ],
   imports: [
     CommonModule,

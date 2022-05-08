@@ -1,7 +1,7 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { isLoggedIn } from 'src/app/api/auth';
-import { getPosts, getReplies, Post, Reply } from 'src/app/api/post';
+import { GlobalConstants } from 'src/app/api/global.constants';
+import { getPosts, getReplies, Post } from 'src/app/api/post';
 
 @Component({
   selector: 'app-forum',
@@ -14,6 +14,8 @@ export class ForumComponent implements OnInit {
   replies: number[] = [];
   isLoggedIn: boolean = false;
 
+  formatDate = GlobalConstants.formatDate;
+
   constructor() { }
 
   async ngOnInit() {
@@ -24,12 +26,6 @@ export class ForumComponent implements OnInit {
     for (const post of this.posts) {
       this.replies.push((await getReplies(post.id)).length);
     }
-  }
-
-  formatDate(date: Date): string {
-    const datepipe: DatePipe = new DatePipe('en-US');
-    let formatedDate: string | null = datepipe.transform(date, 'dd/MM/YYYY');
-    return formatedDate != null ? formatedDate : "unknown";
   }
 
 }
