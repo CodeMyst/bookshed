@@ -1,0 +1,11 @@
+<div id="box">
+    <div class="title">
+        <h1>{{post.title}}</h1>
+        <h5>by {{post.author.username}}</h5>
+        <p>Posted on: {{formatDate(post.createdAt)}}</p>
+    </div>
+
+    <div class="content">
+        <div id="text" [innerHtml]="post.content | markdown"></div>
+    </div>
+</div>

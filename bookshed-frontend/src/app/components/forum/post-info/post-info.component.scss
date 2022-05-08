@@ -1,0 +1,21 @@
+.title {
+    border-bottom: 1px solid gainsboro;
+
+    h1, h5, p {
+        margin-left: 1%;
+    }
+
+    p {
+        margin-bottom: 4%;
+    }
+}
+
+.content {
+    border-bottom: 1px solid gainsboro;
+    margin-top: 5%;
+    
+    #text {
+        margin-bottom: 5%;
+        margin-left: 1%;
+    }
+}

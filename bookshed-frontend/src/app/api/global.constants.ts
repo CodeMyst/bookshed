@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Book } from './book';
 
 export class GlobalConstants {
@@ -8,4 +9,10 @@ export class GlobalConstants {
   public static onSearch: any;
 
   public static goToPage: any;
+
+  public static formatDate = (date: Date): string => {
+    const datepipe: DatePipe = new DatePipe('en-US');
+    let formatedDate: string | null = datepipe.transform(date, 'dd/MM/YYYY');
+    return formatedDate != null ? formatedDate : "unknown";
+  }
 }

@@ -84,7 +84,20 @@ export const getPosts = async (): Promise<Post[]> => {
     return [];
 };
 
-export const getReplies = async(id: number): Promise<Reply[]> => {
+export const getPost = async (id: number): Promise<Post> => {
+    const res = await fetch(`${apiServerUrl}/api/post/${id}`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+    });
+
+    return await res.json();
+};
+
+export const getReplies = async (id: number): Promise<Reply[]> => {
     const res = await fetch(`${apiServerUrl}/api/post/${id}`, {
         method: "GET",
         mode: "cors",

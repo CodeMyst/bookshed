@@ -4,7 +4,6 @@ import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo 
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { createReview, deleteReview, editReview, getBookReviews, Review, ReviewResult } from 'src/app/api/review';
 import { Role, User } from 'src/app/api/user';
-import { DatePipe } from '@angular/common';
 import { getSelf, isLoggedIn } from 'src/app/api/auth';
 
 
@@ -40,6 +39,8 @@ export class BookInfoComponent implements OnInit {
     visibleEditFormReviewId: number | undefined;
 
     reviewRes: ReviewResult | null = null;
+
+    formatDate = GlobalConstants.formatDate;
 
     constructor(private route: ActivatedRoute, private router: Router, private renderer: Renderer2) { }
 
@@ -150,11 +151,5 @@ export class BookInfoComponent implements OnInit {
 
     async loadReviews() {
         this.reviews = await getBookReviews(this.book!.id);
-    }
-
-    formatDate(date: Date): string {
-        const datepipe: DatePipe = new DatePipe('en-US');
-        let formatedDate: string | null = datepipe.transform(date, 'dd/MM/YYYY');
-        return formatedDate != null ? formatedDate : "unknown";
     }
 }
