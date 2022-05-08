@@ -8,6 +8,15 @@ export interface Post {
     author: User;
     sticky: boolean;
     createdAt: Date;
+    lastEdit: Date;
+}
+
+export interface Reply {
+    id: number;
+    author: User;
+    createdAt: Date;
+    lastEdit: Date;
+    content: string;
 }
 
 export interface PostCreateResult {
@@ -56,4 +65,38 @@ export const createPost = async (title: string, content: string, sticky: boolean
             url: ""
         };
     }
+};
+
+export const getPosts = async (): Promise<Post[]> => {
+    const res = await fetch(`${apiServerUrl}/api/post/all`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+    });
+
+    if (res.ok) {
+        return await res.json();
+    }
+
+    return [];
+};
+
+export const getReplies = async(id: number): Promise<Reply[]> => {
+    const res = await fetch(`${apiServerUrl}/api/post/${id}`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+    });
+
+    if (res.ok) {
+        return await res.json();
+    }
+
+    return [];
 };

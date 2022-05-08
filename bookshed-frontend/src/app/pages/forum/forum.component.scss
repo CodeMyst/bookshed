@@ -1,0 +1,24 @@
+.new-post {
+    margin-bottom: 2rem;
+}
+
+.post {
+    color: white;
+    text-decoration: none;
+    background-color: var(--bs-gray-900);
+    display: block;
+    padding: 0.5rem 1rem;
+    margin-bottom: 2rem;
+
+    &:hover {
+        background-color: var(--bs-gray-800);
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    p {
+        margin: 0;
+    }
+}

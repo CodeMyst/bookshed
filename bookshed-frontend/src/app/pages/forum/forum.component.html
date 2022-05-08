@@ -1,1 +1,16 @@
-<a class="nav-link" routerLink="/createPost">New post</a>
+<div id="box">
+    <div class="forum">
+        <a *ngIf="isLoggedIn" class="btn btn-primary new-post" routerLink="/createPost">New post</a>
+
+        <div *ngIf="posts.length === 0">
+            No posts are created on this forum yet.
+        </div>
+
+        <a routerLink="/forum/{{post.id}}" *ngFor="let post of posts; let i = index" class="post">
+            <h3>{{ post.title }}</h3>
+            <p>Created by {{ post.author.username }} on {{ formatDate(post.createdAt) }}</p>
+            <p *ngIf="replies[i] !== 1">{{ replies[i] }} replies</p>
+            <p *ngIf="replies[i] === 1">{{ replies[i] }} reply</p>
+        </a>
+    </div>
+</div>
