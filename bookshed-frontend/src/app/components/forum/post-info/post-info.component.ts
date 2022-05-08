@@ -19,8 +19,6 @@ export class PostInfoComponent implements OnInit {
   async ngOnInit() {
     let strId: string = <string>this.route.snapshot.paramMap.get("id");
     this.post = await getPost(+strId);
-
-    
   }
 
 }
