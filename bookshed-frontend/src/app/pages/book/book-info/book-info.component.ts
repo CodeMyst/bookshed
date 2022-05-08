@@ -34,6 +34,7 @@ export class BookInfoComponent implements OnInit {
     location: string = "";
     price: number = 1.00;
 
+    isWritingAReview: boolean = false;
     reviewContent: string = "";
     reviewEditContent: string = "";
     visibleEditFormReviewId: number | undefined;
@@ -96,11 +97,18 @@ export class BookInfoComponent implements OnInit {
     async submitReview() {
         await createReview(this.book!.id, this.reviewContent);
 
+        this.reviewContent = '';
+        this.toggleIsWritingAReview();
         this.loadReviews()
     }
 
-    async editReview(reviewId: number) {
-        await editReview(this.book!.id, reviewId, this.reviewEditContent);
+    toggleIsWritingAReview() {
+        this.isWritingAReview = !this.isWritingAReview;
+    }
+
+    async editReview(review: Review) {
+        await editReview(this.book!.id, review.id, this.reviewEditContent);
+        this.toggleEditReviewForm(review);
         this.loadReviews()
     }
     
