@@ -142,4 +142,41 @@ public class PostController {
     	
     	return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/{idPost}")
+    @PreAuthorize(RoleConstants.USER)
+    public ResponseEntity<?> editPost(@Valid @RequestBody PostCreateInfo patchInfo, @PathVariable int idPost) {
+        Post post = postRepo.findById(idPost).orElse(null);
+        if (post == null ) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+
+        if (!currentUser.getUsername().equals(post.getAuthor().getUsername())) {
+            return new ResponseEntity<>(
+                    new MessageResponse("You are not the owner of the post:"),
+                    HttpStatus.FORBIDDEN
+            );
+        }
+
+        if ((patchInfo.isSticky() != post.isSticky()) && currentUser.getRole() != UserRole.ADMIN) {
+            return new ResponseEntity<>(
+                    new MessageResponse("You cannot change 'sticky' property of posts!"),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        post.setContent(patchInfo.getContent());
+        post.setSticky(patchInfo.isSticky());
+        post.setTitle(patchInfo.getTitle());
+
+        post.setLastEdit(LocalDateTime.now());
+
+        postRepo.save(post);
+
+        return ResponseEntity.ok(post);
+    }
 }

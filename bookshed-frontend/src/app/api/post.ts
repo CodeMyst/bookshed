@@ -113,3 +113,54 @@ export const getReplies = async (id: number): Promise<Reply[]> => {
 
     return [];
 };
+
+export const editPost = async (id: number, title: string, content: string, sticky: boolean): Promise<PostCreateResult> =>  {
+    const data = {
+        title: title,
+        content: content,
+        sticky: sticky
+    };
+
+    const res = await fetch(`${apiServerUrl}/api/post/${id}`, {
+        method: "PATCH",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(data)
+    });
+
+    if (res.ok) {
+        return {
+            success: true,
+            message: "",
+            url: (await res.json()).url
+        };
+    } else {
+        let msg: string;
+
+        try {
+            msg = (await res.json()).message;
+        } catch (_) {
+            msg = "Something went wrong. Try again."
+        }
+
+        return {
+            success: false,
+            message: msg,
+            url: ""
+        };
+    }
+}
+
+export const deletePost = async (id: number) => {
+    await fetch(`${apiServerUrl}/api/post/${id}`, {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+};

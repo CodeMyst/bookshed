@@ -1,14 +1,37 @@
 <div id="box">
-    <div *ngIf="post; else elseBlock">
+    <div class="top" *ngIf="post; else elseBlock">
         <div class="title">
             <h1>{{post.title}}</h1>
-            <h5>by {{post.author.username}}</h5>
-            <p>Posted on: {{formatDate(post.createdAt)}}</p>
+        
+            <div class="right">
+                <a 
+                    *ngIf="isAuthor"
+                    routerLink="/forum/{{post.id}}/edit" 
+                    class="btn btn-warning"
+                >
+                    Edit
+                </a>
+
+                <button
+                    *ngIf="isAdmin || isAuthor"
+                    class="btn btn-danger"
+                    (click)="confirmDeletePost()"
+                >
+                    Delete
+                </button>
+            </div>
         </div>
 
+        <h5>by {{post.author.username}}</h5>
+        <p>Posted on: {{formatDate(post.createdAt)}}</p>
+
+        <hr />
+        
         <div class="content">
-            <div id="text" [innerHtml]="post.content | markdown"></div>
+            <div id="text" [innerHtml]="post?.content | markdown"></div>
         </div>
+
+        <hr />
     </div>
     <ng-template #elseBlock>
         <h1>Post doesn't exist.</h1>

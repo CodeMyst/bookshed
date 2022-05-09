@@ -1,6 +1,6 @@
 <div id="box">
     <div class="forum">
-        <a *ngIf="isLoggedIn" class="btn btn-primary new-post" routerLink="/createPost">New post</a>
+        <a *ngIf="isLoggedIn" class="btn btn-primary new-post" routerLink="/forum/createPost">New post</a>
 
         <div *ngIf="posts.length === 0">
             No posts are created on this forum yet.
