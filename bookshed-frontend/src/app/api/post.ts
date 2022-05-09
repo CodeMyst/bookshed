@@ -98,7 +98,7 @@ export const getPost = async (id: number): Promise<Post> => {
 };
 
 export const getReplies = async (id: number): Promise<Reply[]> => {
-    const res = await fetch(`${apiServerUrl}/api/post/${id}`, {
+    const res = await fetch(`${apiServerUrl}/api/post/reply/${id}`, {
         method: "GET",
         mode: "cors",
         headers: {

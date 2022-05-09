@@ -34,6 +34,17 @@ public class PostController {
         this.replyRepo = replyRepo;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPost(@PathVariable int id) {
+    	Post post = postRepo.findById(id).orElse(null);
+    	
+    	if (post == null) {
+    		return ResponseEntity.notFound().build();
+    	}
+    	
+    	return ResponseEntity.ok(post);
+    }
+    
     @GetMapping("/all")
     public ResponseEntity<?> getAllPosts() {
         return ResponseEntity.ok(postRepo.findAll());
@@ -65,7 +76,7 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
     
-    @GetMapping("/{idPost}")
+    @GetMapping("/reply/{idPost}")
     public ResponseEntity<?> getAllPostReplies(@PathVariable int idPost) {
     	Post post = postRepo.findById(idPost).orElse(null);
     	if (post == null) {
