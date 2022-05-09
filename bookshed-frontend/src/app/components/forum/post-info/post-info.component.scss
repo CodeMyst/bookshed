@@ -1,5 +1,19 @@
-.title {
-    border-bottom: 1px solid gainsboro;
+.top {
+    .title {
+        display: flex;
+        justify-content: space-between;
+
+        word-break: break-all;
+        
+        button, a {
+            margin: 1rem 0.5rem;
+            padding: 0.2rem 0.5rem;
+        }
+    }
+
+    .right {
+        min-width: 10rem;
+    }
 
     h1, h5, p {
         margin-left: 1%;
@@ -11,11 +25,27 @@
 }
 
 .content {
-    border-bottom: 1px solid gainsboro;
     margin-top: 5%;
     
     #text {
         margin-bottom: 5%;
         margin-left: 1%;
     }
+}
+
+@media only screen and (max-width: 720px) {
+  .title {
+    flex-direction: column;
+  }
+
+  #box {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media only screen and (min-width: 720px) {
+  .title {
+    flex-direction: row;
+  }
 }

@@ -19,6 +19,7 @@ import { ForumComponent } from './pages/forum/forum.component';
 import { CreatePostComponent } from './components/forum/create-post/create-post.component';
 import { PostInfoComponent } from './components/forum/post-info/post-info.component';
 import { MarkdownPipe } from './pipes/markdown.pipe';
+import { EditPostComponent } from './components/forum/edit-post/edit-post.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { MarkdownPipe } from './pipes/markdown.pipe';
     ForumComponent,
     CreatePostComponent,
     PostInfoComponent,
-    MarkdownPipe
+    MarkdownPipe,
+    EditPostComponent
   ],
   imports: [
     CommonModule,
