@@ -166,10 +166,6 @@ export const deletePost = async (id: number) => {
 };
 
 export const replyPost = async (postId: number, content: string) => {
-    const data = {
-        content: content
-    };
-
     await fetch(`${apiServerUrl}/api/post/${postId}`, {
         method: "POST",
         mode: "cors",
@@ -177,6 +173,6 @@ export const replyPost = async (postId: number, content: string) => {
             "Content-Type": "application/json"
         },
         credentials: "include",
-        body: JSON.stringify(data)
+        body: content
     });
 };

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as EasyMDE from 'easymde';
 import { getSelf } from 'src/app/api/auth';
 import { GlobalConstants } from 'src/app/api/global.constants';
-import { deletePost, getPost, Post, replyPost } from 'src/app/api/post';
+import { deletePost, getPost, getReplies, Post, Reply, replyPost } from 'src/app/api/post';
 import { Role, User } from 'src/app/api/user';
 
 @Component({
@@ -13,6 +13,7 @@ import { Role, User } from 'src/app/api/user';
 })
 export class PostInfoComponent implements OnInit {
     post: Post | undefined;
+    replies: Reply[] = [];
 
     loggedUser: User | undefined;
     isAdmin: boolean = false;
@@ -30,6 +31,7 @@ export class PostInfoComponent implements OnInit {
     async ngOnInit() {
         let strId: string = <string>this.route.snapshot.paramMap.get("id");
         this.post = await getPost(+strId);
+        this.replies = await getReplies(this.post.id);
 
         this.loggedUser = await getSelf();
         this.isAdmin = this.loggedUser.role === Role.ADMIN;
@@ -46,6 +48,8 @@ export class PostInfoComponent implements OnInit {
     async onPostReply() {
         if (this.editor.value()) {
             await replyPost(this.post!.id, this.editor.value());
+            this.editor.value("");
+            this.replies = await getReplies(this.post!.id);
         }
     }
 
