@@ -165,6 +165,17 @@ export const deletePost = async (id: number) => {
     });
 };
 
+export const deleteReply = async (postId: number, replyId: number) => {
+    await fetch(`${apiServerUrl}/api/post/${postId}/${replyId}`, {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+};
+
 export const replyPost = async (postId: number, content: string) => {
     await fetch(`${apiServerUrl}/api/post/${postId}`, {
         method: "POST",

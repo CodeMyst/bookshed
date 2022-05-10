@@ -36,15 +36,15 @@ public class PostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getPost(@PathVariable int id) {
-    	Post post = postRepo.findById(id).orElse(null);
-    	
-    	if (post == null) {
-    		return ResponseEntity.notFound().build();
-    	}
-    	
-    	return ResponseEntity.ok(post);
+        Post post = postRepo.findById(id).orElse(null);
+
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(post);
     }
-    
+
     @GetMapping("/all")
     public ResponseEntity<?> getAllPosts() {
         return ResponseEntity.ok(postRepo.findAll());
@@ -58,12 +58,9 @@ public class PostController {
         User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
 
         if (createInfo.isSticky() && currentUser.getRole() != UserRole.ADMIN) {
-			return new ResponseEntity<>(
-					new MessageResponse("You cannot create sticky posts!"),
-					HttpStatus.BAD_REQUEST
-			);
+            return new ResponseEntity<>(new MessageResponse("You cannot create sticky posts!"), HttpStatus.BAD_REQUEST);
         }
-        
+
         Post post = new Post();
         post.setTitle(createInfo.getTitle());
         post.setContent(createInfo.getContent());
@@ -75,79 +72,89 @@ public class PostController {
 
         return ResponseEntity.ok(post);
     }
-    
+
     @GetMapping("/reply/{idPost}")
     public ResponseEntity<?> getAllPostReplies(@PathVariable int idPost) {
-    	Post post = postRepo.findById(idPost).orElse(null);
-    	if (post == null) {
-    		return ResponseEntity.notFound().build();
-    	}
-    	
-    	List<PostReply> replies = replyRepo.findAllByPost(post);
-    	
-    	return ResponseEntity.ok(replies);
+        Post post = postRepo.findById(idPost).orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<PostReply> replies = replyRepo.findAllByPost(post);
+
+        return ResponseEntity.ok(replies);
     }
-    
+
     @PostMapping("/{idPost}")
     @PreAuthorize(RoleConstants.USER)
     public ResponseEntity<?> createPostReply(@PathVariable int idPost, @RequestBody String content) {
-    	Post post = postRepo.findById(idPost).orElse(null);
-    	if (post == null) {
-    		return ResponseEntity.notFound().build();
-    	}
-    	
-    	UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal();
-    	User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
-    	
-    	PostReply reply = new PostReply();
-    	reply.setAuthor(currentUser);
-    	reply.setPost(post);
-    	reply.setContent(content);
-    	reply.setCreatedAt(LocalDateTime.now());
-    	
-    	replyRepo.save(reply);
-    	
-    	return ResponseEntity.ok(reply);
+        Post post = postRepo.findById(idPost).orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+
+        PostReply reply = new PostReply();
+        reply.setAuthor(currentUser);
+        reply.setPost(post);
+        reply.setContent(content);
+        reply.setCreatedAt(LocalDateTime.now());
+
+        replyRepo.save(reply);
+
+        return ResponseEntity.ok(reply);
     }
-    
+
     @DeleteMapping("/{idPost}")
     @PreAuthorize(RoleConstants.ADMIN)
     public ResponseEntity<?> deletePostAndReplies(@PathVariable int idPost) {
-    	Post post = postRepo.findById(idPost).orElse(null);
-    	if (post == null) {
-    		return ResponseEntity.notFound().build();
-    	}
-    	
-    	List<PostReply> replies = replyRepo.findAllByPost(post);
-    	for (int i = 0; i < replies.size(); i++) {
-    		replyRepo.delete(replies.get(i));
-    	}
-    	
-    	postRepo.delete(post);
-    	
-    	return ResponseEntity.ok().build();
+        Post post = postRepo.findById(idPost).orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<PostReply> replies = replyRepo.findAllByPost(post);
+        for (int i = 0; i < replies.size(); i++) {
+            replyRepo.delete(replies.get(i));
+        }
+
+        postRepo.delete(post);
+
+        return ResponseEntity.ok().build();
     }
-    
+
     @DeleteMapping("/{idPost}/{idReply}")
     @PreAuthorize(RoleConstants.ADMIN)
     public ResponseEntity<?> deletePostReply(@PathVariable int idPost, @PathVariable int idReply) {
-    	Post post = postRepo.findById(idPost).orElse(null);
-    	PostReply reply = replyRepo.findById(idReply).orElse(null);
-    	if (post == null || reply == null) {
-    		return ResponseEntity.notFound().build();
-    	}
-    	
-    	replyRepo.delete(reply);
-    	
-    	return ResponseEntity.ok().build();
+        Post post = postRepo.findById(idPost).orElse(null);
+        PostReply reply = replyRepo.findById(idReply).orElse(null);
+        if (post == null || reply == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+
+        if (!currentUser.getUsername().equals(reply.getAuthor().getUsername())
+                && !currentUser.getRole().equals(UserRole.ADMIN)) {
+            return new ResponseEntity<>(new MessageResponse("You are not the owner of this reply."),
+                    HttpStatus.FORBIDDEN);
+        }
+
+        replyRepo.delete(reply);
+
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{idPost}")
     @PreAuthorize(RoleConstants.USER)
     public ResponseEntity<?> editPost(@Valid @RequestBody PostCreateInfo patchInfo, @PathVariable int idPost) {
         Post post = postRepo.findById(idPost).orElse(null);
-        if (post == null ) {
+        if (post == null) {
             return ResponseEntity.notFound().build();
         }
 
@@ -156,17 +163,13 @@ public class PostController {
         User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
 
         if (!currentUser.getUsername().equals(post.getAuthor().getUsername())) {
-            return new ResponseEntity<>(
-                    new MessageResponse("You are not the owner of the post:"),
-                    HttpStatus.FORBIDDEN
-            );
+            return new ResponseEntity<>(new MessageResponse("You are not the owner of the post:"),
+                    HttpStatus.FORBIDDEN);
         }
 
         if ((patchInfo.isSticky() != post.isSticky()) && currentUser.getRole() != UserRole.ADMIN) {
-            return new ResponseEntity<>(
-                    new MessageResponse("You cannot change 'sticky' property of posts!"),
-                    HttpStatus.BAD_REQUEST
-            );
+            return new ResponseEntity<>(new MessageResponse("You cannot change 'sticky' property of posts!"),
+                    HttpStatus.BAD_REQUEST);
         }
 
         post.setContent(patchInfo.getContent());
