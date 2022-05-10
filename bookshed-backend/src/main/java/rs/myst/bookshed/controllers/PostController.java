@@ -24,162 +24,162 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/post")
 public class PostController {
-	private final PostRepository postRepo;
-	private final UserRepository userRepo;
-	private final PostReplyRepository replyRepo;
+    private final PostRepository postRepo;
+    private final UserRepository userRepo;
+    private final PostReplyRepository replyRepo;
 
-	public PostController(PostRepository postRepository, UserRepository userRepo, PostReplyRepository replyRepo) {
-		this.postRepo = postRepository;
-		this.userRepo = userRepo;
-		this.replyRepo = replyRepo;
-	}
+    public PostController(PostRepository postRepository, UserRepository userRepo, PostReplyRepository replyRepo) {
+        this.postRepo = postRepository;
+        this.userRepo = userRepo;
+        this.replyRepo = replyRepo;
+    }
 
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getPost(@PathVariable int id) {
-		Post post = postRepo.findById(id).orElse(null);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPost(@PathVariable int id) {
+        Post post = postRepo.findById(id).orElse(null);
 
-		if (post == null) {
-			return ResponseEntity.notFound().build();
-		}
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-		return ResponseEntity.ok(post);
-	}
+        return ResponseEntity.ok(post);
+    }
 
-	@GetMapping("/all")
-	public ResponseEntity<?> getAllPosts() {
-		return ResponseEntity.ok(postRepo.findAll());
-	}
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllPosts() {
+        return ResponseEntity.ok(postRepo.findAll());
+    }
 
-	@PostMapping("/create")
-	@PreAuthorize(RoleConstants.USER)
-	public ResponseEntity<?> createPost(@Valid @RequestBody PostCreateInfo createInfo) {
-		UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal();
-		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+    @PostMapping("/create")
+    @PreAuthorize(RoleConstants.USER)
+    public ResponseEntity<?> createPost(@Valid @RequestBody PostCreateInfo createInfo) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
 
-		if (createInfo.isSticky() && currentUser.getRole() != UserRole.ADMIN) {
-			return new ResponseEntity<>(new MessageResponse("You cannot create sticky posts!"), HttpStatus.BAD_REQUEST);
-		}
+        if (createInfo.isSticky() && currentUser.getRole() != UserRole.ADMIN) {
+            return new ResponseEntity<>(new MessageResponse("You cannot create sticky posts!"), HttpStatus.BAD_REQUEST);
+        }
 
-		Post post = new Post();
-		post.setTitle(createInfo.getTitle());
-		post.setContent(createInfo.getContent());
-		post.setAuthor(currentUser);
-		post.setSticky(createInfo.isSticky());
-		post.setCreatedAt(LocalDateTime.now());
+        Post post = new Post();
+        post.setTitle(createInfo.getTitle());
+        post.setContent(createInfo.getContent());
+        post.setAuthor(currentUser);
+        post.setSticky(createInfo.isSticky());
+        post.setCreatedAt(LocalDateTime.now());
 
-		postRepo.save(post);
+        postRepo.save(post);
 
-		return ResponseEntity.ok(post);
-	}
+        return ResponseEntity.ok(post);
+    }
 
-	@GetMapping("/reply/{idPost}")
-	public ResponseEntity<?> getAllPostReplies(@PathVariable int idPost) {
-		Post post = postRepo.findById(idPost).orElse(null);
-		if (post == null) {
-			return ResponseEntity.notFound().build();
-		}
+    @GetMapping("/reply/{idPost}")
+    public ResponseEntity<?> getAllPostReplies(@PathVariable int idPost) {
+        Post post = postRepo.findById(idPost).orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-		List<PostReply> replies = replyRepo.findAllByPost(post);
+        List<PostReply> replies = replyRepo.findAllByPost(post);
 
-		return ResponseEntity.ok(replies);
-	}
+        return ResponseEntity.ok(replies);
+    }
 
-	@PostMapping("/{idPost}")
-	@PreAuthorize(RoleConstants.USER)
-	public ResponseEntity<?> createPostReply(@PathVariable int idPost, @RequestBody String content) {
-		Post post = postRepo.findById(idPost).orElse(null);
-		if (post == null) {
-			return ResponseEntity.notFound().build();
-		}
+    @PostMapping("/{idPost}")
+    @PreAuthorize(RoleConstants.USER)
+    public ResponseEntity<?> createPostReply(@PathVariable int idPost, @RequestBody String content) {
+        Post post = postRepo.findById(idPost).orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-		UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal();
-		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
 
-		PostReply reply = new PostReply();
-		reply.setAuthor(currentUser);
-		reply.setPost(post);
-		reply.setContent(content);
-		reply.setCreatedAt(LocalDateTime.now());
+        PostReply reply = new PostReply();
+        reply.setAuthor(currentUser);
+        reply.setPost(post);
+        reply.setContent(content);
+        reply.setCreatedAt(LocalDateTime.now());
 
-		replyRepo.save(reply);
+        replyRepo.save(reply);
 
-		return ResponseEntity.ok(reply);
-	}
+        return ResponseEntity.ok(reply);
+    }
 
-	@DeleteMapping("/{idPost}")
-	@PreAuthorize(RoleConstants.ADMIN)
-	public ResponseEntity<?> deletePostAndReplies(@PathVariable int idPost) {
-		Post post = postRepo.findById(idPost).orElse(null);
-		if (post == null) {
-			return ResponseEntity.notFound().build();
-		}
+    @DeleteMapping("/{idPost}")
+    @PreAuthorize(RoleConstants.ADMIN)
+    public ResponseEntity<?> deletePostAndReplies(@PathVariable int idPost) {
+        Post post = postRepo.findById(idPost).orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-		List<PostReply> replies = replyRepo.findAllByPost(post);
-		for (int i = 0; i < replies.size(); i++) {
-			replyRepo.delete(replies.get(i));
-		}
+        List<PostReply> replies = replyRepo.findAllByPost(post);
+        for (int i = 0; i < replies.size(); i++) {
+            replyRepo.delete(replies.get(i));
+        }
 
-		postRepo.delete(post);
+        postRepo.delete(post);
 
-		return ResponseEntity.ok().build();
-	}
+        return ResponseEntity.ok().build();
+    }
 
-	@DeleteMapping("/{idPost}/{idReply}")
-	@PreAuthorize(RoleConstants.USER)
-	public ResponseEntity<?> deletePostReply(@PathVariable int idPost, @PathVariable int idReply) {
-		Post post = postRepo.findById(idPost).orElse(null);
-		PostReply reply = replyRepo.findById(idReply).orElse(null);
-		if (post == null || reply == null) {
-			return ResponseEntity.notFound().build();
-		}
+    @DeleteMapping("/{idPost}/{idReply}")
+    @PreAuthorize(RoleConstants.ADMIN)
+    public ResponseEntity<?> deletePostReply(@PathVariable int idPost, @PathVariable int idReply) {
+        Post post = postRepo.findById(idPost).orElse(null);
+        PostReply reply = replyRepo.findById(idReply).orElse(null);
+        if (post == null || reply == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-		UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal();
-		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
 
-		if (!currentUser.getUsername().equals(reply.getAuthor().getUsername())
-				&& !currentUser.getRole().equals(UserRole.ADMIN)) {
-			return new ResponseEntity<>(new MessageResponse("You are not the owner of this reply."),
-					HttpStatus.FORBIDDEN);
-		}
+        if (!currentUser.getUsername().equals(reply.getAuthor().getUsername())
+                && !currentUser.getRole().equals(UserRole.ADMIN)) {
+            return new ResponseEntity<>(new MessageResponse("You are not the owner of this reply."),
+                    HttpStatus.FORBIDDEN);
+        }
 
-		replyRepo.delete(reply);
+        replyRepo.delete(reply);
 
-		return ResponseEntity.ok().build();
-	}
+        return ResponseEntity.ok().build();
+    }
 
-	@PatchMapping("/{idPost}")
-	@PreAuthorize(RoleConstants.USER)
-	public ResponseEntity<?> editPost(@Valid @RequestBody PostCreateInfo patchInfo, @PathVariable int idPost) {
-		Post post = postRepo.findById(idPost).orElse(null);
-		if (post == null) {
-			return ResponseEntity.notFound().build();
-		}
+    @PatchMapping("/{idPost}")
+    @PreAuthorize(RoleConstants.USER)
+    public ResponseEntity<?> editPost(@Valid @RequestBody PostCreateInfo patchInfo, @PathVariable int idPost) {
+        Post post = postRepo.findById(idPost).orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-		UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal();
-		User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
 
-		if (!currentUser.getUsername().equals(post.getAuthor().getUsername())) {
-			return new ResponseEntity<>(new MessageResponse("You are not the owner of the post:"),
-					HttpStatus.FORBIDDEN);
-		}
+        if (!currentUser.getUsername().equals(post.getAuthor().getUsername())) {
+            return new ResponseEntity<>(new MessageResponse("You are not the owner of the post:"),
+                    HttpStatus.FORBIDDEN);
+        }
 
-		if ((patchInfo.isSticky() != post.isSticky()) && currentUser.getRole() != UserRole.ADMIN) {
-			return new ResponseEntity<>(new MessageResponse("You cannot change 'sticky' property of posts!"),
-					HttpStatus.BAD_REQUEST);
-		}
+        if ((patchInfo.isSticky() != post.isSticky()) && currentUser.getRole() != UserRole.ADMIN) {
+            return new ResponseEntity<>(new MessageResponse("You cannot change 'sticky' property of posts!"),
+                    HttpStatus.BAD_REQUEST);
+        }
 
-		post.setContent(patchInfo.getContent());
-		post.setSticky(patchInfo.isSticky());
-		post.setTitle(patchInfo.getTitle());
+        post.setContent(patchInfo.getContent());
+        post.setSticky(patchInfo.isSticky());
+        post.setTitle(patchInfo.getTitle());
 
-		post.setLastEdit(LocalDateTime.now());
+        post.setLastEdit(LocalDateTime.now());
 
-		postRepo.save(post);
+        postRepo.save(post);
 
-		return ResponseEntity.ok(post);
-	}
+        return ResponseEntity.ok(post);
+    }
 }
