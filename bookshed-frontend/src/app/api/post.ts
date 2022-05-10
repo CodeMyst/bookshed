@@ -22,7 +22,7 @@ export interface Reply {
 export interface PostCreateResult {
     success: boolean;
     message: string;
-    url: string;
+    post: Post | null;
 }
 
 const apiServerUrl = environment.apiBaseUrl;
@@ -48,7 +48,7 @@ export const createPost = async (title: string, content: string, sticky: boolean
         return {
             success: true,
             message: "",
-            url: (await res.json()).url
+            post: await res.json()
         };
     } else {
         let msg: string;
@@ -62,7 +62,7 @@ export const createPost = async (title: string, content: string, sticky: boolean
         return {
             success: false,
             message: msg,
-            url: ""
+            post: null
         };
     }
 };
@@ -135,7 +135,7 @@ export const editPost = async (id: number, title: string, content: string, stick
         return {
             success: true,
             message: "",
-            url: (await res.json()).url
+            post: await res.json()
         };
     } else {
         let msg: string;
@@ -149,7 +149,7 @@ export const editPost = async (id: number, title: string, content: string, stick
         return {
             success: false,
             message: msg,
-            url: ""
+            post: null
         };
     }
 }

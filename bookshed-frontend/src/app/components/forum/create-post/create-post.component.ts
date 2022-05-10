@@ -27,6 +27,8 @@ export class CreatePostComponent implements OnInit {
 
       if (postForm.value["title"] && this.content.value()) {
         this.res = await createPost(postForm.value["title"], this.content.value(), false);
+
+        this.goToPage(`/forum/${this.res.post?.id}`);
       } else {
         this.error = true;
       }

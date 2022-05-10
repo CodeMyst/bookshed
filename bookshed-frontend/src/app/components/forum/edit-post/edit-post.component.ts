@@ -37,7 +37,7 @@ export class EditPostComponent implements OnInit {
         if (this.content.value() == "" || this.postEditedTitle == "") {
             this.res = {
                 message: "Fields cannot be empty",
-                url: "",
+                post: null,
                 success: false
             }
             return;
