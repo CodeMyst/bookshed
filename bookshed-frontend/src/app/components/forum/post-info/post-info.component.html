@@ -2,11 +2,11 @@
     <div class="top" *ngIf="post; else elseBlock">
         <div class="title">
             <h1>{{post.title}}</h1>
-        
+
             <div class="right">
-                <a 
+                <a
                     *ngIf="isAuthor"
-                    routerLink="/forum/{{post.id}}/edit" 
+                    routerLink="/forum/{{post.id}}/edit"
                     class="btn btn-warning"
                 >
                     Edit
@@ -26,12 +26,26 @@
         <p>Posted on: {{formatDate(post.createdAt)}}</p>
 
         <hr />
-        
+
         <div class="content">
             <div id="text" [innerHtml]="post?.content | markdown"></div>
         </div>
 
         <hr />
+
+        <div *ngIf="loggedUser !== undefined">
+            <h3>Reply:</h3>
+
+            <form (ngSubmit)="onPostReply()" #postForm="ngForm">
+                <div class="form-group">
+                    <div class="editor">
+                        <textarea placeholder="Insert content here..." required></textarea>
+                    </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Reply</button>
+            </form>
+        </div>
     </div>
     <ng-template #elseBlock>
         <h1>Post doesn't exist.</h1>
