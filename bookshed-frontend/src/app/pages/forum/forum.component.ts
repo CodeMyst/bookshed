@@ -23,6 +23,8 @@ export class ForumComponent implements OnInit {
 
     this.posts = await getPosts();
 
+    this.posts.sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf());
+
     for (const post of this.posts) {
       this.replies.push((await getReplies(post.id)).length);
     }
