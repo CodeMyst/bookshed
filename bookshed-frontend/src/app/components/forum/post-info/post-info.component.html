@@ -1,37 +1,62 @@
 <div id="box">
     <div class="top" *ngIf="post; else elseBlock">
-        <div class="title">
-            <h1>{{post.title}}</h1>
-        
-            <div class="right">
-                <a 
-                    *ngIf="isAuthor"
-                    routerLink="/forum/{{post.id}}/edit" 
-                    class="btn btn-warning"
-                >
-                    Edit
-                </a>
+        <h1>{{ post.title }}</h1>
 
-                <button
-                    *ngIf="isAdmin || isAuthor"
-                    class="btn btn-danger"
-                    (click)="confirmDeletePost()"
-                >
-                    Delete
-                </button>
+        <div class="post">
+            <div class="author-top">
+                <div class="author">
+                    <div><span class="admin" *ngIf="post.author.role === 'ADMIN'">[A] </span>{{ post.author.username }}</div>
+
+                    <div class="date">{{ formatDate(post.createdAt) }}</div>
+                </div>
+
+                <div class="author-actions">
+                    <a
+                        *ngIf="isAuthor"
+                        routerLink="/forum/{{post.id}}/edit"
+                        class="btn btn-warning"
+                    >
+                        Edit
+                    </a>
+
+                    <button
+                        *ngIf="isAdmin || isAuthor"
+                        class="btn btn-danger"
+                        (click)="confirmDeletePost()"
+                    >
+                        Delete
+                    </button>
+                </div>
             </div>
+
+            <div class="content md" [innerHtml]="post?.content | markdown"></div>
         </div>
 
-        <h5>by {{post.author.username}}</h5>
-        <p>Posted on: {{formatDate(post.createdAt)}}</p>
+        <div class="post" *ngFor="let reply of replies">
+            <div class="author-top">
+                <div class="author">
+                    <div><span class="admin" *ngIf="reply.author.role === 'ADMIN'">[A] </span>{{ reply.author.username }}</div>
 
-        <hr />
-        
-        <div class="content">
-            <div id="text" [innerHtml]="post?.content | markdown"></div>
+                    <div class="date">{{ formatDate(reply.createdAt) }}</div>
+                </div>
+            </div>
+
+            <div class="content md" [innerHtml]="reply?.content | markdown"></div>
         </div>
 
-        <hr />
+        <div *ngIf="loggedUser !== undefined" class="reply">
+            <h3>Reply:</h3>
+
+            <form (ngSubmit)="onPostReply()" #postForm="ngForm">
+                <div class="form-group">
+                    <div class="editor">
+                        <textarea placeholder="Insert content here..." required></textarea>
+                    </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Reply</button>
+            </form>
+        </div>
     </div>
     <ng-template #elseBlock>
         <h1>Post doesn't exist.</h1>
