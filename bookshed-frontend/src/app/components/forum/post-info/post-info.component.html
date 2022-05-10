@@ -36,8 +36,16 @@
             <div class="author-top">
                 <div class="author">
                     <div><span class="admin" *ngIf="reply.author.role === 'ADMIN'">[A] </span>{{ reply.author.username }}</div>
-
                     <div class="date">{{ formatDate(reply.createdAt) }}</div>
+                </div>
+                <div class="reply-right-side">
+                    <button
+                        *ngIf="isAdmin || isLoggedUserReviewAuthor(reply)"
+                        class="btn btn-danger"
+                        (click)="confirmDeleteReply(reply)"
+                    >
+                        Delete
+                    </button>
                 </div>
             </div>
 
