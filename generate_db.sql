@@ -116,6 +116,42 @@ create table bookshed.post_reply
             references post (id)
 );
 
+
+drop table if exists bookshed.rating;
+
+create table rating
+(
+    id            int          not null primary key auto_increment,
+    book_id       int          not null,
+    author        varchar(50)  not null,
+    rated_at      datetime     not null,
+    rating_value  int          not null,
+
+    constraint fk_rating_book_id
+        foreign key (book_id)
+            references book (id),
+
+    constraint fk_rating_author
+        foreign key (author)
+            references user (username)
+);
+
+
+drop table if exists bookshed.interesting_fact;
+
+create table bookshed.interesting_fact
+(
+    id           int            not null primary key auto_increment,
+    author       varchar(50)  not null,
+    created_at   datetime       not null,
+    content      mediumtext     not null,
+
+    constraint fk_interesting_fact_author
+        foreign key (author)
+            references user (username)
+);
+
+
 insert into book_category (name)
 values ('Fantasy');
 insert into book_category (name)
