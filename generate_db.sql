@@ -142,13 +142,8 @@ drop table if exists bookshed.interesting_fact;
 create table bookshed.interesting_fact
 (
     id           int            not null primary key auto_increment,
-    author       varchar(50)  not null,
     created_at   datetime       not null,
     content      mediumtext     not null,
-
-    constraint fk_interesting_fact_author
-        foreign key (author)
-            references user (username)
 );
 
 
