@@ -143,7 +143,7 @@ create table bookshed.interesting_fact
 (
     id           int            not null primary key auto_increment,
     created_at   datetime       not null,
-    content      mediumtext     not null,
+    content      mediumtext     not null
 );
 
 
