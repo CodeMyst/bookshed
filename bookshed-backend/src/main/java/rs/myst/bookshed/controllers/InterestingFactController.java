@@ -1,7 +1,6 @@
 package rs.myst.bookshed.controllers;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -26,19 +25,9 @@ public class InterestingFactController {
         this.factRepo = factRepo;
     }
 
-    private InterestingFact findFact() {
-        List<InterestingFact> fact = factRepo.findAll();
-
-        if (fact.size() == 0) {
-            return null;
-        }
-
-        return fact.get(0);
-    }
-
     @GetMapping("/")
     public ResponseEntity<?> getFact() {
-        InterestingFact fact = findFact();
+        InterestingFact fact = factRepo.findFirstByOrderById();
 
         return ResponseEntity.ok(fact);
     }
@@ -46,7 +35,7 @@ public class InterestingFactController {
     @PostMapping("/")
     @PreAuthorize(RoleConstants.ADMIN)
     public ResponseEntity<?> createFact(@Valid @RequestBody String content) {
-        InterestingFact fact = findFact();
+        InterestingFact fact = factRepo.findFirstByOrderById();
 
         if (fact == null) {
             fact = new InterestingFact();
