@@ -1,13 +1,13 @@
 package rs.myst.bookshed.controllers;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,25 +26,32 @@ public class InterestingFactController {
         this.factRepo = factRepo;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getFact(@PathVariable int id) {
-        InterestingFact fact = factRepo.findById(id).orElse(null);
+    private InterestingFact findFact() {
+        List<InterestingFact> fact = factRepo.findAll();
 
-        if (fact == null)
-            return ResponseEntity.notFound().build();
+        if (fact.size() == 0) {
+            return null;
+        }
+
+        return fact.get(0);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> getFact() {
+        InterestingFact fact = findFact();
 
         return ResponseEntity.ok(fact);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllFacts() {
-        return ResponseEntity.ok(factRepo.findAll());
-    }
-
-    @PostMapping("/create")
+    @PostMapping("/")
     @PreAuthorize(RoleConstants.ADMIN)
     public ResponseEntity<?> createFact(@Valid @RequestBody String content) {
-        InterestingFact fact = new InterestingFact();
+        InterestingFact fact = findFact();
+
+        if (fact == null) {
+            fact = new InterestingFact();
+        }
+
         fact.setContent(content);
         fact.setCreatedAt(LocalDateTime.now());
 
@@ -53,4 +60,3 @@ public class InterestingFactController {
         return ResponseEntity.ok(fact);
     }
 }
-
