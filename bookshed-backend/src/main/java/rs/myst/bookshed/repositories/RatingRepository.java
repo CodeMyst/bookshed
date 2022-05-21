@@ -1,5 +1,6 @@
 package rs.myst.bookshed.repositories;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -12,4 +13,5 @@ import rs.myst.bookshed.model.User;
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
     Optional<Rating> findByBookAndAuthor(Book book, User author);
     Collection<Rating> findByBook(Book book);
+    Collection<Rating> findAllByRatedAtAfter(LocalDateTime after);
 }

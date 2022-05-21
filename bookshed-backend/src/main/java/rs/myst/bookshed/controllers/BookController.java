@@ -1,9 +1,17 @@
 package rs.myst.bookshed.controllers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -179,7 +187,8 @@ public class BookController {
         if (book == null)
             return ResponseEntity.notFound().build();
 
-        if (ratingValue < 1 || ratingValue > 5) return ResponseEntity.badRequest().build();
+        if (ratingValue < 1 || ratingValue > 5)
+            return ResponseEntity.badRequest().build();
 
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
@@ -213,5 +222,45 @@ public class BookController {
         Collection<Rating> ratings = ratingRepo.findByBook(book);
 
         return ResponseEntity.ok(ratings.stream().mapToDouble(Rating::getRating).average());
+    }
+
+    @GetMapping("/bestLastMonth")
+    public ResponseEntity<?> getBestInLastMonth() {
+        // used for connecting the book and it's average rating
+        class BookRating {
+            private Book book;
+            private double rating;
+
+            public BookRating(Book book, double rating) {
+                this.book = book;
+                this.rating = rating;
+            }
+
+            public Book getBook() {
+                return book;
+            }
+
+            public double getRating() {
+                return rating;
+            }
+        }
+
+        LocalDateTime monthAgo = LocalDate.now().minusMonths(1).atStartOfDay();
+
+        Collection<Rating> ratings = ratingRepo.findAllByRatedAtAfter(monthAgo);
+
+        // group all ratings by their book and average their rating
+        Map<Book, Double> groupedRatings = ratings.stream()
+                .collect(Collectors.groupingBy(Rating::getBook, Collectors.averagingDouble(Rating::getRating)));
+
+        List<BookRating> bookRatings = new ArrayList<>();
+
+        for (Map.Entry<Book, Double> entry : groupedRatings.entrySet()) {
+            bookRatings.add(new BookRating(entry.getKey(), entry.getValue()));
+        }
+
+        bookRatings.sort(Comparator.comparing(BookRating::getRating).reversed());
+
+        return ResponseEntity.ok(bookRatings);
     }
 }
