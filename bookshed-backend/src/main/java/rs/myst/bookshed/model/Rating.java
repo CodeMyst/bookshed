@@ -21,7 +21,7 @@ public class Rating {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @JoinColumn(name = "book", nullable = false)
+    @JoinColumn(name = "book_id", nullable = false)
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Book book;
 
@@ -32,7 +32,7 @@ public class Rating {
     @Column(name = "rated_at", nullable = false)
     private LocalDateTime ratedAt;
 
-    @Column(name = "rating", nullable = false)
+    @Column(name = "rating_value", nullable = false)
     private int rating;
 
 

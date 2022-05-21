@@ -1,5 +1,7 @@
 package rs.myst.bookshed.controllers;
 
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,12 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.myst.bookshed.constants.RoleConstants;
 import rs.myst.bookshed.model.Book;
 import rs.myst.bookshed.model.BookCategory;
+import rs.myst.bookshed.model.Rating;
 import rs.myst.bookshed.model.SellInfo;
+import rs.myst.bookshed.model.User;
 import rs.myst.bookshed.payload.BookCreateInfo;
 import rs.myst.bookshed.payload.SellCreateInfo;
 import rs.myst.bookshed.repositories.BookCategoryRepository;
 import rs.myst.bookshed.repositories.BookRepository;
+import rs.myst.bookshed.repositories.RatingRepository;
 import rs.myst.bookshed.repositories.SellInfoRepository;
+import rs.myst.bookshed.repositories.UserRepository;
+import rs.myst.bookshed.services.UserDetailsImpl;
 
 @RestController
 @RequestMapping("/api/book")
@@ -32,11 +40,16 @@ public class BookController {
     private final BookRepository bookRepo;
     private final BookCategoryRepository bookCategoryRepo;
     private final SellInfoRepository sellInfoRepo;
+    private final UserRepository userRepo;
+    private final RatingRepository ratingRepo;
 
-    public BookController(BookRepository bookRepo, BookCategoryRepository bookCategoryRepo, SellInfoRepository sellInfoRepo) {
+    public BookController(BookRepository bookRepo, BookCategoryRepository bookCategoryRepo,
+            SellInfoRepository sellInfoRepo, UserRepository userRepo, RatingRepository ratingRepo) {
         this.bookRepo = bookRepo;
         this.bookCategoryRepo = bookCategoryRepo;
         this.sellInfoRepo = sellInfoRepo;
+        this.userRepo = userRepo;
+        this.ratingRepo = ratingRepo;
     }
 
     @GetMapping("/{id}")
@@ -157,5 +170,48 @@ public class BookController {
         List<SellInfo> infos = sellInfoRepo.findAllByBook(book);
 
         return ResponseEntity.ok(infos);
+    }
+
+    @PreAuthorize(RoleConstants.USER)
+    @PostMapping("/{id}/rate")
+    public ResponseEntity<?> postRateBook(@PathVariable int id, int ratingValue) {
+        Book book = bookRepo.findById(id).orElse(null);
+        if (book == null)
+            return ResponseEntity.notFound().build();
+
+        if (ratingValue < 1 || ratingValue > 5) return ResponseEntity.badRequest().build();
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+
+        Optional<Rating> existing = ratingRepo.findByBookAndAuthor(book, currentUser);
+
+        // if a rating on this book already exists by this user, update it
+        if (existing.isPresent()) {
+            existing.get().setRatedAt(LocalDateTime.now());
+            existing.get().setRating(ratingValue);
+
+            return ResponseEntity.ok(ratingRepo.save(existing.get()));
+        } else {
+            Rating rating = new Rating();
+            rating.setBook(book);
+            rating.setRatedAt(LocalDateTime.now());
+            rating.setRating(ratingValue);
+            rating.setAuthor(currentUser);
+
+            return ResponseEntity.ok(ratingRepo.save(rating));
+        }
+    }
+
+    @GetMapping("/{id}/avgRating")
+    public ResponseEntity<?> getAverageRating(@PathVariable int id) {
+        Book book = bookRepo.findById(id).orElse(null);
+        if (book == null)
+            return ResponseEntity.notFound().build();
+
+        Collection<Rating> ratings = ratingRepo.findByBook(book);
+
+        return ResponseEntity.ok(ratings.stream().mapToDouble(Rating::getRating).average());
     }
 }
