@@ -125,3 +125,8 @@ body hr {
 .EasyMDEContainer .CodeMirror-selected {
     background-color: #0663D4 !important;
 }
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";
+
+/* Importing Datepicker SCSS file. */
+@import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";

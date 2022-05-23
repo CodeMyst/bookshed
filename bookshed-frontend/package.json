@@ -22,6 +22,7 @@
     "easymde": "^2.16.1",
     "jquery": "^3.6.0",
     "marked": "^4.0.15",
+    "ngx-bootstrap": "^8.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
