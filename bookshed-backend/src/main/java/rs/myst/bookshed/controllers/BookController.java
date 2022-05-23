@@ -181,8 +181,28 @@ public class BookController {
     }
 
     @PreAuthorize(RoleConstants.USER)
+    @GetMapping("/{id}/rate")
+    public ResponseEntity<?> getUserBookRating(@PathVariable int id) {
+        Book book = bookRepo.findById(id).orElse(null);
+        if (book == null)
+            return ResponseEntity.notFound().build();
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User currentUser = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
+
+        Optional<Rating> existing = ratingRepo.findByBookAndAuthor(book, currentUser);
+
+        if (existing.isPresent()) {
+            return ResponseEntity.ok(existing.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PreAuthorize(RoleConstants.USER)
     @PostMapping("/{id}/rate")
-    public ResponseEntity<?> postRateBook(@PathVariable int id, int ratingValue) {
+    public ResponseEntity<?> postRateBook(@PathVariable int id, Integer ratingValue) {
         Book book = bookRepo.findById(id).orElse(null);
         if (book == null)
             return ResponseEntity.notFound().build();

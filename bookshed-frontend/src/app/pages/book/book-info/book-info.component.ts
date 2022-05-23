@@ -1,6 +1,6 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo } from 'src/app/api/book';
+import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo, BookRating, getUserBookRating, rateBook } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { createReview, deleteReview, editReview, getBookReviews, Review, ReviewResult } from 'src/app/api/review';
 import { Role, User } from 'src/app/api/user';
@@ -42,6 +42,10 @@ export class BookInfoComponent implements OnInit {
 
     formatDate = GlobalConstants.formatDate;
 
+    maxRating: number = 5;
+    ratingValue: number = 0;
+    rating: BookRating | undefined;
+    ratingIsReadonly = false;
     constructor(private route: ActivatedRoute, private router: Router, private renderer: Renderer2) { }
 
     async ngOnInit() {
@@ -58,6 +62,10 @@ export class BookInfoComponent implements OnInit {
         this.loggedUser = await getSelf();
 
         this.sellInfos = await getBookSellInfos(this.book?.id);
+
+        this.rating = await getUserBookRating(this.book.id);
+        console.log(this.rating);
+        this.ratingValue = this.rating.rating;
 
         this.loadReviews();
     }
@@ -89,6 +97,15 @@ export class BookInfoComponent implements OnInit {
         this.isSubmittingSellInfo = false;
 
         this.sellInfos = await getBookSellInfos(this.book!.id);
+    }
+
+    async submitRating() {
+        console.log(this.ratingValue);
+        await rateBook(this.book!.id, this.ratingValue);
+        
+        this.rating = await getUserBookRating(this.book!.id);
+        console.log(this.rating);
+        this.ratingValue = this.rating.rating;
     }
 
     isLoggedUserReviewAuthor(review: Review) {

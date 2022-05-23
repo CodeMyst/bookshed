@@ -1,4 +1,5 @@
 import { environment } from "src/environments/environment";
+import { User } from "./user";
 
 export interface Book {
     id: number;
@@ -24,6 +25,14 @@ export interface SellInfo {
     id: number;
     location: string;
     price: number;
+}
+
+export interface BookRating {
+    id: number;
+    author: User;
+    ratedAt: Date;
+    rating: number;
+    book: Book; 
 }
 
 const apiServerUrl = environment.apiBaseUrl;
@@ -216,4 +225,28 @@ export const addBookSellInfo = async (id: number, location: string, price: numbe
         credentials: "include",
         body: JSON.stringify(data)
     });
+};
+
+export const rateBook = async (id: number, ratingValue: number) => {
+    await fetch(`${apiServerUrl}/api/book/${id}/rate?ratingValue=${ratingValue}`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+    });
+};
+
+export const getUserBookRating = async (id: number): Promise<BookRating> => {
+    const res = await fetch(`${apiServerUrl}/api/book/${id}/rate`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+
+    return await res.json();
 };

@@ -102,6 +102,29 @@
 
   <hr />
 
+  <div *ngIf="isLoggedIn">
+    <h3 *ngIf="rating">Your rating of {{book?.title}}</h3>
+    <h3 *ngIf="!rating">Rate {{book?.title}}</h3>
+
+    <rating
+      style="color: #0275d8;font-size: 40px;"
+      [(ngModel)]="ratingValue"
+      [max]="maxRating" 
+      [readonly]="ratingIsReadonly"
+    >
+    </rating>
+    
+    <br />
+
+    <button
+      *ngIf="!rating || rating.rating != ratingValue"  
+      (click)="submitRating()"
+      class="btn btn-primary"
+    >Submit</button>
+
+    <hr />
+  </div>
+
   <h4>User Reviews</h4>
 
   <ng-template
@@ -148,7 +171,7 @@
   </ng-template>
 
   <ng-template #notLoggedIn>
-    <a routerLink="/login">Log in</a> to post a review of {{ book?.title }}
+    <a routerLink="/login">Log in</a> to rate and post your review of {{ book?.title }}
   </ng-template>
 
   <br />

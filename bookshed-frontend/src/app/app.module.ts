@@ -20,6 +20,8 @@ import { CreatePostComponent } from './components/forum/create-post/create-post.
 import { PostInfoComponent } from './components/forum/post-info/post-info.component';
 import { MarkdownPipe } from './pipes/markdown.pipe';
 import { EditPostComponent } from './components/forum/edit-post/edit-post.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RatingModule } from 'ngx-bootstrap/rating';
 
 
 @NgModule({
@@ -46,7 +48,9 @@ import { EditPostComponent } from './components/forum/edit-post/edit-post.compon
     CommonModule,
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    RatingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
