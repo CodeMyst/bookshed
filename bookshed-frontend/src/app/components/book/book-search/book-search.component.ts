@@ -23,11 +23,13 @@ export class BookSearchComponent implements OnInit {
   onSubmit: any;
   onViewBest: any;
 
-  constructor() { 
+  viewingBest = false;
+
+  constructor() {
     this.categories = new Array;
     this.sortedCategories = new Array;
     this.categoryId = 0;
-  
+
     this.onSubmit = async () => {
       this.noResult = false;
 
@@ -55,18 +57,32 @@ export class BookSearchComponent implements OnInit {
     }
 
     this.onViewBest = async () => {
-      this.message = "top rated";
-      this.message2 = " of this month";
+      if (this.viewingBest) {
+        this.message = "";
+        this.message2 = "";
 
-      this.ratingRes = await getBestInLastMonth();
+        this.ratingRes = null;
+        this.noResult = false;
 
-      if (this.ratingRes.length == 0) {
-        this.noResult = true;
+        GlobalConstants.bookRatings = [];
+        GlobalConstants.isBookRating = false;
+        GlobalConstants.onSearch();
+      } else {
+        this.message = "top rated";
+        this.message2 = " of this month";
+
+        this.ratingRes = await getBestInLastMonth();
+
+        if (this.ratingRes.length == 0) {
+          this.noResult = true;
+        }
+
+        GlobalConstants.bookRatings = this.ratingRes;
+        GlobalConstants.isBookRating = true;
+        GlobalConstants.onSearch();
       }
 
-      GlobalConstants.bookRatings = this.ratingRes;
-      GlobalConstants.isBookRating = true;
-      GlobalConstants.onSearch();
+      this.viewingBest = !this.viewingBest;
     }
   }
 
@@ -75,5 +91,4 @@ export class BookSearchComponent implements OnInit {
 
     this.sortedCategories = this.categories.sort((a, b) => a.name.localeCompare(b.name));
   }
-
 }

@@ -22,7 +22,7 @@ import { MarkdownPipe } from './pipes/markdown.pipe';
 import { EditPostComponent } from './components/forum/edit-post/edit-post.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RatingModule } from 'ngx-bootstrap/rating';
-import { InterastingFactComponent } from './components/interasting-fact/interasting-fact.component';
+import { InterestingFactComponent } from './components/interesting-fact/interesting-fact.component';
 
 
 @NgModule({
@@ -44,7 +44,7 @@ import { InterastingFactComponent } from './components/interasting-fact/interast
     PostInfoComponent,
     MarkdownPipe,
     EditPostComponent,
-    InterastingFactComponent
+    InterestingFactComponent
   ],
   imports: [
     CommonModule,

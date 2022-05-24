@@ -29,7 +29,8 @@ public class InterestingFactController {
     public ResponseEntity<?> getFact() {
         InterestingFact fact = factRepo.findFirstByOrderById();
 
-        return ResponseEntity.ok(fact);
+        if (fact == null) return ResponseEntity.notFound().build();
+        else return ResponseEntity.ok(fact);
     }
 
     @PostMapping("/")
@@ -45,7 +46,7 @@ public class InterestingFactController {
         fact.setCreatedAt(LocalDateTime.now());
 
         factRepo.save(fact);
-        
+
         return ResponseEntity.ok(fact);
     }
 }

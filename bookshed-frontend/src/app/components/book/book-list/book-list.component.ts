@@ -41,6 +41,7 @@ export class BookListComponent implements OnInit {
     async ngOnInit() {
         this.books = await getAllBooks();
         this.apiBaseUrl = environment.apiBaseUrl;
+        GlobalConstants.books = this.books;
     }
 
     truncateString(str: string, len: number): string {

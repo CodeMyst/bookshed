@@ -1,8 +1,3 @@
-<div class="topRated">
-    <span>View our top rated books of this month:</span>
-    <button type="submit" class="btn btn-primary" (click)="onViewBest()">View</button>
-    <br><br>
-</div>
 <form>
     <label>Book search</label>
     <label>Category</label><br>
@@ -13,6 +8,7 @@
     </select>
     <button type="submit" class="btn btn-primary" (click)="onSubmit()">Search</button>
 </form>
+<button type="submit" class="btn btn-primary top-rated" (click)="onViewBest()">{{this.viewingBest ? "View all books" : "View top rated books"}}</button>
 <br>
 <div *ngIf="message !== 'search'; else elseBlock">
     <h2>List of {{message}} books{{message2}}: </h2>

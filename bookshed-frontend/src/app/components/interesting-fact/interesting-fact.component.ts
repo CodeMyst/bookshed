@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { getFact, InterestingFact, postFact } from 'src/app/api/interasting-fact';
-import * as EasyMDE from 'easymde';
-import { ActivatedRoute } from '@angular/router';
+import { getFact, InterestingFact, postFact } from 'src/app/api/interesting-fact';
 import { getSelf } from 'src/app/api/auth';
 import { Role } from 'src/app/api/user';
 
 @Component({
-    selector: 'app-interasting-fact',
-    templateUrl: './interasting-fact.component.html',
-    styleUrls: ['./interasting-fact.component.scss']
+    selector: 'app-interesting-fact',
+    templateUrl: './interesting-fact.component.html',
+    styleUrls: ['./interesting-fact.component.scss']
 })
-export class InterastingFactComponent implements OnInit {
+export class InterestingFactComponent implements OnInit {
     fact: InterestingFact | undefined;
 
     content: string = ""
@@ -24,11 +22,9 @@ export class InterastingFactComponent implements OnInit {
 
     async ngOnInit() {
         this.fact = await getFact();
-        this.content = this.fact.content;
-        console.log(this.fact.content);
+        this.content = this.fact ? this.fact.content : "";
 
         this.isAdmin = (await getSelf()).role == Role.ADMIN;
-
     }
 
     toggleEditor() {
@@ -41,7 +37,7 @@ export class InterastingFactComponent implements OnInit {
             this.message = "Something went wrong"
             return;
         }
-        
+
         this.fact = retFact;
         this.toggleEditor();
     }

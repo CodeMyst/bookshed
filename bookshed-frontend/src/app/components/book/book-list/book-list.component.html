@@ -5,32 +5,32 @@
                 <img src='{{ book.imageUrl !== "" ? book.imageUrl : "assets/no-image.jpg"}}' class="" alt="img">
             </span>
             <span class="book-text-container">
-                    <small><a href="#">{{book.category.name}}</a></small>
+                    <small>{{book.category.name}}</small>
                     <br>
-                    <h6><a routerLink="{{'/book/' + book.id}}">{{book.title}}</a></h6>
+                    <h4><a routerLink="{{'/book/' + book.id}}">{{book.title}}</a></h4>
                         {{ truncateString(book.description, descriptionLengthLimit) }}
                     <br>
             </span>
         </div>
     </div>
 
-    <ng-template #bookRating>  
+    <ng-template #bookRating>
         <div *ngFor="let bookRating of bookRatings" class="book-container">
             <span class="book-image-container">
                 <img src='{{ bookRating.book.imageUrl !== "" ? bookRating.book.imageUrl : "assets/no-image.jpg"}}' class="" alt="img">
             </span>
             <span class="book-text-container">
-                    <small><a href="#">{{bookRating.book.category.name}}</a>
+                    <small>{{bookRating.book.category.name}}
                         <rating class="rating"
                             style="color: #0275d8;font-size: 30px;"
                             [(ngModel)]="bookRating.rating"
-                            [max]="5" 
+                            [max]="5"
                             [readonly]="true"
                         >
                         </rating>
                     </small>
                     <br>
-                    <h6><a routerLink="{{'/book/' + bookRating.book.id}}">{{bookRating.book.title}}</a></h6>
+                    <h4><a routerLink="{{'/book/' + bookRating.book.id}}">{{bookRating.book.title}}</a></h4>
                         {{ truncateString(bookRating.book.description, descriptionLengthLimit) }}
                     <br>
             </span>

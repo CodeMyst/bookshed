@@ -8,7 +8,7 @@ export interface InterestingFact {
     content: string;
 }
 
-export const getFact = async (): Promise<InterestingFact> => {
+export const getFact = async (): Promise<InterestingFact | undefined> => {
     const res = await fetch(`${apiServerUrl}/api/fact/`, {
         method: "GET",
         mode: "cors",
@@ -18,7 +18,11 @@ export const getFact = async (): Promise<InterestingFact> => {
         credentials: "include"
     });
 
-    return await res.json();
+    if (res.ok) {
+        return await res.json();
+    } else {
+        return undefined;
+    }
 }
 
 export const postFact = async (content: string): Promise<InterestingFact> => {

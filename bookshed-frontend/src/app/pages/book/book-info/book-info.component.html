@@ -7,13 +7,6 @@
         <h2>{{ book?.title }}</h2>
 
         <div class="info-right">
-          <rating
-            style="color: #0275d8;font-size: 40px;"
-            [(ngModel)]="avgRating"
-            [max]="maxRating" 
-            [readonly]="true"
-          >
-          </rating>
           <div class="buttons" [hidden]="!isLoggedIn">
             <button
               *ngIf="isAdmin"
@@ -32,6 +25,15 @@
       <h3>by {{ book?.author }}</h3>
 
       <p class="category">Category: {{ book?.category?.name }}</p>
+
+      <p class="avg-rating">Average rating:</p>
+      <rating
+        style="color: #0275d8;font-size: 40px;"
+        [(ngModel)]="avgRating"
+        [max]="maxRating"
+        [readonly]="true"
+      >
+      </rating>
 
       <p class="description">
         {{ book?.description }}

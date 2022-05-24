@@ -1,0 +1,53 @@
+<div class="fact-area">
+  <div *ngIf="fact">
+    <h3>Interesting facts and news</h3>
+
+    <div class="fact" *ngIf="!isFactEditorOpen">
+      <div class="fact-content">
+        {{ content }}
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isAdmin">
+    <button
+      *ngIf="isAdmin && !isFactEditorOpen"
+      (click)="toggleEditor()"
+      class="btn btn-warning"
+    >
+      {{ fact ? "Edit Interesting Fact" : "Add Interesting Fact" }}
+    </button>
+
+    <button
+      (click)="submitFact()"
+      class="btn btn-warning"
+      *ngIf="isAdmin && isFactEditorOpen"
+    >
+      Save
+    </button>
+
+    <button
+      (click)="toggleEditor()"
+      class="btn btn-secondary"
+      *ngIf="isAdmin && isFactEditorOpen"
+    >
+      Cancel
+    </button>
+  </div>
+
+  <form #postForm="ngForm" *ngIf="isFactEditorOpen && isAdmin">
+    <div class="editor">
+      <textarea
+        placeholder="Insert content here..."
+        name="content"
+        [(ngModel)]="content"
+        required
+      >
+      {{ fact?.content }}
+    </textarea
+      >
+    </div>
+
+    <br />
+  </form>
+</div>
