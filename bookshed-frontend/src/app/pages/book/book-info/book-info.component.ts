@@ -1,6 +1,6 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo, BookRating, getUserBookRating, rateBook } from 'src/app/api/book';
+import { addBookSellInfo, Book, deleteBook, getBook, getBookSellInfos, SellInfo, BookRating, getUserBookRating, rateBook, getAverageRating } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { createReview, deleteReview, editReview, getBookReviews, Review, ReviewResult } from 'src/app/api/review';
 import { Role, User } from 'src/app/api/user';
@@ -45,12 +45,15 @@ export class BookInfoComponent implements OnInit {
     maxRating: number = 5;
     ratingValue: number = 0;
     rating: BookRating | undefined;
+    avgRating: BookRating | any;
     ratingIsReadonly = false;
+
     constructor(private route: ActivatedRoute, private router: Router, private renderer: Renderer2) { }
 
     async ngOnInit() {
         let strId: string = <string>this.route.snapshot.paramMap.get("id");
         this.book = await getBook(+strId);
+        this.avgRating = await getAverageRating(this.book.id);
         GlobalConstants.viewedBook = this.book;
 
         if (this.book.imageUrl !== "") {
@@ -64,7 +67,6 @@ export class BookInfoComponent implements OnInit {
         this.sellInfos = await getBookSellInfos(this.book?.id);
 
         this.rating = await getUserBookRating(this.book.id);
-        console.log(this.rating);
         this.ratingValue = this.rating.rating;
 
         this.loadReviews();
@@ -100,11 +102,9 @@ export class BookInfoComponent implements OnInit {
     }
 
     async submitRating() {
-        console.log(this.ratingValue);
         await rateBook(this.book!.id, this.ratingValue);
         
         this.rating = await getUserBookRating(this.book!.id);
-        console.log(this.rating);
         this.ratingValue = this.rating.rating;
     }
 

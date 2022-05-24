@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Book, getAllBooks } from 'src/app/api/book';
+import { Book, BookRating, getAllBooks, getAverageRating } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 import { environment } from 'src/environments/environment';
 
@@ -11,15 +11,30 @@ import { environment } from 'src/environments/environment';
 export class BookListComponent implements OnInit {
 
     books: Book[];
+    bookRatings: BookRating[];
     descriptionLengthLimit: number = 250;
+
+    getAvgRating : any;
+    isRating: boolean = false;
 
     apiBaseUrl: string = environment.apiBaseUrl;
 
     constructor() {
         this.books = new Array;
+        this.bookRatings = new Array;
 
         GlobalConstants.onSearch = async () => {
-            this.books = GlobalConstants.books;
+            this.isRating = GlobalConstants.isBookRating;
+
+            if (!this.isRating) {
+                this.books = GlobalConstants.books;
+            } else {
+                this.bookRatings = GlobalConstants.bookRatings;
+            }
+        }
+
+        this.getAvgRating = async (id: number) : Promise<number> => {
+            return await getAverageRating(id);
         }
     }
 

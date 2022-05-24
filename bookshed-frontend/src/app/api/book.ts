@@ -250,3 +250,29 @@ export const getUserBookRating = async (id: number): Promise<BookRating> => {
 
     return await res.json();
 };
+
+export const getBestInLastMonth = async (): Promise<BookRating[]> => {
+    const res = await fetch(`${apiServerUrl}/api/book/bestLastMonth`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+
+    return await res.json();
+};
+
+export const getAverageRating = async (id: number): Promise<number> => {
+    const res = await fetch(`${apiServerUrl}/api/book/${id}/avgRating`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+
+    return await res.json();
+};

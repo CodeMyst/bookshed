@@ -6,17 +6,26 @@
       <div class="title">
         <h2>{{ book?.title }}</h2>
 
-        <div class="right" [hidden]="!isLoggedIn">
-          <a routerLink="/editBook" class="btn btn-warning">
-            Edit
-          </a>
-          <button
-            *ngIf="isAdmin"
-            (click)="confirmDeleteBook()"
-            class="btn btn-danger"
+        <div class="info-right">
+          <rating
+            style="color: #0275d8;font-size: 40px;"
+            [(ngModel)]="avgRating"
+            [max]="maxRating" 
+            [readonly]="true"
           >
-            Delete
-          </button>
+          </rating>
+          <div class="buttons" [hidden]="!isLoggedIn">
+            <button
+              *ngIf="isAdmin"
+              (click)="confirmDeleteBook()"
+              class="btn btn-danger"
+            >
+              Delete
+            </button>
+            <a routerLink="/editBook" class="btn btn-warning">
+              Edit
+            </a>
+          </div>
         </div>
       </div>
 

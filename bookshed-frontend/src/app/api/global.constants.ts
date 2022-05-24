@@ -1,11 +1,13 @@
 import { DatePipe } from '@angular/common';
-import { Book } from './book';
+import { Book, BookRating } from './book';
 
 export class GlobalConstants {
   public static viewedBook: Book;
 
   // used as a list of books on home page (also as search results)
   public static books: Book[];
+  public static bookRatings: BookRating[];
+  public static isBookRating: boolean = false;
   public static onSearch: any;
 
   public static goToPage: any;

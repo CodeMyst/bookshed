@@ -1,14 +1,39 @@
 <div class="book-list">
-    <div *ngFor="let book of books" class="book-container">
-        <span class="book-image-container">
-            <img src='{{ book.imageUrl !== "" ? book.imageUrl : "assets/no-image.jpg"}}' class="" alt="img">
-        </span>
-        <span class="book-text-container">
-                <small><a href="#">{{book.category.name}}</a></small>
-                <br>
-                <h6><a routerLink="{{'/book/' + book.id}}">{{book.title}}</a></h6>
-                    {{ truncateString(book.description, descriptionLengthLimit) }}
-                <br>
-        </span>
+    <div *ngIf="!isRating; else bookRating">
+        <div *ngFor="let book of books" class="book-container">
+            <span class="book-image-container">
+                <img src='{{ book.imageUrl !== "" ? book.imageUrl : "assets/no-image.jpg"}}' class="" alt="img">
+            </span>
+            <span class="book-text-container">
+                    <small><a href="#">{{book.category.name}}</a></small>
+                    <br>
+                    <h6><a routerLink="{{'/book/' + book.id}}">{{book.title}}</a></h6>
+                        {{ truncateString(book.description, descriptionLengthLimit) }}
+                    <br>
+            </span>
+        </div>
     </div>
+
+    <ng-template #bookRating>  
+        <div *ngFor="let bookRating of bookRatings" class="book-container">
+            <span class="book-image-container">
+                <img src='{{ bookRating.book.imageUrl !== "" ? bookRating.book.imageUrl : "assets/no-image.jpg"}}' class="" alt="img">
+            </span>
+            <span class="book-text-container">
+                    <small><a href="#">{{bookRating.book.category.name}}</a>
+                        <rating class="rating"
+                            style="color: #0275d8;font-size: 30px;"
+                            [(ngModel)]="bookRating.rating"
+                            [max]="5" 
+                            [readonly]="true"
+                        >
+                        </rating>
+                    </small>
+                    <br>
+                    <h6><a routerLink="{{'/book/' + bookRating.book.id}}">{{bookRating.book.title}}</a></h6>
+                        {{ truncateString(bookRating.book.description, descriptionLengthLimit) }}
+                    <br>
+            </span>
+        </div>
+    </ng-template>
 </div>
