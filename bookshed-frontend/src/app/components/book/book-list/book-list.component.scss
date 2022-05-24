@@ -8,6 +8,10 @@
     background-color: #16181c;
     display: flex;
     border-top: 1px solid gainsboro;
+
+    .rating {
+        float: right;
+    }
 }
 
 .book-text-container {

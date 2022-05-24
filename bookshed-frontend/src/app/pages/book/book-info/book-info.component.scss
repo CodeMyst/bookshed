@@ -30,7 +30,7 @@
     justify-content: space-between;
 
     .btn-warning {
-      margin-right: 1rem;
+      margin-left: 1rem;
     }
   }
 }
@@ -147,6 +147,14 @@
   padding: 0.2rem 0.5rem;
   overflow: auto;
   border-radius: 5px;
+}
+
+.info-right {
+  float: right;
+
+  .buttons {
+    margin-left: 2.8rem;
+  }
 }
 
 @media only screen and (max-width: 720px) {

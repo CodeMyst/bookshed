@@ -2,15 +2,12 @@ package rs.myst.bookshed.controllers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -202,7 +199,7 @@ public class BookController {
 
     @PreAuthorize(RoleConstants.USER)
     @PostMapping("/{id}/rate")
-    public ResponseEntity<?> postRateBook(@PathVariable int id, Integer ratingValue) {
+    public ResponseEntity<?> postRateBook(@PathVariable int id, int ratingValue) {
         Book book = bookRepo.findById(id).orElse(null);
         if (book == null)
             return ResponseEntity.notFound().build();

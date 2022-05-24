@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Book, BookCategory, getAllBookCategories, getAllBooks, getByCategory, searchBooks } from 'src/app/api/book';
+import { Book, BookCategory, BookRating, getAllBookCategories, getAllBooks, getBestInLastMonth, getByCategory, searchBooks } from 'src/app/api/book';
 import { GlobalConstants } from 'src/app/api/global.constants';
 
 @Component({
@@ -15,10 +15,13 @@ export class BookSearchComponent implements OnInit {
   sortedCategories: BookCategory[];
 
   res: Book[] | null = null;
+  ratingRes: BookRating[] | null = null;
   message: string = "all";
+  message2: string = "";
   noResult: boolean = false;
 
   onSubmit: any;
+  onViewBest: any;
 
   constructor() { 
     this.categories = new Array;
@@ -33,7 +36,10 @@ export class BookSearchComponent implements OnInit {
         this.message = "search";
       } else if (this.search === "" && this.categoryId != 0) {
         this.res = await getByCategory(this.categoryId);
-        this.message = this.categories[this.categoryId-1].name;
+        for (let i = 0; i < this.sortedCategories.length; i++) {
+          if (this.sortedCategories[i].id === this.categoryId)
+            this.message = this.sortedCategories[i].name;
+        }
       } else {
         this.res = await getAllBooks();
         this.message = "all";
@@ -44,6 +50,22 @@ export class BookSearchComponent implements OnInit {
       }
 
       GlobalConstants.books = this.res;
+      GlobalConstants.isBookRating = false;
+      GlobalConstants.onSearch();
+    }
+
+    this.onViewBest = async () => {
+      this.message = "top rated";
+      this.message2 = " of this month";
+
+      this.ratingRes = await getBestInLastMonth();
+
+      if (this.ratingRes.length == 0) {
+        this.noResult = true;
+      }
+
+      GlobalConstants.bookRatings = this.ratingRes;
+      GlobalConstants.isBookRating = true;
       GlobalConstants.onSearch();
     }
   }
