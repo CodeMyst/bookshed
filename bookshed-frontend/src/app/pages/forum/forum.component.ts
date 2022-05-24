@@ -35,7 +35,6 @@ export class ForumComponent implements OnInit {
     }
 
     this.posts = await getPosts();
-    console.log(this.posts.length)
 
     this.posts.sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf());
     this.posts.sort(function(a, b) { return (a.sticky === b.sticky)? 0 : a.sticky? -1 : 1; })
