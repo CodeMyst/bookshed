@@ -11,7 +11,7 @@
     margin-bottom: 2rem;
 
     &:hover {
-        background-color: var(--bs-gray-800);
+        background-color: var(--bs-gray-800) !important;
     }
 
     &:last-child {
@@ -21,4 +21,15 @@
     p {
         margin: 0;
     }
+}
+
+.post.sticky {
+    border-bottom-style: solid;
+    border-width: 3px;
+    border-color: #0275d8;
+}
+
+
+a {
+    margin-right: 1rem;
 }

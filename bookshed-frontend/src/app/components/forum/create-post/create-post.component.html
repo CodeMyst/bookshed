@@ -1,6 +1,7 @@
 <div id="box">
     <div class="container">
-        <h2>Create a new post</h2>
+        <h2 *ngIf="!isSticky">Create a new post</h2>
+        <h2 *ngIf="isSticky">Create a new Readers' Club post</h2>
 
         <div *ngIf="res && res.success" class="alert-success">
             Post successfully added.
