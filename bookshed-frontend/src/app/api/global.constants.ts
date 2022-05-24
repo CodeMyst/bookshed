@@ -10,6 +10,9 @@ export class GlobalConstants {
   public static isBookRating: boolean = false;
   public static onSearch: any;
 
+  // forum sticky posts
+  public static isSticky: boolean = false;
+
   public static goToPage: any;
 
   public static formatDate = (date: Date): string => {

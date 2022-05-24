@@ -60,6 +60,13 @@ public class PostController {
         if (createInfo.isSticky() && currentUser.getRole() != UserRole.ADMIN) {
             return new ResponseEntity<>(new MessageResponse("You cannot create sticky posts!"), HttpStatus.BAD_REQUEST);
         }
+        
+        if (createInfo.isSticky()) {
+            List<Post> posts = postRepo.findAllByStickyTrue();
+            for (Post post : posts) {
+                post.setSticky(false);
+            }
+        }
 
         Post post = new Post();
         post.setTitle(createInfo.getTitle());

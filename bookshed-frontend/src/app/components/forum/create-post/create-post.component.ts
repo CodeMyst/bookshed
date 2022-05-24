@@ -12,6 +12,7 @@ import { createPost, PostCreateResult } from 'src/app/api/post';
 export class CreatePostComponent implements OnInit {
 
   isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
 
   content : EasyMDE | any;
 
@@ -19,16 +20,21 @@ export class CreatePostComponent implements OnInit {
   res: PostCreateResult | null = null;
   error: boolean = false;
 
+  isSticky: boolean = false;
+
   onSubmit: any;
 
   constructor() {
     this.onSubmit = async (postForm: any) => {
       this.error = false;
-
+      
       if (postForm.value["title"] && this.content.value()) {
-        this.res = await createPost(postForm.value["title"], this.content.value(), false);
+        if (this.isSticky)
+          this.res = await createPost(postForm.value["title"], this.content.value(), true);
+        else
+          this.res = await createPost(postForm.value["title"], this.content.value(), false);
 
-        this.goToPage(`/forum/${this.res.post?.id}`);
+        this.goToPage(`/forum/home`);
       } else {
         this.error = true;
       }
@@ -40,6 +46,11 @@ export class CreatePostComponent implements OnInit {
 
     if (!this.isLoggedIn) {
       this.goToPage("/forbidden");
+    }
+
+    if (GlobalConstants.isSticky) {
+      this.isSticky = true;
+      GlobalConstants.isSticky = false;
     }
   }
 
