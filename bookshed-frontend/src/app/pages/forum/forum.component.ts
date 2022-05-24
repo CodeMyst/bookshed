@@ -30,9 +30,12 @@ export class ForumComponent implements OnInit {
 
   async ngOnInit() {
     this.isLoggedIn = await isLoggedIn();
-    this.isAdmin = (await getSelf()).role === Role.ADMIN;
+    if (await isLoggedIn()) {
+      this.isAdmin = (await getSelf()).role === Role.ADMIN;
+    }
 
     this.posts = await getPosts();
+    console.log(this.posts.length)
 
     this.posts.sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf());
     this.posts.sort(function(a, b) { return (a.sticky === b.sticky)? 0 : a.sticky? -1 : 1; })
