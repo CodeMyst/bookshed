@@ -1,0 +1,31 @@
+.fact, form {
+    border-bottom: 1px solid gainsboro;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    width: 100%;
+    position: relative;
+}
+
+button {
+    margin-left: 1rem;
+}
+
+.fact-content,
+textarea {
+    white-space: pre-wrap;
+    background-color: rgb(41, 41, 41);
+
+    padding: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+textarea {
+    height: 10rem;
+}
+
+.top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
